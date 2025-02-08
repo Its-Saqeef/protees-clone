@@ -1,0 +1,322 @@
+"use client";
+import axios from "axios";
+import React, { useState,useRef } from "react";
+import { toast } from "react-toastify";
+
+const ProductForm = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    description: "",
+    category: "",
+    subcategory: "",
+    sale: 0,
+    composition: "",
+    sizes: [],
+    //  images : [],
+    colors: [],
+  });
+  const [image, setImage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const imageRef=useRef()
+  const handleChange = (e) => {
+    const { name } = e.target;
+    if (
+      name === "SMALL" ||
+      name === "MEDIUM" ||
+      name === "LARGE" ||
+      name === "XL" ||
+      name === "XXL"
+    ) {
+      setFormData((prevData) => {
+        const updatedSizes = prevData.sizes.some((item) => item.size === name)
+          ? prevData.sizes.map((item) =>
+              item.size === name ? { ...item, quantity: e.target.value } : item
+            )
+          : [...prevData.sizes, { size: name, quantity: e.target.value }];
+  
+        return { ...prevData, sizes: updatedSizes };
+      });
+    }
+    
+    //  else if(name==="images"){
+
+    //     setFormData((prevData)=>{
+    //       const images =Array.isArray(formData.images) ? [...prevData.images,e.target.file?.[0]] : [e.target.file?.[0]]
+    //         return {...prevData, images : images}
+    //     })
+    //  }
+    else if (name === "colors") {
+      const value = e.target.value;
+      const array = value.split(",");
+      setFormData({ ...formData, colors: array });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: e.target.value,
+      });
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("price", formData.price);
+    form.append("description", formData.description);
+    form.append("category", formData.category);
+    form.append("subcategory", formData.subcategory.toLowerCase());
+    form.append("sale", formData.sale);
+    form.append("composition", formData.composition);
+    form.append("sizes", JSON.stringify(formData.sizes));
+    form.append("colors", JSON.stringify(formData.colors));
+    // form.append("images",formData.images)
+    form.append("file", image);
+
+    console.log(formData)
+    const response = await axios
+      .post("/api/addproduct", form)
+      .then((res) =>
+        res.data.message === "Success"
+          ? toast.success("Product Added Successfully")
+          : toast.error(res.data.message)
+      )
+      .catch((err) => toast.error("Could not Add Product"));
+      setFormData({
+        name: "",
+    price: "",
+    description: "",
+    category: "",
+    subcategory: "",
+    sale: 0,
+    composition: "",
+    sizes: [],
+    colors: [],
+      })
+     if(imageRef){
+      imageRef.current.value=""
+     }
+     setIsLoading(false);
+  };
+
+  return (
+    <section className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
+        Create New Product
+      </h2>
+
+      <form onSubmit={handleSubmit}>
+        {/* Product Name */}
+        <div className="mb-4">
+          <label
+            htmlFor="name"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Product Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.name}
+          />
+        </div>
+
+        {/* Price */}
+        <div className="mb-4">
+          <label
+            htmlFor="price"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Price
+          </label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            required
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.price}
+          />
+        </div>
+
+        {/* Description */}
+        <div className="mb-4">
+          <label
+            htmlFor="description"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            required
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.description}
+          ></textarea>
+        </div>
+
+        {/* Category */}
+        <div className="mb-4">
+          <label
+            htmlFor="category"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Category
+          </label>
+          <input
+            type="text"
+            id="category"
+            name="category"
+            required
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.category}
+          />
+        </div>
+
+        {/* Subcategory */}
+        <div className="mb-4">
+          <label
+            htmlFor="subcategory"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Subcategory
+          </label>
+          <input
+            type="text"
+            id="subcategory"
+            name="subcategory"
+            required
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.subcategory}
+          />
+        </div>
+
+        {/* Sale Percentage */}
+        <div className="mb-4">
+          <label
+            htmlFor="sale"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Sale Percentage
+          </label>
+          <input
+            type="number"
+            id="sale"
+            name="sale"
+            min="0"
+            max="100"
+            placeholder="Enter Sale Percentage"
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.sale}
+          />
+        </div>
+
+        {/* Composition */}
+        <div className="mb-4">
+          <label
+            htmlFor="composition"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Composition
+          </label>
+          <input
+            type="text"
+            id="composition"
+            name="composition"
+            placeholder="e.g. Cotton, Polyester"
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.composition}
+          />
+        </div>
+
+        {/* Images */}
+        <div className="mb-4">
+          <label
+            htmlFor="images"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Images
+          </label>
+          <input
+            type="file"
+            id="images"
+            name="images"
+            placeholder="Upload Images"
+            accept="image/*"
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={(e) => setImage(e.target.files?.[0])}
+            ref={imageRef}
+          />
+        </div>
+
+        {/* Sizes and Quantities */}
+        <div className="mb-6">
+          <label className="block text-lg font-medium text-gray-600 mb-2">
+            Sizes and Quantities
+          </label>
+          <div className="grid grid-cols-5 gap-4">
+            {["SMALL", "MEDIUM", "LARGE", "XL", "XXL"].map((size) => (
+              <div key={size} className="flex flex-col items-center">
+                <label className="text-gray-700">{size}</label>
+                <input
+                  type="number"
+                  name={size}
+                  placeholder="Quantity"
+                  className="w-20 p-2 mt-1 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  onChange={handleChange}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Colors */}
+        <div className="mb-4">
+          <label
+            htmlFor="colors"
+            className="block text-lg font-medium text-gray-600 mb-2"
+          >
+            Colors
+          </label>
+          <input
+            type="text"
+            id="colors"
+            name="colors"
+            placeholder="e.g. Red, Blue, Green"
+            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+            onChange={handleChange}
+            value={formData.colors}
+          />
+        </div>
+
+        {/* Submit Button */}
+        <div className="mt-6">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 bg-red-700 text-white text-lg rounded-md hover:bg-red-500 transition duration-300"
+          >
+            {isLoading ? (
+              <div className="loader mx-auto"></div>
+            ) : (
+              "Submit Product"
+            )}
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+};
+
+export default ProductForm;

@@ -1,0 +1,52 @@
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import AllNavComps from "@/components/Home/AllNavComps";
+import { ToastContainer } from "react-toastify";
+import Footer from "@/components/Footer_Links/Footer";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata = {
+  title: "Protees - Protees.pk",
+  description : "Protees at your service",
+  icons : {
+    icon : "/favicon.png"
+  }
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className="dark">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+      >
+        <main>
+          <AllNavComps />
+          {children}
+          <Footer />
+          <ToastContainer
+            position="top-center"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+          
+        </main>
+      </body>
+    </html>
+  );
+}

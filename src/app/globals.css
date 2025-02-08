@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+  .message {
+    @apply absolute text-xs bg-black top-6 hidden p-1 md:p-2 text-gray-200 left-[-50%] w-max
+  }
+  .show:hover .message{
+    @apply block
+  }
+  .custom::after{
+    @apply content-[''] bg-black absolute left-0 w-[0%] bottom-[-5px] h-[3px]
+}
+.custom:hover::after{
+    @apply w-[100%] duration-[400ms] ease-in-out
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 30px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: white #0000;
+  animation: l1 1s infinite;
+}
+@keyframes l1 {to{transform: rotate(.5turn)}}
+
+.animateHeight{
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows ease-in-out 0.7s 
+}
+
+.defaultheight{
+  grid-template-rows: 0fr;
+  transition: grid-template-rows ease-in-out 0.3s
+}
+
+}
