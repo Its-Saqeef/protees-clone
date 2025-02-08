@@ -1,7 +1,7 @@
 import connectDB from "@/lib/Connection.js";
 import { Product } from "@/components/Backend/models/Product.models";
 import { NextResponse } from "next/server";
-
+ export const dynamic = 'force-static'
 export async function GET(request,{params}) {
   try {
     await connectDB();
