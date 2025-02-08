@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <main>
+          <marquee className="bg-black text-white">This website is a clone of www.protees.pk.Clone is for practice purposes</marquee>
           <AllNavComps />
           {children}
           <Footer />
