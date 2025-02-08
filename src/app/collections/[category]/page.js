@@ -51,7 +51,7 @@ if(error){
     setValue(newValue);
     sp.set("minprice",value[0])
     sp.set("maxprice",value[1])
-    router.push(`${pathname}?${sp}`)
+    router.push(`${pathname}?${sp}`)    
   };
 
   const handleStock=(e)=>{
@@ -98,7 +98,7 @@ if(error){
           <div className='flex flex-col overflow-hidden'>
             <div className='flex justify-between mb-4'>
             <h5>Rs.{value[0]}</h5>
-            <h5>Rs. {(value[1]== 0 ? maxPrice : value[1]).toLocaleString("en-IN")}.00</h5>
+            <h5>Rs. {(value[1]).toLocaleString("en-IN")}.00</h5>
             </div>            
             <Slider
             getAriaLabel={() => 'Price'}
@@ -109,7 +109,7 @@ if(error){
             color='black'
             max={maxPrice}
             step={10}
-            className='w-[90%] mx-auto'
+
             />
           </div>
         </div>

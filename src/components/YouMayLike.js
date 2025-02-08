@@ -12,15 +12,15 @@ function YouMayLike({params}) {
     console.log();
     
   return (
-    <section>
-        <h1 className='font-bold text-2xl lg:text-4xl my-[20px] text-gray-800 tracking-wider text-center'>YOU MAY ALSO LIKE</h1>
-        <div className='grid grid-cols-2 lg:grid-cols-4 cursor-pointer gap-x-1 gap-y-4'>
+    <section className='my-5 md:mt-20'>
+        <h1 className='w-max mx-auto text-xl md:text-2xl lg:text-3xl my-[20px] text-gray-800 tracking-wider text-center'>YOU MAY ALSO LIKE</h1>
+        <div className='md:grid md:grid-cols-4 mt-[30px] flex overflow-x-scroll md:overflow-hidden'>
         {
             data && data.map((item)=>{
-                if(item._id!=params.id)
+                 if(item._id!=params.id)
                 return (
                     <Link href={`/collections/${item.subcategory}/product/${item._id}`} key={item._id}>
-                    <div  className='relative my-[10px] p-2' data-aos="fade-up">
+                    <div  className='relative my-[10px] w-44 md:w-auto p-2' data-aos="fade-left">
                         <p className={item.sale ? "text-white bg-red-600 inline p-[3px] md:px-2 md:py-1 absolute right-2 rounded-sm" : 'hidden' }>sale</p>
                         <div className='flex flex-col justify-center items-center'>
                         <CldImage width="600" height="600" src={item.images[0]} alt='Photo'/>
@@ -33,8 +33,7 @@ function YouMayLike({params}) {
                 </div>   
                     </div>
                     </Link>
-                )
-            
+                )            
         })
         }
         </div>

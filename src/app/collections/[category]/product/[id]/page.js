@@ -9,6 +9,8 @@ import Link from "next/link";
 import { CldImage } from "next-cloudinary";
 import useSWR from "swr";
 import YouMayLike from "@/components/YouMayLike";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 function page() {
   const params = useParams();
@@ -33,6 +35,9 @@ function page() {
       if (smallSizeButton && sizeButtonsRef.current[smallSizeButton.size]) {
         sizeButtonsRef.current[smallSizeButton.size].focus();
       }
+      Aos.init({
+        once: false,
+      });
       setStock(data.sizes[0].quantity);
     }
   }, [data]);
@@ -58,9 +63,13 @@ function page() {
               {data.name}
             </h1>
             <div className="flex gap-5 text-base sm:text-xl md:text-lg mx-auto md:mx-0">
-              <h3
-                className={`line-through py-1 ${data.sale ? "" : "hidden"}`}
-              >Rs.{((Math.floor((data.sale/100)*data.price))+ data.price).toLocaleString("en-IN")}.00</h3>
+              <h3 className={`line-through py-1 ${data.sale ? "" : "hidden"}`}>
+                Rs.
+                {(
+                  Math.floor((data.sale / 100) * data.price) + data.price
+                ).toLocaleString("en-IN")}
+                .00
+              </h3>
               <h3 className="py-1">
                 Rs {data.price.toLocaleString("en-IN")}.00
               </h3>
@@ -84,7 +93,9 @@ function page() {
                   data.sizes.map((size, index) => {
                     return (
                       <button
-                        className={`font-medium border-2 border-gray-300 focus:border-black ${size.quantity== 0? "line-through text-gray-500" : ""} py-2 px-2 sm:px-3 md:min-w-20`}
+                        className={`font-medium border-2 border-gray-300 focus:border-black ${
+                          size.quantity == 0 ? "line-through text-gray-500" : ""
+                        } py-2 px-2 sm:px-3 md:min-w-20`}
                         key={index}
                         onClick={() => setStock(size.quantity)}
                         ref={(el) => (sizeButtonsRef.current[size.size] = el)}
@@ -116,20 +127,24 @@ function page() {
                 ? `${stock} items left - Shop now`
                 : `In stock - order now`}
             </h6>
-            {
-              stock==0 ? <button className="bg-gray-200 text-gray-400 p-3 border-gray-600 border tracking-wider rounded-sm my-4" disabled={stock}>SOLD OUT</button> : (
-            <div className="flex flex-col gap-2 my-5">
-              <button className="border border-black p-3 tracking-wider rounded-sm">
-                ADD TO CART
+            {stock == 0 ? (
+              <button
+                className="bg-gray-200 text-gray-400 p-3 border-gray-600 border tracking-wider rounded-sm my-4"
+                disabled={stock}
+              >
+                SOLD OUT
               </button>
-              <button className="bg-black text-white p-3 tracking-wider rounded-sm">
-                BUY NOW
-              </button>
-            </div>
+            ) : (
+              <div className="flex flex-col gap-2 my-5">
+                <button className="border border-black p-3 tracking-wider rounded-sm">
+                  ADD TO CART
+                </button>
+                <button className="bg-black text-white p-3 tracking-wider rounded-sm">
+                  BUY NOW
+                </button>
+              </div>
+            )}
 
-              )
-            }
-            
             <div>
               <h2
                 className={`text-lg font-medium ${
@@ -191,7 +206,7 @@ function page() {
       ) : (
         <div className="loader w-12 mx-auto mt-10 border-x-black border-y-white"></div>
       )}
-      <YouMayLike params={params}/>
+      <YouMayLike params={params} />
     </main>
   );
 }

@@ -1,9 +1,12 @@
 "use client";
 import axios from "axios";
-import React, { useState,useRef } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 
 const ProductForm = () => {
+  useEffect(()=>{
+    document.title="Add Product - Protees.pk"
+  },[])
   const [formData, setFormData] = useState({
     name: "",
     price: "",
