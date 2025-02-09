@@ -17,8 +17,8 @@ export const slice=createSlice({
                 state.cart[itemIndex].quantity += 1;
             } else {
                 state.cart.push({ ...action.payload, quantity: 1 });
+                toast.success("Added To Cart")
             }
-            toast.success("Added To Cart")
         },
         removeFromCart : (state,action)=> {
             const itemIndex = state.cart.findIndex(
