@@ -7,9 +7,7 @@ const fetcher=async ()=>{
 
 export default async function page() {
   try {
-    const data=await fetcher()
-    console.log(data);
-    
+    const data=await fetcher()    
     return (
       <section>      
         <Home data={data} />

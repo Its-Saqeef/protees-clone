@@ -7,17 +7,17 @@ import EachCategory from "@/components/Home/EachCategory";
 
 
 export default function Home({data}) {
-
-  const beyondActive=data ? data.filter((item)=>item.subcategory=="beyond active") : null
-  const graphicTees=data ? data.filter((item)=>item.subcategory=="graphic") : null
-  const superTees=data ? data.filter((item)=>item.subcategory==="superheroes") : null
-  const basic= data ? data.filter((item)=>item.subcategory==="basic") : null
-  const sweatshirts= data ? data.filter((item)=>item.subcategory==="sweatshirt") : null
   useEffect(()=>{
     Aos.init({
           once: false
         })
   },[])
+  const beyondActive=data ? data.filter((item)=>item.subcategory=="beyond active") : null
+  const graphicTees=data ? data.filter((item)=>item.subcategory=="graphic") : null
+  const superTees=data ? data.filter((item)=>item.subcategory==="superheroes") : null
+  const basic= data ? data.filter((item)=>item.subcategory==="basic") : null
+  const sweatshirts= data ? data.filter((item)=>item.subcategory==="sweatshirt") : null
+  
   return (
     <section>      
       <ShopByCategory />
