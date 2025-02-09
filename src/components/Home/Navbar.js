@@ -12,7 +12,8 @@ import { IoMdClose } from "react-icons/io";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { BsPerson } from "react-icons/bs";
 import { MdOutlineDarkMode } from "react-icons/md";
-
+import Cart from "../Cart/Cart";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
@@ -20,10 +21,14 @@ function Navbar() {
   const [women, setWomen] = useState(false);
   const [fourseason, setFourSeason] = useState(true);
   const [winter, setWinter] = useState(false);
- 
-
+ const [openCart,setOpenCart]=useState(false)
+  const data=useSelector(state=>state.cart)
+  
   return (
     <header>
+      {
+        openCart ? <Cart setOpenCart={setOpenCart} /> : null
+      }
       <article className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto">
         <ul className="hidden md:flex gap-2 text-xl justify-end p-2">
             <li className="cursor-pointer relative show">
@@ -70,8 +75,8 @@ function Navbar() {
               src={"/SITE_LOGO_1.png"}
               alt="photo"
               className="cursor-pointer w-auto h-auto"
-              height={180}
-              width={180}
+              height={190}
+              width={190}
             />
           </Link>
           <div className="flex items-center gap-5 md:gap-10">
@@ -83,11 +88,11 @@ function Navbar() {
           </Link>
           <div>
             <p className="relative show">
-              <span className="message">Cart</span>
-              <IoBagOutline className="text-2xl cursor-pointer" />
+              <span className="message" >Cart</span>
+              <IoBagOutline className="text-2xl cursor-pointer" onClick={()=>setOpenCart(true)}/>
             </p>
             <hr
-              className={`bg-red-500 w-[10px] h-[10px] absolute rounded-xl ml-[17px] mt-[-25px] block`}
+              className={`bg-red-500 w-[10px] h-[10px] absolute rounded-xl ml-[17px] mt-[-25px] ${data.length==0 ? "hidden" : null}`}
             />
           </div>
           </div>

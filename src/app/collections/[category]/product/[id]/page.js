@@ -11,36 +11,38 @@ import useSWR from "swr";
 import YouMayLike from "@/components/YouMayLike";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import { addToCart } from "@/app/store/CartSlice";
+import { useDispatch } from "react-redux";
 
 function page() {
+  const { data, error } = useSWR("Product", async () => {
+    let response = await axios
+        .get(`/api/getproducts/${id}`)
+        .then((res) => res.data.data);
+      return response;
+    });
+  
+    if (error) {
+      return error.status == 404 ? notFound() : null;
+    }
   const params = useParams();
   const [id, setId] = useState(params.id);
   const [open, setOpen] = useState(false);
+  const [size,setSize]=useState("SMALL")
+  const [active,setActive]=useState("SMALL")
+  const sizeButtonsRef = useRef({});  
   const [stock, setStock] = useState();
-  const sizeButtonsRef = useRef({});
-  const { data, error } = useSWR("Product", async () => {
-    let response = await axios
-      .get(`/api/getproducts/${id}`)
-      .then((res) => res.data.data);
-    return response;
-  });
-
-  if (error) {
-    return error.status == 404 ? notFound() : null;
-  }
   useEffect(() => {
+    Aos.init({
+      once: false,
+    })
     if (data && data.sizes) {
       document.title = data.name + " - Protees.pk";
-      const smallSizeButton = data.sizes.find((size) => size.size === "SMALL");
-      if (smallSizeButton && sizeButtonsRef.current[smallSizeButton.size]) {
-        sizeButtonsRef.current[smallSizeButton.size].focus();
-      }
-      Aos.init({
-        once: false,
-      });
       setStock(data.sizes[0].quantity);
     }
   }, [data]);
+
+  const dispatch=useDispatch()
 
   return (
     <main className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto mt-10">
@@ -93,11 +95,11 @@ function page() {
                   data.sizes.map((size, index) => {
                     return (
                       <button
-                        className={`font-medium border-2 border-gray-300 focus:border-black ${
+                        className={`font-medium border-2 ${active===size.size ? "border-black" : "border-gray-300"} ${
                           size.quantity == 0 ? "line-through text-gray-500" : ""
                         } py-2 px-2 sm:px-3 md:min-w-20`}
                         key={index}
-                        onClick={() => setStock(size.quantity)}
+                        onClick={() => {setStock(size.quantity),setSize(size.size),setActive(size.size)}}
                         ref={(el) => (sizeButtonsRef.current[size.size] = el)}
                       >
                         {size.size}
@@ -136,7 +138,7 @@ function page() {
               </button>
             ) : (
               <div className="flex flex-col gap-2 my-5">
-                <button className="border border-black p-3 tracking-wider rounded-sm">
+                <button className="border border-black p-3 tracking-wider rounded-sm" onClick={()=>dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images}))}>
                   ADD TO CART
                 </button>
                 <button className="bg-black text-white p-3 tracking-wider rounded-sm">
