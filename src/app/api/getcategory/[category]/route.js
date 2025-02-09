@@ -8,8 +8,6 @@ export async function GET(request,{params}) {
   try {
     await connectDB();
     const {category}=await params
-    const searchParams = request.nextUrl.searchParams
-    const query = searchParams.get('query')
     
     if (!category) {
       return NextResponse.json(

@@ -29,7 +29,7 @@ function Cart({setOpenCart}) {
               </div>
               
               <div className={`h-[70vh] overflow-y-auto`}> 
-                <p className={`p-4 text-base lg:text-lg xl:text-xl mt-4 ${data ? "hidden" : "block"} `}>Your cart is currently empty.</p>
+                <p className={`p-4 text-base lg:text-lg xl:text-xl mt-4 ${data.length > 0 ? "hidden" : ""} `}>Your cart is currently empty.</p>
                 {
                  data.map((item,i)=>{
                    return(

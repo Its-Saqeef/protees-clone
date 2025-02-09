@@ -9,7 +9,7 @@ export default async function connectDB() {
     }
 
     try {
-       const db = await mongoose.connect(process.env.MONGODB_URI);
+       const db = await mongoose.connect("mongodb://localhost:27017");
        connection.isConnected=db.connections[0].readyState
        console.log("Connected with host ",db.connection.host);
     } catch (error) {
