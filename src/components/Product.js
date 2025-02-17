@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams,useRouter } from "next/navigation";
 import { TfiWorld } from "react-icons/tfi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaFacebook } from "react-icons/fa";
@@ -9,11 +9,13 @@ import { CldImage } from "next-cloudinary";
 import YouMayLike from "@/components/YouMayLike";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { addToCart } from "@/app/store/CartSlice";
+import { addToCart,setCartFromLocalStorage } from "@/app/store/CartSlice";
 import { useDispatch } from "react-redux";
+import RecentlyViewed from "./RecentlyViewed";
+import { IoIosArrowRoundBack } from "react-icons/io"
 
 function Product({data}) {
-
+  const router=useRouter()
   const params = useParams();
   const [id, setId] = useState(params.id);
   const [open, setOpen] = useState(false);
@@ -21,16 +23,29 @@ function Product({data}) {
   const [active,setActive]=useState("SMALL")
   const sizeButtonsRef = useRef({});  
   const [stock, setStock] = useState();
+  const [recent,setRecent]=useState(typeof window !== "undefined" ? JSON.parse(localStorage.getItem("Recent")) || [] : null)
   useEffect(() => {
     Aos.init({
       once: false,
     })
       document.title = data.name + " - Protees.pk";
       setStock(data.sizes[0].quantity);
+      if(recent.length>6 && !recent.some(item => item._id === data._id)){
+        recent.shift();
+        localStorage.setItem("Recent", JSON.stringify([...recent,data]))
+      }
+      else if(!recent.some(item => item._id === data._id)){
+        localStorage.setItem("Recent", JSON.stringify([...recent,data]))
+      }
   },[]);
-
+  
   const dispatch=useDispatch()
-
+  useEffect(()=>{
+    if (typeof window !== "undefined") {
+      const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
+      dispatch(setCartFromLocalStorage(storedCart));
+    }
+  },[dispatch])
   
   return (
     <main className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto mt-10">
@@ -129,7 +144,7 @@ function Product({data}) {
                 <button className="border border-black p-3 tracking-wider rounded-sm" onClick={()=>dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images}))}>
                   ADD TO CART
                 </button>
-                <button className="bg-black text-white p-3 tracking-wider rounded-sm">
+                <button className="bg-black text-white p-3 tracking-wider rounded-sm" onClick={()=>(dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images})), router.push("/checkout"))}>
                   BUY NOW
                 </button>
               </div>
@@ -197,6 +212,13 @@ function Product({data}) {
         <div className="loader w-12 mx-auto mt-10 border-x-black border-y-white"></div>
       )}
       <YouMayLike params={params} />
+      <RecentlyViewed id={data._id} />
+      <div className="flex justify-center my-5">
+        <Link href={`/collections/${data.subcategory}`}>
+        <button className="text-white bg-black py-3 px-2 text-center rounded-md"><IoIosArrowRoundBack className="inline-block text-2xl" /> <span className="capitalize">{data.subcategory}</span></button>
+        </Link>
+      </div>
+      
     </main>
   );
 }

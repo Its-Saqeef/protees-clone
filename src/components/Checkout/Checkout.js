@@ -1,0 +1,470 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { HiOutlineQuestionMarkCircle } from "react-icons/hi2";
+import Modal from "./Modal";
+import { useSelector } from "react-redux";
+import {CldImage} from "next-cloudinary"
+import { toast } from "react-toastify";
+
+function Checkout() {
+    useEffect(()=>{
+        document.title = "Checkout - Protees.pk";
+    },[])
+  const [messagedisp, setMessageDisp] = useState(false);
+  const [radiotoggleone, setRadioToggleOne] = useState(true);
+  const [radiotoggletwo, setRadioToggleTwo] = useState(false);
+  const [billaddress, setBillAddress] = useState(false);
+  const [shippingtoggle, setShippingToggle] = useState(false);
+  const data=useSelector(state=>state.cart)
+  console.log(data)
+  const [formdata, setFormData] = useState({
+    email: "",
+    fname: "",
+    lname: "",
+    address: "",
+    city: "",
+    postalcode: "",
+    phone: "",
+  });
+
+  const [billing, setBilling] = useState({
+    fname: "",
+    lname: "",
+    address: "",
+    city: "",
+    postalcode: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const changeHandler = (e) => {
+    setFormData(() => ({
+      ...formdata,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handlebillingaddress = (e) => {
+    if (billaddress) {
+      setBilling(() => ({
+        ...billing,
+        [e.target.name]: e.target.value,
+      }));
+    }
+  };
+
+  const handleErrors = () => {
+    let errors = {};
+
+    if (!formdata.email && !formdata.email) {
+      errors.email = "Enter a valid email or phone number";
+    }
+    if (!formdata.lname) {
+      errors.lname = "Enter Last Name";
+    }
+    if (!formdata.address) {
+      errors.address = "Enter an address";
+    }
+    if (!formdata.city) {
+      errors.city = "Enter a city";
+    }
+    if (!formdata.phone) {
+      errors.phone = "Enter a phone number";
+    }
+    if (billaddress) {
+      if (!billing.lname) {
+        errors.blname = "Enter Last Name";
+      }
+      if (!billing.address) {
+        errors.baddress = "Enter an address";
+      }
+      if (!billing.city) {
+        errors.bcity = "Enter a city";
+      }
+    }
+    return errors;
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    const errors = handleErrors();
+
+    if (Object.keys(errors).length) {
+      setErrors(errors);
+      return;
+    }
+    setErrors({});
+    toast.success("Order Placed")
+    console.log(formdata);
+    console.log(data)
+  };
+
+  let totalamount=0
+    data && data.map((item)=>{
+        const individual_item=item.price * item.quantity
+        totalamount=individual_item + totalamount
+    })   
+
+  return (
+    <div
+      className={` w-full  top-0 bg-black ${
+        shippingtoggle ? "fixed top-0" : "absolute"
+      }`}
+    >
+      <div className="w-[90%] mx-auto md:mx-0 md:ml-[10%]">
+        {shippingtoggle && (
+          <Modal
+            onClose={() => setShippingToggle(false)}
+            shippingtoggle={shippingtoggle}
+          />
+        )}
+        <div className="py-7 w-[260px]">
+          <Link href="/">
+            <img src={"/white logo.png"} alt="photo" className="h-[90px]" />
+          </Link>
+        </div>
+        <div className="text-white flex flex-col md:flex-row gap-5">
+          <div className="w-full md:w-[45%]">
+            <form onSubmit={submitHandler}>
+              <h2 className="text-2xl py-4">Contact</h2>
+              <input
+                name="email"
+                placeholder="Email or Mobile Phone Number"
+                className={`bg-black focus:outline-none border border-gray-500 w-full p-3 rounded-md ${
+                  errors.email ? "border-red-500" : null
+                }`}
+                onChange={changeHandler}
+              />
+              <div className="text-red-500">{errors.email}</div>
+              <input
+                type="checkbox"
+                id="check"
+                className="cursor-pointer my-4 mr-2"
+                defaultChecked
+              />
+              <label htmlFor="check" className="cursor-pointer text-lg">
+                Email me with news and offers
+              </label>
+              <h2 className="text-2xl py-5">Delivery</h2>
+              <select className="bg-black w-full outline-none border  border-gray-500 p-3 rounded-md" defaultValue="Pakistan">
+                <option disabled >Country/State</option>
+                <option >Pakistan</option>
+              </select>
+              <div className="flex gap-5 py-3">
+                <input
+                  name="fname"
+                  placeholder="First Name"
+                  className="bg-black w-[50%] outline-none border  border-gray-500 p-3 rounded-md"
+                  onChange={changeHandler}
+                />
+                <div
+                  className={`w-[50%] relative ${errors.lname ? "mb-2" : null}`}
+                >
+                  <input
+                    name="lname"
+                    placeholder="Last Name"
+                    className={`bg-black w-full outline-none border  border-gray-500 p-3 rounded-md ${
+                      errors.lname ? "border-red-500 " : null
+                    }`}
+                    onChange={changeHandler}
+                  />
+                  <div className="text-red-500 absolute">{errors.lname}</div>
+                </div>
+              </div>
+              <input
+                name="address"
+                placeholder="Address"
+                className={`bg-black w-full outline-none border border-gray-500 p-3 rounded-md ${
+                  errors.address ? "border-red-500" : null
+                }`}
+                onChange={changeHandler}
+              />
+              <div className="text-red-500 ">{errors.address}</div>
+              <div className="flex gap-5 py-5 mt-2">
+                <div className="w-[50%] relative">
+                  <input
+                    name="city"
+                    placeholder="City"
+                    className={`bg-black w-full outline-none border  border-gray-500 p-3 rounded-md ${
+                      errors.city ? "border-red-500" : null
+                    }`}
+                    onChange={changeHandler}
+                  />
+                  <div className="text-red-500 absolute">{errors.city}</div>
+                </div>
+                <input
+                  name="postalcode"
+                  placeholder="Postal Code"
+                  className="bg-black w-[50%] outline-none border  border-gray-500 p-3 rounded-md"
+                  onChange={changeHandler}
+                />
+              </div>
+              <div
+                className={`flex items-center border  border-gray-500 rounded-md p-2 relative ${
+                  errors.phone ? "border-red-500" : null
+                }`}
+              >
+                <input
+                  name="phone"
+                  placeholder="Phone"
+                  className="bg-black w-[100%] py-1 outline-none"
+                  onChange={changeHandler}
+                />
+                <div>
+                  <HiOutlineQuestionMarkCircle
+                    className="cursor-pointer w-10 text-2xl"
+                    onMouseEnter={() => setMessageDisp(true)}
+                    onMouseLeave={() => setMessageDisp(false)}
+                  />
+                  <p
+                    className={`absolute w-[150px] h-[80px] py-1 px-2 rounded-md border z-10 bg-white shadow-md text-black ${
+                      messagedisp ? "block" : "hidden"
+                    }`}
+                  >
+                    In case we need to contact you about your order
+                  </p>
+                </div>
+              </div>
+              <div className="text-red-500">{errors.phone}</div>
+              <input
+                type="checkbox"
+                id="check2"
+                className="cursor-pointer my-5 mr-2"
+              />
+              <label htmlFor="check2" className="cursor-pointer text-lg">
+                Save this information for next time
+              </label>
+              <h2 className="text-2xl py-4">Shipping Method</h2>
+              <p className="bg-black w-[100%] flex justify-between border  border-gray-500 p-4 rounded-md">
+                STANDARD SHIPPING <span>Rs 200.00</span>
+              </p>
+              <h2 className="text-2xl pt-3 pb-1">Payment</h2>
+              <p className="font-light">
+                All transactions are secure and encrypted.
+              </p>
+              <div className="flex flex-col border border-gray-500 my-4 rounded-md">
+                <div className="border-b border-gray-500 py-3 pl-2">
+                  <input
+                    type="radio"
+                    value=""
+                    name="payment"
+                    id="payment"
+                    defaultChecked
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setRadioToggleTwo(false);
+                      setRadioToggleOne(true);
+                    }}
+                  />
+                  <label htmlFor="payment" className="cursor-pointer ml-2">
+                    Cash on Delivery
+                  </label>
+                </div>
+                <p
+                  className={`mx-auto border-b border-gray-500 w-full text-center py-4 ${
+                    radiotoggleone ? "block" : "hidden"
+                  }`}
+                >
+                  Pay Cash on Delivery
+                </p>
+                <div className={`border-b border-gray-500 py-3 pl-2`}>
+                  <input
+                    type="radio"
+                    value=""
+                    name="payment"
+                    id="payment2"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setRadioToggleTwo(true);
+                      setRadioToggleOne(false);
+                    }}
+                  />
+                  <label htmlFor="payment2" className="cursor-pointer ml-2">
+                    Bank Deposit
+                  </label>
+                </div>
+                <div
+                  className={`mx-auto w-[60%] py-5 flex flex-col items-center ${
+                    radiotoggletwo ? "block" : "hidden"
+                  }`}
+                >
+                  <p> Transfer the amount to this bank account.</p>
+                  <p>BANK NAME: MEEZAN BANK</p>
+                  <p>ACC TITLE: PROTEES PRIVATE LIMITED</p>
+                  <p>ACC NUMBER: 02240104954836</p>
+                </div>
+              </div>
+              <h2 className="text-2xl py-4">Billing Address</h2>
+              <div className="border border-gray-500 rounded-md">
+                <div className=" py-3 pl-2">
+                  <input
+                    type="radio"
+                    name="billing"
+                    id="billing"
+                    onClick={() => setBillAddress(false)}
+                    defaultChecked
+                  />
+                  <label htmlFor="billing" className="ml-2 cursor-pointer">
+                    Same as shipping address
+                  </label>
+                </div>
+                <div className="py-3 pl-2">
+                  <input
+                    type="radio"
+                    name="billing"
+                    id="billing2"
+                    onClick={() => setBillAddress(true)}
+                  />
+                  <label htmlFor="billing2" className="ml-2 cursor-pointer">
+                    Use a different billing address
+                  </label>
+                </div>
+                <div
+                  className={`py-5 w-[90%] mx-auto ${
+                    billaddress ? "block" : "hidden"
+                  } `}
+                >
+                  <select className="bg-black w-full outline-none border  border-gray-500 p-3 rounded-md" defaultValue={"Pakistan"}>
+                    <option disabled>Country/State</option>
+                    <option >Pakistan</option>
+                  </select>
+                  <div className="flex gap-5 py-3 relative">
+                    <input
+                      name="fname"
+                      placeholder="First Name"
+                      className="bg-black w-[50%] outline-none border  border-gray-500 p-3 rounded-md"
+                      onChange={handlebillingaddress}
+                    />
+                    <div
+                      className={`w-[50%] relative ${
+                        errors.blname ? "mb-2" : null
+                      }`}
+                    >
+                      <input
+                        name="lname"
+                        placeholder="Last Name"
+                        className={`bg-black w-full outline-none border  border-gray-500 p-3 rounded-md ${
+                          errors.blname ? "border-red-500 " : null
+                        }`}
+                        onChange={handlebillingaddress}
+                      />
+                      <div className="text-red-500 absolute">
+                        {errors.blname}
+                      </div>
+                    </div>
+                  </div>
+                  <input
+                    name="address"
+                    placeholder="Address"
+                    className="bg-black w-full outline-none border  border-gray-500 p-3 rounded-md"
+                    onChange={handlebillingaddress}
+                  />
+                  <div className="text-red-500 my-1">{errors.baddress}</div>
+                  <div className="flex gap-5 py-3 mt-2">
+                    <input
+                      name="city"
+                      placeholder="City"
+                      className="bg-black w-[50%] outline-none border  border-gray-500 p-3 rounded-md"
+                      onChange={handlebillingaddress}
+                    />
+                    <input
+                      name="postalcode"
+                      placeholder="Postal Code"
+                      className="bg-black w-[50%] outline-none border  border-gray-500 p-3 rounded-md"
+                      onChange={handlebillingaddress}
+                    />
+                  </div>
+                  <div className="text-red-500">{errors.bcity}</div>
+                </div>
+              </div>
+              <input
+                type="submit"
+                className="bg-red-700 hover:bg-red-800 transition ease-in-out duration-300 w-full p-4 text-xl rounded-md my-8 cursor-pointer hidden md:block"
+                value="Complete Order"
+              />
+            </form>
+          </div>
+
+          <div className="bg-black md:bg-white w-full  md:w-[60%] md:h-[810px] text-white md:text-black sticky top-0">
+            <div className="w-full md:w-[60%] md:ml-14 mt-10">
+              {data.map((item,i) => {
+                  return (
+                    <div className="flex gap-2 md:justify-between items-center my-5" key={item.id + i}>
+                      <div className="relative">
+                        <CldImage
+                          src={item.image[0]}
+                          alt="photo"
+                          height={50}
+                          width={50}
+                          className="h-[40px] w-[40px] md:h-[80px] md:w-[80px] border-2"
+                        />
+                        <p className="absolute top-[-8px] right-[-8px] border-2 h-[20px] md:h-[30px] w-[20px] md:w-[30px] text-center text-xs md:text-sm pb-1 md:p-1 rounded-2xl bg-gray-500 text-white">
+                          {item.quantity}
+                        </p>
+                      </div>
+                      <div className="flex flex-col justify-start w-[60%] gap-2">
+                        <p className="text-sm lg:text-base xl:text-lg">
+                          {item.name}
+                        </p>
+                        <p><span className="text-gray-500">Size : </span>{item.size}</p>
+                      </div>
+                      <p className="text-sm md:text-base text-gray-500">
+                        Rs {item.price.toLocaleString("en-IN")}.00
+                      </p>
+                    </div>
+                  );
+              })}
+              <div className="flex gap-5">
+                <input
+                  type="text"
+                  placeholder="Discount code"
+                  className="p-2 border-2 rounded-md w-[80%]"
+                />
+                <button className="py-2 px-3 border rounded-md text-gray-400 bg-gray-100">
+                  Apply
+                </button>
+              </div>
+              <div className=" p-4 my-5 flex flex-col gap-2">
+                <div className="flex justify-between">
+                  <p>Subtotal</p>
+                  <p className="font-semibold">Rs {totalamount.toLocaleString("en-IN")}.00</p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="flex items-center gap-1">
+                    Shipping{" "}
+                    <HiOutlineQuestionMarkCircle
+                      className="cursor-pointer"
+                      onClick={() => setShippingToggle(true)}
+                    />
+                  </p>
+                  <p className="font-semibold">
+                    {totalamount > 2000 ? "Free" : "Rs 200.00"}
+                  </p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="font-semibold text-xl">Total</p>
+                  <p className="font-semibold text-xl">
+                    <sub className="text-gray-400 font-normal mr-2">PKR</sub>Rs{" "}
+                    {totalamount > 2000
+                      ? totalamount + ".00"
+                      : totalamount + 200 + ".00"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input
+            type="submit"
+            onClick={submitHandler}
+            className="bg-red-700 hover:bg-red-800 transition ease-in-out duration-300 w-full p-4 text-xl rounded-md my-8 cursor-pointer md:hidden"
+            value="Complete Order"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Checkout;

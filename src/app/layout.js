@@ -4,7 +4,7 @@ import AllNavComps from "@/components/Home/AllNavComps";
 import { ToastContainer } from "react-toastify";
 import Footer from "@/components/Footer_Links/Footer";
 import { StoreProvider } from "./store/Provider";
-
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +33,9 @@ export default function RootLayout({ children }) {
         <main>
           <marquee className="bg-black text-white">This website is a clone of www.protees.pk.Clone is for practice purposes</marquee>
           <AllNavComps />
+          <NuqsAdapter>
           {children}
+          </NuqsAdapter>
           <Footer />
           <ToastContainer
             position="top-center"

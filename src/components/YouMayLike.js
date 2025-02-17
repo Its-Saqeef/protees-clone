@@ -9,7 +9,6 @@ function YouMayLike({params}) {
         const response=await axios.get(`/api/getcategory/${decodedCategory}`).then((res)=>res.data.data)
         return response
     })
-    console.log();
     
   return (
     <section className='my-5 md:mt-20'>

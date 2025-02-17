@@ -138,20 +138,20 @@ function Navbar() {
                   }`}
                   onClick={() => setNav(false)}
                 >
-                  <Link href="/yearly">
-                    <li>YEARLY TEES</li>
+                  <Link href="/collections/sweatshirt">
+                    <li>SWEATSHIRTS</li>
                   </Link>
-                  <Link href="/collection/basic">
+                  <Link href="/collections/basic">
                     <li>BASIC</li>
                   </Link>
-                  <Link href="/oversized_tees">
-                    <li>OVERSIZED TEES</li>
+                  <Link href="/collections/beyond active">
+                    <li>BEYOND ACTIVE</li>
                   </Link>
-                  <Link href="">
-                    <li>TANKTOPS</li>
+                  <Link href="/collections/graphic">
+                    <li>GRAPHIC TEES</li>
                   </Link>
-                  <Link href="/beyond_active">
-                    <li>ACTIVE BEYOND</li>
+                  <Link href="/collections/superheroes">
+                    <li>SUPER TEES</li>
                   </Link>
                 </div>
               </ul>

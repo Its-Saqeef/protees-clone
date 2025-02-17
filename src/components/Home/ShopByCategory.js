@@ -6,20 +6,23 @@ function Banner() {
         {   
             id :1,
             category : 'BEYOND CAMO',
-            sub_category : 'beyond_active',
-            image : "/img1.png"
+            sub_category : 'beyond active',
+            image : "/img1.png",
+            link : "beyond active"
         },
         {
             id :2,
             category : 'OVERSIZED TEES',
             sub_category : 'oversized_tees',
-            image : "img2.png"
+            image : "img2.png",
+
         },
         {
             id :3,
             category : 'SUPERHERO TEES',
             sub_category : 'cotton_tees',
-            image : "/smoke-superman.png"
+            image : "/smoke-superman.png",
+            link : "superheroes"
         },
         {
             id :4,
@@ -31,7 +34,8 @@ function Banner() {
             id :5,
             category : 'BASIC',
             sub_category : 'basic',
-            image : "/img5.png"
+            image : "/img5.png",
+            link : "basic"
         },
         {
             id :6,
@@ -49,7 +53,8 @@ function Banner() {
             id :8,
             category : 'SWEATSHIRTS',
             sub_category : 'yearly',
-            image : "/sweatshirt-.png"
+            image : "/sweatshirt-.png",
+            link : "sweatshirt"
         },
         {
             id :9,
@@ -67,7 +72,8 @@ function Banner() {
             id :11,
             category : 'DIGITAL GRAPHIC TEES',
             sub_category : 'yearly',
-            image : "/digitaltee-.png"
+            image : "/digitaltee-.png",
+            link : "graphic"
         },
         {
             id :12,
@@ -91,7 +97,7 @@ function Banner() {
             {
                 categoryImages.map((item)=>{
                    return(
-                   <Link href={`/collections/${item.sub_category}`} key={item.id}>
+                   <Link href={`/collections/${item.link}`} key={item.id}>
                    <div   className="bg-gray-200 transition ease-out duration-[1.5s] hover:bg-gray-300 relative hover:cursor-pointer " data-aos="fade-up">
                    <img  className="transition ease-out duration-[1s] hover:scale-[105%] "  src={item.image} /> 
                     <p className="absolute top-[50%] w-[90%] border bg-white p-1 ml-[5%] text-center text-sm xl:text-lg">{item.category}</p>
