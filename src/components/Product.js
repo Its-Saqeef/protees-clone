@@ -9,7 +9,7 @@ import { CldImage } from "next-cloudinary";
 import YouMayLike from "@/components/YouMayLike";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { addToCart,setCartFromLocalStorage } from "@/app/store/CartSlice";
+import { addToCart,setCartFromLocalStorage } from "@/components/store/CartSlice";
 import { useDispatch } from "react-redux";
 import RecentlyViewed from "./RecentlyViewed";
 import { IoIosArrowRoundBack } from "react-icons/io"
@@ -141,10 +141,10 @@ function Product({data}) {
               </button>
             ) : (
               <div className="flex flex-col gap-2 my-5">
-                <button className="border border-black p-3 tracking-wider rounded-sm" onClick={()=>dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images}))}>
+                <button className="border border-black p-3 tracking-wider rounded-sm" onClick={()=>dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images,subcategory : data.subcategory}))}>
                   ADD TO CART
                 </button>
-                <button className="bg-black text-white p-3 tracking-wider rounded-sm" onClick={()=>(dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images})), router.push("/checkout"))}>
+                <button className="bg-black text-white p-3 tracking-wider rounded-sm" onClick={()=>(dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images,subcategory : data.subcategory})), router.push("/checkout"))}>
                   BUY NOW
                 </button>
               </div>
@@ -215,7 +215,7 @@ function Product({data}) {
       <RecentlyViewed id={data._id} />
       <div className="flex justify-center my-5">
         <Link href={`/collections/${data.subcategory}`}>
-        <button className="text-white bg-black py-3 px-2 text-center rounded-md"><IoIosArrowRoundBack className="inline-block text-2xl" /> <span className="capitalize">{data.subcategory}</span></button>
+        <button className="text-white bg-black py-3 px-2 text-center rounded-md"><IoIosArrowRoundBack className="inline-block text-2xl" /> <span className="uppercase text-xs tracking-widest">BACK TO {data.subcategory}</span></button>
         </Link>
       </div>
       

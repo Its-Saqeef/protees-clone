@@ -5,7 +5,7 @@ import { LuPlus } from "react-icons/lu";
 import Link  from 'next/link'
 import { useSelector } from 'react-redux';
 import {CldImage} from "next-cloudinary"
-import { addToCart,removeFromCart } from '@/app/store/CartSlice';
+import { addToCart,removeFromCart } from '@/components/store/CartSlice';
 import { useDispatch } from 'react-redux';
 
 
@@ -16,12 +16,13 @@ function Cart({setOpenCart}) {
     data && data.map((item)=>{
         const individual_item=item.price * item.quantity
         calculatePrice=individual_item + calculatePrice
-    })   
+    })
+    
   return (
     <section className='w-[100%] h-[100vh] top-0 left-0 absolute z-20 flex'>
         <div className='w-[10%] sm:w-[55%] lg:w-[60%] xl:w-[70%] bg-opacity-50 bg-gray-300 backdrop-blur-sm' onClick={()=>setOpenCart(false)}></div>
       <div className={`w-[100%] sm:w-[55%] md:w-[50%] lg:w-[40%] xl:w-[40%] 2xl:w-[30%] overflow-y-auto bg-white` }>
-          <div className='w-[95%] mx-auto'>
+          <div className='w-[95%] mx-auto' data-aos="fade-up" data-aos-duration="700">
               <div className='flex justify-between items-center border-b-2 py-5'>
                 <h2 className='text-2xl xl:text-3xl font-semibold '>CART</h2>
                 <IoMdClose className='text-2xl cursor-pointer' onClick={()=>setOpenCart(false)}/>
@@ -33,10 +34,12 @@ function Cart({setOpenCart}) {
                  data.map((item,i)=>{
                    return(
                     <div className='flex  my-4 py-4 xl:py-5 border-b-2 gap-1' key={i}>
-                      <CldImage src={item.image[0]} alt='photo' width={150} height={120} />
+                      <Link href={`/collections/${item.subcategory}/product/${item.id}`} onClick={()=>setOpenCart(false)}>
+                      <CldImage src={item.image[0]} alt='photo' width={150} height={120} /></Link>
                       <div  className='flex flex-col justify-start gap-2 xl:gap-3'>
                         <h4 className='font-medium tracking-wider sm:w-[170px] lg:w-[230px] xl:text-lg w-[120px] xl:w-[270px]'>{item.name}</h4>
-                        <p>SIZE:{item.size}</p>
+                        
+                        <p><span className='text-xs'>SIZE</span> : {item.size}</p>
                         <div className='flex gap-[15px] xl:gap-[25px]'>
                           <div className='flex items-center border gap-3 xl:gap-4 self-start'>
                           <LuMinus className='cursor-pointer' onClick={()=>dispatch(removeFromCart({id : item.id,size : item.size}))}/>
@@ -47,6 +50,7 @@ function Cart({setOpenCart}) {
                         </div>
                       </div>
                     </div>
+                    
                   )
                   })
                 }

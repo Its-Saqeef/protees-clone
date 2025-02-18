@@ -3,7 +3,7 @@ import "./globals.css";
 import AllNavComps from "@/components/Home/AllNavComps";
 import { ToastContainer } from "react-toastify";
 import Footer from "@/components/Footer_Links/Footer";
-import { StoreProvider } from "./store/Provider";
+import { StoreProvider } from "../components/store/Provider";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <main>
-          <marquee className="bg-black text-white">This website is a clone of www.protees.pk.Clone is for practice purposes</marquee>
+          <marquee className="bg-black text-white text-lg p-1">This website is a clone of www.protees.pk.Clone is for practice purposes</marquee>
           <AllNavComps />
           <NuqsAdapter>
           {children}

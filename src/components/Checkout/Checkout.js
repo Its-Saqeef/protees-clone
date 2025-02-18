@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 function Checkout() {
     useEffect(()=>{
-        document.title = "Checkout - Protees.pk";
+    document.title = "Checkout - Protees.pk";
     },[])
   const [messagedisp, setMessageDisp] = useState(false);
   const [radiotoggleone, setRadioToggleOne] = useState(true);
