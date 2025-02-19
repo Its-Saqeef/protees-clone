@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaList } from "react-icons/fa";
@@ -13,21 +13,29 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { BsPerson } from "react-icons/bs";
 import { MdOutlineDarkMode } from "react-icons/md";
 import Cart from "../Cart/Cart";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { setCartFromLocalStorage,toggleCart } from '@/components/Store/CartSlice';
 
 function Navbar() {
+  const dispatch=useDispatch()
   const [nav, setNav] = useState(false);
   const [men, setMen] = useState(true);
   const [women, setWomen] = useState(false);
   const [fourseason, setFourSeason] = useState(true);
   const [winter, setWinter] = useState(false);
- const [openCart,setOpenCart]=useState(false)
   const data=useSelector(state=>state.cart)
+  const togglecart=useSelector(state=>state.toggleCart)
+  useEffect(()=>{
+          if (typeof window !== "undefined") {
+            const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
+            dispatch(setCartFromLocalStorage(storedCart));
+          }
+        },[])
   
   return (
-    <header>
+    <header >
       {
-        openCart ? <Cart setOpenCart={setOpenCart} /> : null
+        togglecart ? <Cart /> : null
       }
       <article className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto">
         <ul className="hidden md:flex gap-2 text-xl justify-end p-2">
@@ -89,7 +97,7 @@ function Navbar() {
           <div>
             <p className="relative show">
               <span className="message" >Cart</span>
-              <IoBagOutline className="text-2xl cursor-pointer" onClick={()=>setOpenCart(true)}/>
+              <IoBagOutline className="text-2xl cursor-pointer" onClick={()=>dispatch(toggleCart({toggle : true}))}/>
             </p>
             <hr
               className={`bg-red-500 w-[10px] h-[10px] absolute rounded-xl ml-[17px] mt-[-25px] ${data.length==0 ? "hidden" : null}`}

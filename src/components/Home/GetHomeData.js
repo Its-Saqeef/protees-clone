@@ -7,6 +7,7 @@ import EachCategory from "@/components/Home/EachCategory";
 
 
 export default function Home({data}) {
+  
   useEffect(()=>{
     Aos.init({
           once: false

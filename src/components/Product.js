@@ -9,7 +9,7 @@ import { CldImage } from "next-cloudinary";
 import YouMayLike from "@/components/YouMayLike";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { addToCart,setCartFromLocalStorage } from "@/components/store/CartSlice";
+import { addToCart,setCartFromLocalStorage } from "@/components/Store/CartSlice";
 import { useDispatch } from "react-redux";
 import RecentlyViewed from "./RecentlyViewed";
 import { IoIosArrowRoundBack } from "react-icons/io"
@@ -48,7 +48,7 @@ function Product({data}) {
   },[dispatch])
   
   return (
-    <main className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto mt-10">
+    <main className={`w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto mt-10`}>
       {data ? (
         <div
           className="flex flex-col md:flex-row md:items-start gap-4"

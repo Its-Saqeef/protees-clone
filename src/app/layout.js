@@ -1,10 +1,12 @@
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AllNavComps from "@/components/Home/AllNavComps";
 import { ToastContainer } from "react-toastify";
 import Footer from "@/components/Footer_Links/Footer";
-import { StoreProvider } from "../components/store/Provider";
+import { StoreProvider } from "../components/Store/Provider";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

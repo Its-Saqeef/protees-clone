@@ -6,12 +6,16 @@ import { toast } from "react-toastify";
 // Initial state without `localStorage`
 const initialState = {
   cart: [],
+  toggleCart : false
 };
 
 export const slice = createSlice({
   name: "Cart",
   initialState,
   reducers: {
+    toggleCart : (state,action)=>{
+      state.toggleCart = action.payload.toggle
+    },
     setCartFromLocalStorage: (state, action) => {
       state.cart = action.payload;
     },
@@ -54,5 +58,5 @@ export const slice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, setCartFromLocalStorage } = slice.actions;
+export const { addToCart, removeFromCart, setCartFromLocalStorage,toggleCart } = slice.actions;
 export default slice.reducer;
