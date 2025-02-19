@@ -14,7 +14,7 @@ import { BsPerson } from "react-icons/bs";
 import { MdOutlineDarkMode } from "react-icons/md";
 import Cart from "../Cart/Cart";
 import { useSelector,useDispatch } from "react-redux";
-import { setCartFromLocalStorage,toggleCart } from '@/components/Store/CartSlice';
+import { setCartFromLocalStorage,toggleCart } from '@/app/store/CartSlice';
 
 function Navbar() {
   const dispatch=useDispatch()

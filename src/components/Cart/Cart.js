@@ -5,7 +5,7 @@ import { LuPlus } from "react-icons/lu";
 import Link  from 'next/link'
 import { useSelector } from 'react-redux';
 import {CldImage} from "next-cloudinary"
-import { addToCart,removeFromCart,toggleCart } from '@/components/Store/CartSlice';
+import { addToCart,removeFromCart,toggleCart } from '@/app/store/CartSlice';
 import { useDispatch } from 'react-redux';
 
 

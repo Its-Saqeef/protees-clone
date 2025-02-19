@@ -4,7 +4,7 @@ import "./globals.css";
 import AllNavComps from "@/components/Home/AllNavComps";
 import { ToastContainer } from "react-toastify";
 import Footer from "@/components/Footer_Links/Footer";
-import { StoreProvider } from "@/components/Store/Provider";
+import { StoreProvider } from "@/app/store/Provider";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const geistSans = Geist({

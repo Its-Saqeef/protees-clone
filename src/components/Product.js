@@ -9,7 +9,7 @@ import { CldImage } from "next-cloudinary";
 import YouMayLike from "@/components/YouMayLike";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { addToCart,setCartFromLocalStorage } from "@/components/Store/CartSlice";
+import { addToCart,setCartFromLocalStorage } from "@/app/store/CartSlice";
 import { useDispatch } from "react-redux";
 import RecentlyViewed from "./RecentlyViewed";
 import { IoIosArrowRoundBack } from "react-icons/io"
