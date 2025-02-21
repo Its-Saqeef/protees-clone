@@ -9,6 +9,8 @@ async function GetData(category) {
     .then((res) => res.data.data);
   return getData;
 }
+
+
 async function page({ params }) {
   const { category } = await params;
   try {

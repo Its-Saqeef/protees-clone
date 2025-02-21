@@ -10,6 +10,15 @@ async function GetData(id) {
   return getData;
 }
 
+export async function generateMetadata({params}){
+  const { id } = await params;
+  const getData = await GetData(id)
+  return{
+    title : getData.name + " - Protees.pk",
+    description : getData.subcategory + " shirts"
+  }
+}
+
 async function page({ params }) {
   const { id } = await params;
   try {
