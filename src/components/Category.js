@@ -117,7 +117,7 @@ function Category({ data }) {
               className="flex mt-[20px] justify-between tracking-widest items-center cursor-pointer"
               onClick={() => setTogglePrice(!togglePrice)}
             >
-              PRICE{" "}
+              PRICE
               <MdOutlineKeyboardArrowDown
                 className={` text-xl  transition ease-linear duration-100 ${
                   togglePrice ? "rotate-180" : null
@@ -131,8 +131,8 @@ function Category({ data }) {
             >
               <div className="flex flex-col overflow-hidden">
                 <div className="flex justify-between mb-4">
-                  <h5>Rs.{value[0]}</h5>
-                  <h5>Rs. {value[1].toLocaleString("en-IN")}.00</h5>
+                  <span>Rs.{value[0]}</span>
+                  <span>Rs. {value[1].toLocaleString("en-IN")}.00</span>
                 </div>
                 <div className="w-[90%] mx-auto">
                 <Slider

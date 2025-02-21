@@ -166,8 +166,8 @@ function Product({data}) {
                 })}
               </ul>
             </div>
-            <div className="border-2 p-2" onClick={() => setOpen(!open)}>
-              <h1 className="cursor-pointer tracking-widest text-center">
+            <div className="border-2 p-2" >
+              <h1 className="cursor-pointer tracking-widest text-center" onClick={() => setOpen(!open)}>
                 SIZE CHART{" "}
                 <MdOutlineKeyboardArrowDown
                   className={`float-right text-2xl  transition ease-linear duration-100 ${
@@ -195,9 +195,9 @@ function Product({data}) {
                   <img src="/sizes/halfsleeve.webp" alt="photo" />
                   <img src="/sizes/hoodies.webp" alt="photo" />
                   <img src="/sizes/Oversize.webp" alt="photo" />
-                  <img src="/sizes/puffer.webp" alt="photo" />
+                  <img src="/sizes/Puffer.webp" alt="photo" />
                   <img src="/sizes/tanktop.webp" alt="photo" />
-                  <img src="/sizes/trouser.webp" alt="photo" />
+                  <img src="/sizes/Trouser.webp" alt="photo" />
                 </div>
               </div>
             </div>

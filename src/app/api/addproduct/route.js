@@ -1,6 +1,5 @@
 import connectDB from "@/lib/Connection.js";
 import { Product } from "@/components/Backend/models/Product.models";
-import fs from "fs/promises";
 
 export async function POST(request) {
   await connectDB();

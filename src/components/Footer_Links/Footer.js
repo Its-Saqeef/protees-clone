@@ -5,6 +5,7 @@ import { FaInstagram } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import Link from 'next/link';
+import Image from 'next/image';
 
 function Footer() {
     const [email,setEmail]=useState();
@@ -14,21 +15,21 @@ function Footer() {
         <div className='flex flex-col md:flex-row justify-around p-8 mt-5'>
             <div className='flex flex-col gap-[10px] border-b-2 md:border-0 md:w-1/3 xl:w-auto'>
                 <h1 className='font-bold text-xl'>CONTACT US</h1>
-                <img className='h-[50%]' src="/SITE_LOGO_1.png" alt='photo' />
+                <Image  src="/SITE_LOGO_1.png" alt='photo' width={300} height={300} />
                 <p className='text-sm  font-bold'>PROTEES HEAD OFFICE,NAWAB TOWN RAIWIND ROAD LAHORE</p>
                 <p>0321-6331227</p>
                 <p>Info@protees.pk</p>
             </div>
             <div className='border-b-2 md:border-0 mt-2 md:mt-0 md:w-1/3 md:text-center xl:w-auto'>
-                <ul className='leading-9' onClick={()=> window.scrollTo(0,0)}>
-                 <Link href='/pages/size'><li>SIZE CHART</li></Link>
-                 <Link href='/pages/guarantee'>   <li>GUARANTEE</li></Link>
-                 <Link href='/pages/privacy-policy'>  <li>PRIVACY POLICY</li></Link>
-                 <Link href='/pages/return-exchange'>  <li>RETURN & EXCHANGE</li></Link>
-                 <Link href='/pages/refund-policy'>  <li>REFUND POLICY</li></Link>
-                 <Link href='/pages/terms-of-service'>  <li>TERMS OF SERVICE</li></Link>
-                 <Link href='/pages/shipping-policy'> <li>SHIPPING POLICY</li></Link>
-                </ul>
+                <div className='leading-9 flex flex-col' onClick={()=> window.scrollTo(0,0)}>
+                 <Link href='/pages/size'>SIZE CHART</Link>
+                 <Link href='/pages/guarantee'>GUARANTEE</Link>
+                 <Link href='/pages/privacy-policy'>PRIVACY POLICY</Link>
+                 <Link href='/pages/return-exchange'>RETURN & EXCHANGE</Link>
+                 <Link href='/pages/refund-policy'>REFUND POLICY</Link>
+                 <Link href='/pages/terms-of-service'>TERMS OF SERVICE</Link>
+                 <Link href='/pages/shipping-policy'>SHIPPING POLICY</Link>
+                </div>
             </div>
             <div className='flex flex-col items-start gap-[20px] lg:gap-[40px] mt-2 md:mt-0 md:w-1/3 xl:w-auto'>
                 <h1 className='font-bold text-xl'>SIGN UP AND SAVE</h1>

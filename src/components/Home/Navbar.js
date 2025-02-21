@@ -1,7 +1,6 @@
 "use client";
 import React, { useState,useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { FaList } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { IoBagOutline } from "react-icons/io5";
@@ -15,6 +14,7 @@ import { MdOutlineDarkMode } from "react-icons/md";
 import Cart from "../Cart/Cart";
 import { useSelector,useDispatch } from "react-redux";
 import { setCartFromLocalStorage,toggleCart } from '@/app/store/CartSlice';
+import Modal from "../Search/SearchModal";
 
 function Navbar() {
   const dispatch=useDispatch()
@@ -24,6 +24,8 @@ function Navbar() {
   const [fourseason, setFourSeason] = useState(true);
   const [winter, setWinter] = useState(false);
   const data=useSelector(state=>state.cart)
+  const [toggleSearch,setToggleSearch]=useState(false)
+
   const togglecart=useSelector(state=>state.toggleCart)
   useEffect(()=>{
           if (typeof window !== "undefined") {
@@ -37,54 +39,55 @@ function Navbar() {
       {
         togglecart ? <Cart /> : null
       }
+      {
+        toggleSearch ? <Modal setToggleSearch={setToggleSearch} /> : null
+      }
       <article className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto">
-        <ul className="hidden md:flex gap-2 text-xl justify-end p-2">
-            <li className="cursor-pointer relative show">
+        <div className="hidden md:flex gap-2 text-xl justify-end p-2">
+            <p className="cursor-pointer relative show">
               <span className=" message">Dark Mode</span>
               <MdOutlineDarkMode />
-            </li>
+            </p>
           <Link
             href="https://www.instagram.com/_protees.pk/?hl=en"
             target="blank"
           >
-            {" "}
-            <li className="cursor-pointer relative show">
+            
+            <p className="cursor-pointer relative show">
               <span className=" message">Instagram</span>
               <FaInstagram />
-            </li>
+            </p>
           </Link>
           <Link target="blank" href="https://www.facebook.com/Protees.pk">
-            <li className="cursor-pointer relative show">
+            <p className="cursor-pointer relative show">
               <span className="absolute message">Facebook</span>
-              <FaFacebook />{" "}
-            </li>
+              <FaFacebook />
+            </p>
           </Link>
           <Link
             target="blank"
             href="https://www.youtube.com/@proteesprivatelimited1827"
           >
-            <li className="cursor-pointer relative show">
+            <p className="cursor-pointer relative show">
               <span className="absolute message">Youtube</span>
               <FaYoutube />
-            </li>
+            </p>
           </Link>
-        </ul>
+        </div>
 
         <div className="flex justify-between items-center mt-[40px]">
           <FaList className="md:hidden" onClick={()=>setNav(true)}/>
           <Link href="">
             <p className="relative show">
               <span className="message">Search</span>
-              <CiSearch className="text-2xl cursor-pointer" />
+              <CiSearch className="text-2xl cursor-pointer" onClick={()=>setToggleSearch(true)}/>
             </p>
           </Link>
           <Link href="/">
-            <Image
+            <img
               src={"/SITE_LOGO_1.png"}
               alt="photo"
               className="cursor-pointer w-auto h-auto"
-              height={190}
-              width={190}
             />
           </Link>
           <div className="flex items-center gap-5 md:gap-10">
@@ -130,8 +133,8 @@ function Navbar() {
               <ul className={`${!men ? "hidden" : "block"}`}>
                 <li>
                   <div className="flex justify-between w-[95%] mx-auto py-2 text-lg">
-                    {" "}
-                    FOUR SEASON{" "}
+                    
+                    FOUR SEASON
                     <MdOutlineKeyboardArrowDown
                       className={`text-xl border-2 rounded-xl w-[25px] h-[25px] ${
                         fourseason ? "rotate-180" : "rotate-0"
@@ -167,7 +170,7 @@ function Navbar() {
                 <Link href="">
                   <li>
                     <div className="flex justify-between w-[95%] mx-auto py-2 text-lg">
-                      WINTER{" "}
+                      WINTER
                       <MdOutlineKeyboardArrowDown
                         className={`text-xl border-2 rounded-xl w-[25px] h-[25px] ${
                           winter ? "rotate-180" : "rotate-0"
@@ -196,7 +199,7 @@ function Navbar() {
             </li>
             <li className="border-b-2 py-2">
               <div className="flex justify-between p-2 tracking-wider text-lg">
-                WOMEN{" "}
+                WOMEN
                 <MdOutlineKeyboardArrowDown
                   className={`text-2xl w-[30px] ${
                     women ? "rotate-180 border-r-2" : "rotate-0 border-l-2"
@@ -225,7 +228,7 @@ function Navbar() {
           </ul>
           <div className="w-[90%] mx-auto flex justify-evenly text-2xl my-3 border-2">
             <div className="w-[30%] text-center p-2 border-r-2">
-              {" "}
+              
               <Link
                 href="https://www.instagram.com/_protees.pk/?hl=en"
                 target="blank"
@@ -244,7 +247,7 @@ function Navbar() {
                 href="https://www.youtube.com/@proteesprivatelimited1827"
               >
                 <FaYoutube />
-              </Link>{" "}
+              </Link>
             </div>
           </div>
         </div>
