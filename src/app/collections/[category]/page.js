@@ -1,6 +1,8 @@
 import axios from "axios";
 import Category from "@/components/Category";
 import { notFound } from "next/navigation";
+
+
 async function GetData(category) {
   const getData = await axios
     .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getcategory/${category}`)

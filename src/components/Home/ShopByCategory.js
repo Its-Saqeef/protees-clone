@@ -99,7 +99,7 @@ function Banner() {
                    return(
                    <Link href={`/collections/${item.link}`} key={item.id}>
                    <div   className="bg-gray-200 transition ease-out duration-[1.5s] hover:bg-gray-300 relative hover:cursor-pointer " data-aos="fade-up">
-                   <img  className="transition ease-out duration-[1s] hover:scale-[105%] "  src={item.image} /> 
+                   <img  className="transition ease-out duration-[1s] hover:scale-[105%] "  src={item.image} alt={`${item.category}`} /> 
                     <p className="absolute top-[50%] w-[90%] border bg-white p-1 ml-[5%] text-center text-sm xl:text-lg">{item.category}</p>
                    </div>
                    </Link>

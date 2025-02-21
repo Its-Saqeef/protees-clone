@@ -28,7 +28,7 @@ function Product({data}) {
     Aos.init({
       once: false,
     })
-      document.title = data.name + " - Protees.pk";
+      //document.title = data.name + " - Protees.pk";
       setStock(data.sizes[0].quantity);
       if(recent.length>6 && !recent.some(item => item._id === data._id)){
         recent.shift();
