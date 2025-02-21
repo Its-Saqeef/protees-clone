@@ -86,7 +86,7 @@ function Navbar() {
           <Link href="/">
             <img
               src={"/SITE_LOGO_1.png"}
-              alt="photo"
+              alt="photo"              
               className="cursor-pointer w-auto h-auto"
             />
           </Link>

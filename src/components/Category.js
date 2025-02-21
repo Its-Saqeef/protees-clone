@@ -174,6 +174,7 @@ function Category({ data }) {
               name="stock"
               value="yes"
               className="cursor-pointer"
+              onClick={handleStock}
             />
             IN STOCK
             <p>(10)</p>
@@ -186,6 +187,7 @@ function Category({ data }) {
               name="stock"
               value="no"
               className="cursor-pointer"
+              onClick={handleStock}
             />
             OUT OF STOCK
             <p>(10)</p>
@@ -200,17 +202,19 @@ function Category({ data }) {
               <h5>Rs.00</h5>
               <h5>Rs.00</h5>
             </div>
-            <Slider
-              getAriaLabel={() => "Price"}
-              value={value}
-              onChange={handleChange}
-              valueLabelDisplay="auto"
-              getAriaValueText={valuetext}
-              color="black"
-              min={0}
-              max={maxPrice}
-              step={10}
-            />
+            <div className="w-[95%] mx-auto">
+                <Slider
+                  getAriaLabel={() => "Price"}
+                  value={value}
+                  onChange={handleChange}
+                  valueLabelDisplay="auto"
+                  getAriaValueText={valuetext}
+                  color="black"
+                  min={0}
+                  max={maxPrice}
+                  step={10}
+                />
+                </div>
           </div>
         </div>
       </div>
@@ -271,13 +275,13 @@ function Category({ data }) {
                       src={item.images[0]}
                       width={600}
                       height={600}
-                      alt="Photo"
+                      alt="Product Image"
                     />
                     <h3 className="text-xs sm:text-xs lg:text-base  mb-[10px] text-center tracking-wider text-gray-800">
                       {item.name}
                     </h3>
                   </div>
-                  <div className="w-[95%] flex gap-2 justify-around mx-auto text-xs sm:text-sm text-gray-700">
+                  <div className="w-[95%] flex gap-2 justify-around mx-auto text-xs sm:text-sm text-gray-700 flex-wrap">
                     <p
                       className={`${
                         item.sale ? "block line-through" : "hidden"

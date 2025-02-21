@@ -15,7 +15,7 @@ function Footer() {
         <div className='flex flex-col md:flex-row justify-around p-8 mt-5'>
             <div className='flex flex-col gap-[10px] border-b-2 md:border-0 md:w-1/3 xl:w-auto'>
                 <h1 className='font-bold text-xl'>CONTACT US</h1>
-                <Image  src="/SITE_LOGO_1.png" alt='photo' width={300} height={300} />
+                <Image  src="/SITE_LOGO_1.png" alt='photo' width={300} height={300} className='w-auto h-auto'/>
                 <p className='text-sm  font-bold'>PROTEES HEAD OFFICE,NAWAB TOWN RAIWIND ROAD LAHORE</p>
                 <p>0321-6331227</p>
                 <p>Info@protees.pk</p>
