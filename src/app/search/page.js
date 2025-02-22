@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import Link from "next/link";
 import { IoMdClose } from "react-icons/io";
@@ -9,149 +9,193 @@ import { CldImage } from "next-cloudinary";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { useQueryState } from "nuqs";
+import { CiSearch } from "react-icons/ci";
+import axios from "axios";
+import { useSearchParams } from "next/navigation";
 
-function Category({ data }) {
-  const [maxPrice, setMaxPrice] = useState(data ? Math.max(...data.map((item) => item.price)) : 0);
+function page() {
+  const searchParams = useSearchParams();
+  const [data, setData] = useState();
+  const query = searchParams.get("query");
+
+  const [maxPrice, setMaxPrice] = useState(
+    data ? Math.max(...data.map((item) => item.price)) : 0
+  );
   useEffect(() => {
-    document.title = data[0].subcategory.toUpperCase() + " - Protees.pk";
     Aos.init({
       once: false,
     });
-  });
+    setSearchInput(query)
+   
+  },[]);
   const [value, setValue] = useState([0, maxPrice]);
   const [minPrice, setMinPrice] = useQueryState("min_price");
   const [maximumPrice, setMaximumPrice] = useQueryState("max_price");
-  const [sortBy,setSortBy]=useQueryState("sort_by")
-  const [availability,setAvailability]=useQueryState("availability")
+  const [sortBy, setSortBy] = useQueryState("sort_by");
+  const [Query,setQuery]=useQueryState("query")
+  const [availability, setAvailability] = useQueryState("availability");
   const [togglePrice, setTogglePrice] = useState(false);
   const [toggleAvailability, setToggleAvailability] = useState(false);
   const [filter, setFilter] = useState(false);
-
+  const [searchInput, setSearchInput] = useState(query);
+  
   const valuetext = () => {
     return `${value}`;
   };
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    setMinPrice(newValue[0])
-    setMaximumPrice(newValue[1])
-  }
-
-  // useEffect(()=>{
-  //   setMinPrice(value[0]);
-  //   setMaximumPrice(value[1]);
-  // },[value])
+    setMinPrice(newValue[0]);
+    setMaximumPrice(newValue[1]);
+  };
 
   const handleStock = (e) => {
     const availability = e.target.value;
-    if(availability=="yes"){
-      setAvailability(1)
-    }
-     else{
-      setAvailability(0)
+    if (availability == "yes") {
+      setAvailability(1);
+    } else {
+      setAvailability(0);
     }
   };
-  
 
+  const getData = async () => {
+    const getData = await axios
+      .get(`/api/getproducts/?query=${searchInput &&searchInput.toLowerCase()}`)
+      .then((res) => res.data.data);
+    return getData;
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const Data = await getData();
+      setData(Data);
+    });
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const keyhandler=(e)=>{
+    if(e.key=='Enter'){
+      searchInput.length > 0 ? setQuery(searchInput) : null
+    }
+   }
+   if(typeof window !== "undefined"){
+ document.title =`Search : ${data&&data.length} results found for ${query}`
+   }
+  
   return (
-    <main className="w-[90%] mx-auto flex gap-[50px] my-[50px]">
-      <div className="w-[20%] hidden md:block pt-4 h-[50%] sticky top-4">
-        <ul className="border-b-2 pb-5">
-          <li
-            className="flex justify-between tracking-widest pb-2 items-center cursor-pointer"
-            onClick={() => setToggleAvailability(!toggleAvailability)}
-          >
-            AVAILABILITY{" "}
-            <MdOutlineKeyboardArrowDown
-              className={` text-xl  transition ease-linear duration-100 ${
-                toggleAvailability ? "rotate-180" : null
-              } `}
-            />
-          </li>
-          <div
-            className={`grid duration-300 ${
-              toggleAvailability ? "animateHeight" : "defaultheight"
-            }`}
-          >
-            <div className="overflow-hidden">
-              <li
-                className={`text-[12px]  flex items-center hover:underline gap-2 py-[5px]`}
-              >
-                <input
-                  type="radio"
-                  id="instock"
-                  name="stock"
-                  value="yes"
-                  className="cursor-pointer"
-                  onClick={handleStock}
-                />
-                <label htmlFor="instock" className="cursor-pointer">
-                  IN STOCK
-                </label>
-                <p>(10)</p>
-              </li>
-              <li
-                className={`text-[12px] flex items-center gap-2 hover:underline py-[5px] `}
-              >
-                <input
-                  type="radio"
-                  id="outofstock"
-                  name="stock"
-                  value="no"
-                  className="cursor-pointer"
-                  style={{ color: "black" }}
-                  onClick={handleStock}
-                />
-                <label htmlFor="outofstock" className="cursor-pointer">
-                  OUT OF STOCK
-                </label>
-                <p>(10)</p>
-              </li>
-            </div>
-          </div>
-        </ul>
-        <div>
-          <div>
-            <h2
-              className="flex mt-[20px] justify-between tracking-widest items-center cursor-pointer"
-              onClick={() => setTogglePrice(!togglePrice)}
+    <main className="w-[90%] mx-auto">
+      <h1 className="text-2xl w-max tracking-widest mx-auto my-10">SEARCH</h1>
+      <div className="w-[60%] mx-auto flex border-2 border-black items-center mb-10">
+        <input
+          type="text"
+          className=" p-2 w-full focus:outline-none"
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={keyhandler}
+        />
+        <CiSearch className="text-2xl cursor-pointer mr-1" onClick={()=>searchInput.length > 0 ? setQuery(searchInput) : null} />
+      </div>
+      {
+  
+        <div className={`flex gap-4 border-t-2`}>
+          {
+            data && data.length > 0 ? (
+              <>
+              <div className="w-[20%] hidden md:block pt-4 h-[50%] sticky top-4">
+          <ul className="border-b-2 pb-5">
+            <li
+              className="flex justify-between tracking-widest pb-2 items-center cursor-pointer"
+              onClick={() => setToggleAvailability(!toggleAvailability)}
             >
-              PRICE
+              AVAILABILITY{" "}
               <MdOutlineKeyboardArrowDown
                 className={` text-xl  transition ease-linear duration-100 ${
-                  togglePrice ? "rotate-180" : null
+                  toggleAvailability ? "rotate-180" : null
                 } `}
               />
-            </h2>
+            </li>
             <div
-              className={` mx-auto py-2 grid duration-300 ${
-                togglePrice ? "animateHeight" : "defaultheight"
+              className={`grid duration-300 ${
+                toggleAvailability ? "animateHeight" : "defaultheight"
               }`}
             >
-              <div className="flex flex-col overflow-hidden">
-                <div className="flex justify-between mb-4">
-                  <span>Rs.{value[0]}</span>
-                  <span>Rs. {value[1].toLocaleString("en-IN")}.00</span>
-                </div>
-                <div className="w-[90%] mx-auto">
-                <Slider
-                  getAriaLabel={() => "Price"}
-                  value={value}
-                  onChange={handleChange}
-                  valueLabelDisplay="auto"
-                  getAriaValueText={valuetext}
-                  color="black"
-                  min={0}
-                  max={maxPrice}
-                  step={10}
+              <div className="overflow-hidden">
+                <li
+                  className={`text-[12px]  flex items-center hover:underline gap-2 py-[5px]`}
+                >
+                  <input
+                    type="radio"
+                    id="instock"
+                    name="stock"
+                    value="yes"
+                    className="cursor-pointer"
+                    onClick={handleStock}
+                  />
+                  <label htmlFor="instock" className="cursor-pointer">
+                    IN STOCK
+                  </label>
+                  <p>(10)</p>
+                </li>
+                <li
+                  className={`text-[12px] flex items-center gap-2 hover:underline py-[5px] `}
+                >
+                  <input
+                    type="radio"
+                    id="outofstock"
+                    name="stock"
+                    value="no"
+                    className="cursor-pointer"
+                    style={{ color: "black" }}
+                    onClick={handleStock}
+                  />
+                  <label htmlFor="outofstock" className="cursor-pointer">
+                    OUT OF STOCK
+                  </label>
+                  <p>(10)</p>
+                </li>
+              </div>
+            </div>
+          </ul>
+          <div>
+            <div>
+              <h2
+                className="flex mt-[20px] justify-between tracking-widest items-center cursor-pointer"
+                onClick={() => setTogglePrice(!togglePrice)}
+              >
+                PRICE
+                <MdOutlineKeyboardArrowDown
+                  className={` text-xl  transition ease-linear duration-100 ${
+                    togglePrice ? "rotate-180" : null
+                  } `}
                 />
+              </h2>
+              <div
+                className={` mx-auto py-2 grid duration-300 ${
+                  togglePrice ? "animateHeight" : "defaultheight"
+                }`}
+              >
+                <div className="flex flex-col overflow-hidden">
+                  <div className="flex justify-between mb-4">
+                    <span>Rs.{value[0]}</span>
+                    <span>Rs. {value[1].toLocaleString("en-IN")}.00</span>
+                  </div>
+                  <div className="w-[90%] mx-auto">
+                    <Slider
+                      getAriaLabel={() => "Price"}
+                      value={value}
+                      onChange={handleChange}
+                      valueLabelDisplay="auto"
+                      getAriaValueText={valuetext}
+                      color="black"
+                      min={0}
+                      max={maxPrice}
+                      step={10}
+                    />
+                  </div>
                 </div>
-                
               </div>
             </div>
           </div>
         </div>
-      </div>
-
+      
       <div
         className={`fixed left-0 top-0 w-[80%] sm:w-[70%] h-[100%] bg-white z-10 transition-all ease-in-out duration-500 ${
           filter ? "left-0" : "left-[-82%] sm:left-[-75%] "
@@ -201,18 +245,18 @@ function Category({ data }) {
               <h5>Rs.00</h5>
             </div>
             <div className="w-[95%] mx-auto">
-                <Slider
-                  getAriaLabel={() => "Price"}
-                  value={value}
-                  onChange={handleChange}
-                  valueLabelDisplay="auto"
-                  getAriaValueText={valuetext}
-                  color="black"
-                  min={0}
-                  max={maxPrice}
-                  step={10}
-                />
-                </div>
+              <Slider
+                getAriaLabel={() => "Price"}
+                value={value}
+                onChange={handleChange}
+                valueLabelDisplay="auto"
+                getAriaValueText={valuetext}
+                color="black"
+                min={0}
+                max={maxPrice}
+                step={10}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -220,7 +264,7 @@ function Category({ data }) {
       <div className="grid grid-cols-2 md:grid-cols-4 mt-3 w-[100%] md:w-[85%] mx-auto">
         <div className="col-span-2 md:col-span-4 pb-5">
           <div className="flex justify-between ">
-            <p className="hidden md:block">{data.length} Products</p>
+            <p className="hidden md:block">{data && data.length} Products</p>
             <div
               className="flex border-2 px-2 py-1 items-center gap-2 w-[45%] md:hidden "
               onClick={() => setFilter(true)}
@@ -233,7 +277,12 @@ function Category({ data }) {
               defaultValue={"Best Selling"}
             >
               <option>Featured</option>
-              <option value={"Best Selling"} onClick={()=>setSortBy("best-selling")}>Best Selling</option>
+              <option
+                value={"Best Selling"}
+                onClick={() => setSortBy("best-selling")}
+              >
+                Best Selling
+              </option>
               <option value={"Alphabetically, A-Z"}>Alphabetically, A-Z</option>
               <option value={"Alphabetically, Z-A"}>Alphabetically, Z-A</option>
               <option value={"Price, low to high"}>Price, low to high</option>
@@ -306,10 +355,14 @@ function Category({ data }) {
               </Link>
             );
           })}
-        <h1 className="text-4xl"></h1>
       </div>
+      </> ) : <p className="text-2xl tracking-wider flex items-center justify-center h-[30vh] w-full">No Products Found For "{query}"</p>
+          }
+        
+      </div>
+}
     </main>
   );
 }
 
-export default Category;
+export default page;
