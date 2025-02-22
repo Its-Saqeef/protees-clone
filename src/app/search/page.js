@@ -84,7 +84,7 @@ function page() {
   return (
     <main className="w-[90%] mx-auto">
       <h1 className="text-2xl w-max tracking-widest mx-auto my-10">SEARCH</h1>
-      <div className="w-[60%] mx-auto flex border-2 border-black items-center mb-10">
+      <div className="w-[90%] md:w-[60%] mx-auto flex border-2 border-black items-center mb-10">
         <input
           type="text"
           className=" p-2 w-full focus:outline-none"
@@ -356,7 +356,7 @@ function page() {
             );
           })}
       </div>
-      </> ) : <p className="text-2xl tracking-wider flex items-center justify-center h-[30vh] w-full">No Products Found For "{query}"</p>
+      </> ) : <p className="text-lg md:text-2xl tracking-wider flex items-center justify-center h-[30vh] w-full">No Products Found For "{query}"</p>
           }
         
       </div>
