@@ -197,8 +197,8 @@ function Category({ data }) {
           </h2>
           <div className={`w-[95%] mx-auto py-2 `}>
             <div className="flex justify-between">
-              <h5>Rs.00</h5>
-              <h5>Rs.00</h5>
+              <h5>Rs. {value[0]}.00</h5>
+              <h5>Rs. {value[1].toLocaleString("en-IN")}.00</h5>
             </div>
             <div className="w-[95%] mx-auto">
                 <Slider
