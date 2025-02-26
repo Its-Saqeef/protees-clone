@@ -55,8 +55,8 @@ function Category({ data }) {
   return (
     <main className="w-[90%] mx-auto flex gap-[50px] my-[50px]">
       <div className="w-[20%] hidden md:block pt-4 h-[50%] sticky top-4">
-        <ul className="border-b-2 pb-5">
-          <li
+        <div className="border-b-2 pb-5">
+          <div
             className="flex justify-between tracking-widest pb-2 items-center cursor-pointer"
             onClick={() => setToggleAvailability(!toggleAvailability)}
           >
@@ -66,14 +66,14 @@ function Category({ data }) {
                 toggleAvailability ? "rotate-180" : null
               } `}
             />
-          </li>
+          </div>
           <div
             className={`grid duration-300 ${
               toggleAvailability ? "animateHeight" : "defaultheight"
             }`}
           >
             <div className="overflow-hidden">
-              <li
+              <div
                 className={`text-[12px]  flex items-center hover:underline gap-2 py-[5px]`}
               >
                 <input
@@ -88,8 +88,8 @@ function Category({ data }) {
                   IN STOCK
                 </label>
                 <p>(10)</p>
-              </li>
-              <li
+              </div>
+              <div
                 className={`text-[12px] flex items-center gap-2 hover:underline py-[5px] `}
               >
                 <input
@@ -105,10 +105,10 @@ function Category({ data }) {
                   OUT OF STOCK
                 </label>
                 <p>(10)</p>
-              </li>
+              </div>
             </div>
           </div>
-        </ul>
+        </div>
         <div>
           <div>
             <h2
@@ -160,11 +160,11 @@ function Category({ data }) {
         <h1 className="flex justify-between items-center w-[95%] mx-auto text-lg px-1 py-5 border-b tracking-widest">
           FILTER <IoMdClose onClick={() => setFilter(false)} />
         </h1>
-        <ul className="border-b-2 pb-5 pt-5 w-[95%] mx-auto text-sm">
-          <li className="flex justify-between tracking-widest pb-2 items-center cursor-pointer">
+        <div className="border-b-2 pb-5 pt-5 w-[95%] mx-auto text-sm">
+          <div className="flex justify-between tracking-widest pb-2 items-center cursor-pointer">
             AVAILABILITY <MdOutlineKeyboardArrowDown className={``} />
-          </li>
-          <li
+          </div>
+          <div
             className={`text-[12px] cursor-pointer flex items-center hover:underline gap-2 py-[5px] `}
           >
             <input
@@ -177,8 +177,8 @@ function Category({ data }) {
             />
             <label htmlFor="in-stock">IN STOCK</label>
             <p>(10)</p>
-          </li>
-          <li
+          </div>
+          <div
             className={`text-[12px] cursor-pointer flex items-center gap-2 hover:underline py-[5px] `}
           >
             <input
@@ -191,8 +191,8 @@ function Category({ data }) {
             />
             <label htmlFor="out-of-stock">OUT OF STOCK</label>
             <p>(10)</p>
-          </li>
-        </ul>
+          </div>
+        </div>
         <div className="w-[95%] mx-auto text-sm">
           <h2 className="flex mt-[20px] justify-between tracking-widest items-center cursor-pointer">
             PRICE <MdOutlineKeyboardArrowDown className={``} />
