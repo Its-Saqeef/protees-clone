@@ -274,6 +274,7 @@ function Category({ data }) {
                       width={600}
                       height={600}
                       alt="Product Image"
+                      style={{height : "auto",width : "auto"}}
                     />
                     <h3 className="text-xs sm:text-xs lg:text-base  mb-[10px] text-center tracking-wider text-gray-800">
                       {item.name}

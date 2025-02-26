@@ -9,7 +9,7 @@ import { addToCart,removeFromCart,toggleCart } from '@/app/store/CartSlice';
 import { useDispatch } from 'react-redux';
 
 
-function Cart({setOpenCart}) {
+function Cart() {
     const dispatch=useDispatch()
     const data=useSelector(state=>state.cart)
     let calculatePrice=0

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaList } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
@@ -12,47 +12,42 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { BsPerson } from "react-icons/bs";
 import { MdOutlineDarkMode } from "react-icons/md";
 import Cart from "../Cart/Cart";
-import { useSelector,useDispatch } from "react-redux";
-import { setCartFromLocalStorage,toggleCart } from '@/app/store/CartSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { setCartFromLocalStorage, toggleCart } from "@/app/store/CartSlice";
 import Modal from "../Search/SearchModal";
 
 function Navbar() {
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const [nav, setNav] = useState(false);
   const [men, setMen] = useState(true);
   const [women, setWomen] = useState(false);
   const [fourseason, setFourSeason] = useState(true);
   const [winter, setWinter] = useState(false);
-  const data=useSelector(state=>state.cart)
-  const [toggleSearch,setToggleSearch]=useState(false)
+  const data = useSelector((state) => state.cart);
+  const [toggleSearch, setToggleSearch] = useState(false);
 
-  const togglecart=useSelector(state=>state.toggleCart)
-  useEffect(()=>{
-          if (typeof window !== "undefined") {
-            const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
-            dispatch(setCartFromLocalStorage(storedCart));
-          }
-        },[])
-  
+  const togglecart = useSelector((state) => state.toggleCart);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
+      dispatch(setCartFromLocalStorage(storedCart));
+    }
+  }, []);
+
   return (
-    <header >
-      {
-        togglecart ? <Cart /> : null
-      }
-      {
-        toggleSearch ? <Modal setToggleSearch={setToggleSearch} /> : null
-      }
+    <header>
+      {togglecart ? <Cart /> : null}
+      {toggleSearch ? <Modal setToggleSearch={setToggleSearch} /> : null}
       <article className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto">
         <div className="hidden md:flex gap-2 text-xl justify-end p-2">
-            <p className="cursor-pointer relative show">
-              <span className=" message">Dark Mode</span>
-              <MdOutlineDarkMode />
-            </p>
+          <p className="cursor-pointer relative show">
+            <span className=" message">Dark Mode</span>
+            <MdOutlineDarkMode />
+          </p>
           <Link
             href="https://www.instagram.com/_protees.pk/?hl=en"
             target="blank"
           >
-            
             <p className="cursor-pointer relative show">
               <span className=" message">Instagram</span>
               <FaInstagram />
@@ -76,36 +71,44 @@ function Navbar() {
         </div>
 
         <div className="flex justify-between items-center mt-[40px]">
-          <FaList className="md:hidden" onClick={()=>setNav(true)}/>
+          <FaList className="md:hidden" onClick={() => setNav(true)} />
           <Link href="">
             <p className="relative show">
               <span className="message">Search</span>
-              <CiSearch className="text-2xl cursor-pointer" onClick={()=>setToggleSearch(true)}/>
+              <CiSearch
+                className="text-2xl cursor-pointer"
+                onClick={() => setToggleSearch(true)}
+              />
             </p>
           </Link>
           <Link href="/">
             <img
               src={"/SITE_LOGO_1.png"}
-              alt="photo"              
+              alt="photo"
               className="cursor-pointer w-auto h-auto"
             />
           </Link>
           <div className="flex items-center gap-5 md:gap-10">
-          <Link href="">
-            <p className="relative show">
-              <span className="message">Login</span>
-              <BsPerson className="text-2xl cursor-pointer" />
-            </p>
-          </Link>
-          <div>
-            <p className="relative show">
-              <span className="message" >Cart</span>
-              <IoBagOutline className="text-2xl cursor-pointer" onClick={()=>dispatch(toggleCart({toggle : true}))}/>
-            </p>
-            <hr
-              className={`bg-red-500 w-[10px] h-[10px] absolute rounded-xl ml-[17px] mt-[-25px] ${data.length==0 ? "hidden" : null}`}
-            />
-          </div>
+            <Link href="">
+              <p className="relative show">
+                <span className="message">Login</span>
+                <BsPerson className="text-2xl cursor-pointer" />
+              </p>
+            </Link>
+            <div>
+              <p className="relative show">
+                <span className="message">Cart</span>
+                <IoBagOutline
+                  className="text-2xl cursor-pointer"
+                  onClick={() => dispatch(toggleCart({ toggle: true }))}
+                />
+              </p>
+              <hr
+                className={`bg-red-500 w-[10px] h-[10px] absolute rounded-xl ml-[17px] mt-[-25px] ${
+                  data.length == 0 ? "hidden" : null
+                }`}
+              />
+            </div>
           </div>
         </div>
         <div
@@ -116,8 +119,8 @@ function Navbar() {
           <div className="w-[95%] mx-auto border-b flex justify-end px-3 py-4">
             <IoMdClose onClick={() => setNav(false)} className="text-2xl" />
           </div>
-          <ul className="w-[95%] mx-auto">
-            <li className="border-b-2 py-2">
+          <div className="w-[95%] mx-auto flex flex-col">
+            <div className="border-b-2 py-2">
               <div className="flex justify-between tracking-wider p-2 text-lg">
                 MEN
                 <MdOutlineKeyboardArrowDown
@@ -130,74 +133,54 @@ function Navbar() {
                 />
               </div>
 
-              <ul className={`${!men ? "hidden" : "block"}`}>
-                <li>
-                  <div className="flex justify-between w-[95%] mx-auto py-2 text-lg">
-                    
-                    FOUR SEASON
-                    <MdOutlineKeyboardArrowDown
-                      className={`text-xl border-2 rounded-xl w-[25px] h-[25px] ${
-                        fourseason ? "rotate-180" : "rotate-0"
-                      }`}
-                      onClick={() => setFourSeason(!fourseason)}
-                    />
-                  </div>
-                </li>
+              <div className={`${!men ? "hidden" : "block"}`}>
+                <div className="flex justify-between w-[95%] mx-auto py-2 text-lg">
+                  FOUR SEASON
+                  <MdOutlineKeyboardArrowDown
+                    className={`text-xl border-2 rounded-xl w-[25px] h-[25px] ${
+                      fourseason ? "rotate-180" : "rotate-0"
+                    }`}
+                    onClick={() => setFourSeason(!fourseason)}
+                  />
+                </div>
+
                 <div
                   className={`w-[95%] mx-auto pl-2 border-l border-black tracking-wider text-base ${
-                    fourseason ? "block" : "hidden"
+                    fourseason ? "flex flex-col" : "hidden"
                   }`}
                   onClick={() => setNav(false)}
                 >
-                  <Link href="/collections/sweatshirt">
-                    <li>SWEATSHIRTS</li>
-                  </Link>
-                  <Link href="/collections/basic">
-                    <li>BASIC</li>
-                  </Link>
-                  <Link href="/collections/beyond active">
-                    <li>BEYOND ACTIVE</li>
-                  </Link>
-                  <Link href="/collections/graphic">
-                    <li>GRAPHIC TEES</li>
-                  </Link>
-                  <Link href="/collections/superheroes">
-                    <li>SUPER TEES</li>
-                  </Link>
+                  <Link href="/collections/sweatshirt">SWEATSHIRTS</Link>
+                  <Link href="/collections/basic">BASIC</Link>
+                  <Link href="/collections/beyond active">BEYOND ACTIVE</Link>
+                  <Link href="/collections/graphic">GRAPHIC TEES</Link>
+                  <Link href="/collections/superheroes">SUPER TEES</Link>
                 </div>
-              </ul>
-              <ul className={`${!men ? "hidden" : "block"}`}>
+              </div>
+              <div className={`${!men ? "hidden" : "block"}`}>
                 <Link href="">
-                  <li>
-                    <div className="flex justify-between w-[95%] mx-auto py-2 text-lg">
-                      WINTER
-                      <MdOutlineKeyboardArrowDown
-                        className={`text-xl border-2 rounded-xl w-[25px] h-[25px] ${
-                          winter ? "rotate-180" : "rotate-0"
-                        }`}
-                        onClick={() => setWinter(!winter)}
-                      />
-                    </div>
-                  </li>
+                  <div className="flex justify-between w-[95%] mx-auto py-2 text-lg">
+                    WINTER
+                    <MdOutlineKeyboardArrowDown
+                      className={`text-xl border-2 rounded-xl w-[25px] h-[25px] ${
+                        winter ? "rotate-180" : "rotate-0"
+                      }`}
+                      onClick={() => setWinter(!winter)}
+                    />
+                  </div>
                 </Link>
                 <div
                   className={`w-[95%] mx-auto pl-2 border-l border-black tracking-wider text-base ${
-                    winter ? "block" : "hidden"
+                    winter ? "flex flex-col" : "hidden"
                   }`}
                 >
-                  <Link href="">
-                    <li>PUFFER JACKETS</li>
-                  </Link>
-                  <Link href="">
-                    <li>SUPER SWEATSHIRTS</li>
-                  </Link>
-                  <Link href="">
-                    <li>SUPER HOODIES</li>
-                  </Link>
+                  <Link href="">PUFFER JACKETS</Link>
+                  <Link href="">SUPER SWEATSHIRTS</Link>
+                  <Link href="">SUPER HOODIES</Link>
                 </div>
-              </ul>
-            </li>
-            <li className="border-b-2 py-2">
+              </div>
+            </div>
+            <div className="border-b-2 py-2">
               <div className="flex justify-between p-2 tracking-wider text-lg">
                 WOMEN
                 <MdOutlineKeyboardArrowDown
@@ -209,26 +192,31 @@ function Navbar() {
                   }}
                 />
               </div>
-              <ul className={`${!women ? "hidden" : "block"}`}>
-                <div className="w-[95%] mx-auto pl-2 border-l border-black tracking-wider text-base">
-                  <li>CROP TEES AND TOPS</li>
-                  <li>YEARLY TEES</li>
-                  <li>FULL SLEEVES</li>
-                  <li>SUPER HOODIES</li>
-                  <li>SUPER CAPS</li>
+              <div className={`${!women ? "hidden" : "block"}`}>
+                <div className="w-[95%] mx-auto pl-2 border-l border-black tracking-wider text-base flex flex-col">
+                  <Link href={""}>CROP TEES AND TOPS</Link>
+                  <Link href={""}>YEARLY TEES</Link>
+                  <Link href={""}>FULL SLEEVES</Link>
+                  <Link href={""}>SUPER HOODIES</Link>
+                  <Link href={""}>SUPER CAPS</Link>
                 </div>
-              </ul>
-            </li>
-            <li className="w-[95%] mx-auto  py-4 border-b-2 tracking-wider text-lg">
+              </div>
+            </div>
+            <Link
+              href={""}
+              className="w-[95%] mx-auto  py-4 border-b-2 tracking-wider text-lg"
+            >
               PROTEES JUNIOR
-            </li>
-            <li className="w-[95%] mx-auto  py-4 border-b-2 tracking-wider text-lg">
+            </Link>
+            <Link
+              href={""}
+              className="w-[95%] mx-auto  py-4 border-b-2 tracking-wider text-lg"
+            >
               SUMMER COLLECTION
-            </li>
-          </ul>
+            </Link>
+          </div>
           <div className="w-[90%] mx-auto flex justify-evenly text-2xl my-3 border-2">
             <div className="w-[30%] text-center p-2 border-r-2">
-              
               <Link
                 href="https://www.instagram.com/_protees.pk/?hl=en"
                 target="blank"
