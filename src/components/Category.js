@@ -17,7 +17,7 @@ function Category({ data }) {
     Aos.init({
       once: false,
     });
-  });
+  },[]);
   const [value, setValue] = useState([0, maxPrice]);
   const [minPrice, setMinPrice] = useQueryState("min_price");
   const [maximumPrice, setMaximumPrice] = useQueryState("max_price");
@@ -35,11 +35,6 @@ function Category({ data }) {
     setMinPrice(newValue[0])
     setMaximumPrice(newValue[1])
   }
-
-  // useEffect(()=>{
-  //   setMinPrice(value[0]);
-  //   setMaximumPrice(value[1]);
-  // },[value])
 
   const handleStock = (e) => {
     const availability = e.target.value;
@@ -310,7 +305,6 @@ function Category({ data }) {
               </Link>
             );
           })}
-        <h1 className="text-4xl"></h1>
       </div>
     </main>
   );
