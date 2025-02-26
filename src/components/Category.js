@@ -173,8 +173,9 @@ function Category({ data }) {
               value="yes"
               className="cursor-pointer"
               onClick={handleStock}
+              id="in-stock"
             />
-            IN STOCK
+            <label htmlFor="in-stock">IN STOCK</label>
             <p>(10)</p>
           </li>
           <li
@@ -186,8 +187,9 @@ function Category({ data }) {
               value="no"
               className="cursor-pointer"
               onClick={handleStock}
+              id="out-of-stock"
             />
-            OUT OF STOCK
+            <label htmlFor="out-of-stock">OUT OF STOCK</label>
             <p>(10)</p>
           </li>
         </ul>
@@ -197,8 +199,8 @@ function Category({ data }) {
           </h2>
           <div className={`w-[95%] mx-auto py-2 `}>
             <div className="flex justify-between">
-              <h5>Rs. {value[0]}.00</h5>
-              <h5>Rs. {value[1].toLocaleString("en-IN")}.00</h5>
+              <span>Rs. {value[0]}.00</span>
+              <span>Rs. {value[1].toLocaleString("en-IN")}.00</span>
             </div>
             <div className="w-[95%] mx-auto">
                 <Slider
@@ -274,6 +276,7 @@ function Category({ data }) {
                       width={600}
                       height={600}
                       alt="Product Image"
+                      priority={true}
                       style={{height : "auto",width : "auto"}}
                     />
                     <h3 className="text-xs sm:text-xs lg:text-base  mb-[10px] text-center tracking-wider text-gray-800">

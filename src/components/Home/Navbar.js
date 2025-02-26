@@ -15,6 +15,7 @@ import Cart from "../Cart/Cart";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartFromLocalStorage, toggleCart } from "@/app/store/CartSlice";
 import Modal from "../Search/SearchModal";
+import Image from "next/image";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ function Navbar() {
     <header>
       {togglecart ? <Cart /> : null}
       {toggleSearch ? <Modal setToggleSearch={setToggleSearch} /> : null}
-      <article className="w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto">
+      <article className={`w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto `}>
         <div className="hidden md:flex gap-2 text-xl justify-end p-2">
           <p className="cursor-pointer relative show">
             <span className=" message">Dark Mode</span>
@@ -72,7 +73,7 @@ function Navbar() {
 
         <div className="flex justify-between items-center mt-[40px]">
           <FaList className="md:hidden" onClick={() => setNav(true)} />
-          <Link href="">
+          <div>
             <p className="relative show">
               <span className="message">Search</span>
               <CiSearch
@@ -80,21 +81,23 @@ function Navbar() {
                 onClick={() => setToggleSearch(true)}
               />
             </p>
-          </Link>
+          </div>
           <Link href="/">
-            <img
+            <Image
               src={"/SITE_LOGO_1.png"}
               alt="photo"
-              className="cursor-pointer w-auto h-auto"
+              height={300}
+              width={300}
+              style={{height : "auto", width : "auto", cursor : "pointer"}}
             />
           </Link>
           <div className="flex items-center gap-5 md:gap-10">
-            <Link href="">
+            <div>
               <p className="relative show">
                 <span className="message">Login</span>
                 <BsPerson className="text-2xl cursor-pointer" />
               </p>
-            </Link>
+            </div>
             <div>
               <p className="relative show">
                 <span className="message">Cart</span>
