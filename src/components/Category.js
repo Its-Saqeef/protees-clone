@@ -17,7 +17,8 @@ function Category({ data }) {
     Aos.init({
       once: false,
     });
-  },[]);
+    console.log("Hello")
+  },[data]);
   const [value, setValue] = useState([0, maxPrice]);
   const [minPrice, setMinPrice] = useQueryState("min_price");
   const [maximumPrice, setMaximumPrice] = useQueryState("max_price");
@@ -49,7 +50,7 @@ function Category({ data }) {
 
   return (
     <main className="w-[90%] mx-auto flex gap-[50px] my-[50px]">
-      <div className="w-[20%] hidden md:block pt-4 h-[50%] sticky top-4">
+      <section className="w-[20%] hidden md:block pt-4 h-[50%] sticky top-4">
         <div className="border-b-2 pb-5">
           <div
             className="flex justify-between tracking-widest pb-2 items-center cursor-pointer"
@@ -145,9 +146,9 @@ function Category({ data }) {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div
+      <section
         className={`fixed left-0 top-0 w-[80%] sm:w-[70%] h-[100%] bg-white z-10 transition-all ease-in-out duration-500 ${
           filter ? "left-0" : "left-[-82%] sm:left-[-75%] "
         } md:hidden`}
@@ -212,9 +213,9 @@ function Category({ data }) {
                 </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 mt-3 w-[100%] md:w-[85%] mx-auto">
+      <section className="grid grid-cols-2 md:grid-cols-4 mt-3 w-[100%] md:w-[85%] mx-auto">
         <div className="col-span-2 md:col-span-4 pb-5">
           <div className="flex justify-between ">
             <p className="hidden md:block">{data.length} Products</p>
@@ -271,7 +272,6 @@ function Category({ data }) {
                       width={600}
                       height={600}
                       alt="Product Image"
-                      priority={true}
                       style={{height : "auto",width : "auto"}}
                     />
                     <h3 className="text-xs sm:text-xs lg:text-base  mb-[10px] text-center tracking-wider text-gray-800">
@@ -305,7 +305,7 @@ function Category({ data }) {
               </Link>
             );
           })}
-      </div>
+      </section>
     </main>
   );
 }

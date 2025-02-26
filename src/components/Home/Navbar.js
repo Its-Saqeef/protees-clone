@@ -88,6 +88,7 @@ function Navbar() {
               alt="photo"
               height={300}
               width={300}
+              priority={true}
               style={{height : "auto", width : "auto", cursor : "pointer"}}
             />
           </Link>
