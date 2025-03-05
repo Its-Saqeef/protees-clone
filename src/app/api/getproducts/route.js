@@ -16,9 +16,6 @@ export async function GET(request,{params}) {
                     {
                         subcategory : {$regex: query, $options: 'i' }
                     },
-                    {
-                        composition : {$regex : query,$options : 'i'}
-                    },
                 ]
             })
             return Response.json({
