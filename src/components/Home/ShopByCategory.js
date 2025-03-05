@@ -15,7 +15,7 @@ function Banner() {
             category : 'OVERSIZED TEES',
             sub_category : 'oversized_tees',
             image : "img2.png",
-
+            link : "oversized"
         },
         {
             id :3,

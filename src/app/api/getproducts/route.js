@@ -1,13 +1,12 @@
 import connectDB from "@/lib/Connection.js";
 import { Product } from "@/components/Backend/models/Product.models";
 
-export async function GET(request) {
+export async function GET(request,{params}) {
     try {
         await connectDB()
         
-       const params=request.nextUrl.searchParams
-       const query=params.get("query")
-
+       const parameters=request.nextUrl.searchParams
+       const query=parameters.get("query")
         if(query){
             const data=await Product.find({
                 $or : [
@@ -18,7 +17,7 @@ export async function GET(request) {
                         subcategory : {$regex: query, $options: 'i' }
                     },
                     {
-                        description : {$regex : query,$options : 'i'}
+                        composition : {$regex : query,$options : 'i'}
                     },
                 ]
             })

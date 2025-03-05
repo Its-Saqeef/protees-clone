@@ -9,15 +9,16 @@ import { CldImage } from "next-cloudinary";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { useQueryState } from "nuqs";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-function Category({ data }) {
+function Category({ data,category }) {
   const [maxPrice, setMaxPrice] = useState(data ? Math.max(...data.map((item) => item.price)) : 0);
   useEffect(() => {
     document.title = data[0].subcategory.toUpperCase() + " - Protees.pk";
     Aos.init({
       once: false,
     });
-    console.log("Hello")
   },[data]);
   const [value, setValue] = useState([0, maxPrice]);
   const [minPrice, setMinPrice] = useQueryState("min_price");
@@ -27,6 +28,7 @@ function Category({ data }) {
   const [togglePrice, setTogglePrice] = useState(false);
   const [toggleAvailability, setToggleAvailability] = useState(false);
   const [filter, setFilter] = useState(false);
+  const [debounceValue,setDebounceValue]=useState()
 
   const valuetext = () => {
     return `${value}`;
@@ -47,6 +49,14 @@ function Category({ data }) {
     }
   };
   
+  // useEffect(()=>{
+  //   const timer=setTimeout(async()=>{
+  //     const response=await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getcategory/${category}?min_price=${minPrice}&max_price=${maximumPrice}`,{
+  //     })
+  //     .then((res) => res.data.data).catch((err)=>toast.error("Couldn't fetch products"));
+  //   },500)
+  //   return ()=>clearTimeout(timer)
+  // },[value,availability])
 
   return (
     <main className="w-[90%] mx-auto flex gap-[50px] my-[50px]">

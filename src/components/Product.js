@@ -178,7 +178,7 @@ function Product({data}) {
               <div
                 className={`grid ${open ? "animateHeight" : "defaultheight"}`}
               >
-                <div className="overflow-hidden">
+                <div className="overflow-hidden" >
                   <h1 className="font-bold text-2xl md:text-4xl p-2 my-[20px] tracking-wider">
                     NOTE:
                   </h1>

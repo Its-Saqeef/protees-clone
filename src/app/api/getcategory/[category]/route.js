@@ -1,12 +1,18 @@
 import connectDB from "@/lib/Connection.js";
 import { Product } from "@/components/Backend/models/Product.models";
 import { NextResponse } from "next/server";
- 
-export async function GET(request,{params}) {
+
+export async function GET(request, { params }) {
   try {
     await connectDB();
-    const {category}=await params
-    
+
+    const { category } = await params
+    const min_price = request.nextUrl.searchParams.get("min_price")
+    const max_price = request.nextUrl.searchParams.get("max_price")
+    const availability = request.nextUrl.searchParams.get("availability") || 1
+
+    console.log(min_price, max_price, availability)
+
     if (!category) {
       return NextResponse.json(
         {
@@ -15,20 +21,81 @@ export async function GET(request,{params}) {
         { status: 400 }
       );
     }
-    const eachCategory = await Product.find({subcategory: category })
-    if(eachCategory.length==0){
+
+    if (!max_price && availability==1){
+      let filterCriteria = { subcategory: category };
+
+      // If availability is provided (availability == 1), filter products where quantity > 0 for any size
+        filterCriteria = {
+          ...filterCriteria,
+          sizes: {
+            $elemMatch: {
+              quantity: { $gt: 0 }, // Find at least one size with quantity > 0
+            },
+          },
+        };
+      const eachCategory = await Product.find(filterCriteria)
+      if (eachCategory.length == 0) {
         return NextResponse.json({
-            message : "Category Not Found"
-        },{status : 404})
+          message: "Category Not Found"
+        }, { status: 404 })
+      }
+      else {
+        return NextResponse.json(
+          {
+            message: "Success",
+            data: eachCategory,
+          },
+          { status: 200 }
+        )
+      }
     }
-    
-    return NextResponse.json(
-      {
+    else if(!max_price && availability==0){
+      let filterCriteria = { subcategory: category };
+
+      
+        filterCriteria = {
+          ...filterCriteria,
+          sizes: {
+            $elemMatch: {
+              quantity: { $lte: 0 }, 
+            },
+          },
+        };      
+
+      const eachCategory = await Product.find(filterCriteria);
+      return NextResponse.json({
         message: "Success",
         data: eachCategory,
-      },
-      { status: 200 }
-    )
+      }, { status: 200 });
+    }
+    else if(max_price && (availability==0 || availability==1)){
+      let filterCriteria = { subcategory: category, price: { $gte: min_price, $lte: max_price } };
+      if(availability==0){
+        filterCriteria = {
+          ...filterCriteria,
+          sizes: {
+            $elemMatch: {
+              quantity: { $lte: 0 }, 
+            },
+          },
+        };
+      }else{
+        filterCriteria = {
+          ...filterCriteria,
+          sizes: {
+            $elemMatch: {
+              quantity: { $gt: 0 }, 
+            },
+          },
+        };
+      }
+      const eachCategory = await Product.find(filterCriteria);
+      return NextResponse.json({
+        message: "Success",
+        data: eachCategory,
+      }, { status: 200 });
+    }
   } catch (error) {
     return NextResponse.json(
       {

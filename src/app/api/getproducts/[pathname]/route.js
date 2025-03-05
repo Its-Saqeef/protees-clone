@@ -6,7 +6,7 @@ export async function GET(request,{params}) {
   try {
     await connectDB();
     const {pathname}=await params
-    
+
     if(!pathname){
       return NextResponse.json({
         message : "No Input Data"

@@ -5,8 +5,8 @@ import Link from "next/link";
 function Lists() {
     
   return (
-    <nav className="w-[85%] lg:w-[70%] xl:w-[55%] 2xl:w-[50%] mx-auto">
-        <div className="hidden md:flex items-center justify-evenly my-[2%]">
+    <nav className="w-[85%] lg:w-[70%] xl:w-[55%] 2xl:w-[50%] mx-auto" >
+        <div className="hidden md:flex items-center justify-evenly my-[2%]" >
             <div className="group">
               <p className="flex items-center text-base tracking-wider cursor-pointer custom relative">MEN <MdOutlineKeyboardArrowDown className="md:text-base xl:text-2xl ml-[10px]"  /></p>
                   <div className="hidden group-hover:flex shadow-lg py-10 absolute left-0 w-full bg-white z-10 mt-[5px]">
@@ -15,7 +15,7 @@ function Lists() {
                         <Link href={""} className="p-1 text-xs lg:text-sm">FOUR SEASON</Link>
                         <Link href={"/collections/sweatshirt"} className="p-1">SWEATSHIRTS</Link>
                         <Link href={"/collections/basic"} className="p-1">BASIC</Link>
-                        <Link href={""} className="p-1">OVERSIZED TEES</Link>
+                        <Link href={"/collections/oversized"} className="p-1">OVERSIZED TEES</Link>
                         <Link href={"/collections/beyond active"} className="p-1">BEYOND ACTIVE</Link>
                         <Link href={"/collections/graphic"} className="p-1">GRAPHIC TEES</Link>
                         <Link href={"/collections/superheroes"} className="p-1">SUPER TEES</Link>

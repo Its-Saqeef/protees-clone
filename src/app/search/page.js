@@ -88,6 +88,7 @@ function page() {
         <input
           type="text"
           className=" p-2 w-full focus:outline-none"
+          value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           onKeyDown={keyhandler}
         />
