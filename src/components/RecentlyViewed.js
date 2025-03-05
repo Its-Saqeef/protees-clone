@@ -7,7 +7,11 @@ function RecentlyViewed({id}) {
   const [data,setData]=useState()
   useEffect(()=>{
     if (typeof window !== "undefined"){
-      setData(JSON.parse(localStorage.getItem("Recent")).reverse()) || []
+     const storageData=JSON.parse(localStorage.getItem("Recent")) || []
+     if(storageData.length>=1){
+      storageData.reverse()
+      setData(storageData)
+     }
     }
   },[])
 
