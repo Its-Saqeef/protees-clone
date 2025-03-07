@@ -9,7 +9,7 @@ function YouMayLike({params}) {
         const response=await axios.get(`/api/getcategory/${decodedCategory}`).then((res)=>res.data.data)
         return response
     })
-    console.log(data)
+    
   return (
     <section className='my-5 md:mt-20'>
         <h1 className={`w-max mx-auto text-xl md:text-2xl lg:text-3xl my-[20px] text-gray-800 tracking-wider text-center ${data && data.length > 1 ? "" : "hidden"}`}>YOU MAY ALSO LIKE</h1>

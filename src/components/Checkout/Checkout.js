@@ -17,7 +17,6 @@ function Checkout() {
   const [billaddress, setBillAddress] = useState(false);
   const [shippingtoggle, setShippingToggle] = useState(false);
   const data=useSelector(state=>state.cart)
-  console.log(data)
   const [formdata, setFormData] = useState({
     email: "",
     fname: "",
@@ -97,8 +96,6 @@ function Checkout() {
     }
     setErrors({});
     toast.success("Order Placed")
-    console.log(formdata);
-    console.log(data)
   };
 
   let totalamount=0
@@ -219,7 +216,7 @@ function Checkout() {
                     onMouseLeave={() => setMessageDisp(false)}
                   />
                   <p
-                    className={`absolute w-[150px] h-[80px] py-1 px-2 rounded-md border z-10 bg-white shadow-md text-black ${
+                    className={`absolute w-[150px] h-[80px] py-1 px-2 rounded-md border z-10 bg-white shadow-md text-black right-0 ${
                       messagedisp ? "block" : "hidden"
                     }`}
                   >

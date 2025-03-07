@@ -24,6 +24,7 @@ function page() {
       once: false,
     });
   },[])
+
   if(categoryData && categoryData.length > 0) (document.title = categoryData[0].subcategory.toUpperCase() + " - Protees.pk" )
 
   const [value, setValue] = useState([0, maxPrice]);
@@ -47,16 +48,16 @@ function page() {
   const handleStock = (e) => {
     const availability = e.target.value;
     if(availability=="yes"){
-      setAvailability(1)
+      setAvailability(1)      
     }
-     else{
-      setAvailability(0)
+     else if(availability=="no"){
+      setAvailability(0)      
     }
   };
   
   useEffect(()=>{
     const timer=setTimeout(()=>{
-      const response=fetch(`/api/getcategory/${category}?min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice ? "" : maximumPrice}&availability=${!availability ? "" : availability}`)
+      const response=fetch(`/api/getcategory/${category}?min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice ? "" : maximumPrice}&availability=${availability=== "" ? "" : availability}`)
       .then((res) => res.json()).then((res)=>setData(res.data)).catch((err)=>toast.error("Couldn't fetch products"));
     },800)
     return ()=>clearTimeout(timer)
@@ -114,7 +115,6 @@ function page() {
                 <label htmlFor="outofstock" className="cursor-pointer">
                   OUT OF STOCK
                 </label>
-                <p>{}</p>
               </div>
             </div>
           </div>
