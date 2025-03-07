@@ -11,7 +11,7 @@ export async function GET(request, { params }) {
     const max_price = request.nextUrl.searchParams.get("max_price")
     const availability = request.nextUrl.searchParams.get("availability") || 1
 
-    console.log(min_price, max_price, availability)
+    console.log( availability)
 
     if (!category) {
       return NextResponse.json(
@@ -25,12 +25,12 @@ export async function GET(request, { params }) {
     if (!max_price && availability==1){
       let filterCriteria = { subcategory: category };
 
-      // If availability is provided (availability == 1), filter products where quantity > 0 for any size
+      
         filterCriteria = {
           ...filterCriteria,
           sizes: {
             $elemMatch: {
-              quantity: { $gt: 0 }, // Find at least one size with quantity > 0
+              quantity: { $gt: 0 }, 
             },
           },
         };
@@ -52,7 +52,6 @@ export async function GET(request, { params }) {
     }
     else if(!max_price && availability==0){
       let filterCriteria = { subcategory: category };
-
       
         filterCriteria = {
           ...filterCriteria,

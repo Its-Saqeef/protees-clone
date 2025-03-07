@@ -57,7 +57,7 @@ function page() {
   
   useEffect(()=>{
     const timer=setTimeout(()=>{
-      const response=fetch(`/api/getcategory/${category}?min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice ? "" : maximumPrice}&availability=${availability=== "" ? "" : availability}`)
+      const response=fetch(`/api/getcategory/${category}?min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice ? "" : maximumPrice}&availability=${availability=== null ? "" : availability}`)
       .then((res) => res.json()).then((res)=>setData(res.data)).catch((err)=>toast.error("Couldn't fetch products"));
     },800)
     return ()=>clearTimeout(timer)
