@@ -2,7 +2,7 @@ import axios from "axios";
 import Home from "@/components/Home/GetHomeData";
 import { toast } from "react-toastify";
 const fetcher=async ()=>{
-  const response = await axios.get(`/api/getproducts`).then((res)=>res.data.data).catch((err)=>console.log("Request Failed",err.message))
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getproducts`).then((res)=>res.data.data).catch((err)=>console.log("Request Failed",err.message))
   return response
 }
 
