@@ -57,7 +57,7 @@ export async function GET(request, { params }) {
           ...filterCriteria,
           sizes: {
             $elemMatch: {
-              quantity: { $lte: 0 }, 
+              quantity: { $lte: 0 },
             },
           },
         };      

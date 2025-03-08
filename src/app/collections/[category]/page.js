@@ -63,6 +63,8 @@ function page() {
     return ()=>clearTimeout(timer)
   },[value[0],value[1],availability])
 
+  console.log(data)
+
   return (
     
     <main className="w-[90%] mx-auto flex gap-[50px] my-[50px]">
@@ -262,16 +264,17 @@ function page() {
             return (
               <Link
                 href={`/collections/${item.subcategory}/product/${item._id}`}
+                className="relative"
                 key={item._id}
               >
                 <div
-                  className={`relative my-[10px] cursor-pointer p-2 relative`}
+                  className={`my-[10px] cursor-pointer p-2 group relative`}
                   data-aos="fade-up"
                 >
                   <p
-                    className={`w-[90%] text-xs md:text-sm xl:text-base 2xl:text-lg bg-gray-200 text-black absolute  text-center py-1 mt-[40%] ${item.sizes.some((prod)=>prod.quantity !=0) ? "hidden" : "" }`}
+                    className={`w-[90%] text-xs md:text-sm xl:text-base 2xl:text-lg text-black absolute  text-left top-0 py-1 ${item.sizes.some((prod)=>prod.quantity !=0) ? "hidden" : "" }`}
                   >
-                    Out of Stock
+                    Sold Out
                   </p>
                   <p
                     className={
@@ -282,7 +285,7 @@ function page() {
                   >
                     sale
                   </p>
-                  <div className="flex flex-col justify-center items-center">
+                  <div className="flex flex-col justify-center items-center ">
                     <CldImage
                       src={item.images[0]}
                       width={600}
@@ -290,6 +293,15 @@ function page() {
                       alt="Product Image"
                       style={{height : "auto",width : "auto"}}
                     />
+                  <div className={`w-[90%] absolute flex justify-between opacity-0 group-hover:opacity-75 transition duration-200 ease-in-out`}>
+                  {
+                    item.sizes.map((size)=>{
+                      return( 
+                          <span key={size._id} className={`text-sm bg-gray-950 text-white p-1 w-[30px] h-[30px] rounded-2xl text-center ${size.quantity==0 ? "line-through decoration-red-700 decoration-solid decoration-4" : ""}`}>{size.size=="XXL" || size.size=="XL" ? size.size.slice(0,3) :size.size[0]}</span>
+                      )
+                    })
+                  }
+                   </div>
                     <h3 className="text-xs sm:text-xs lg:text-base  mb-[10px] text-center tracking-wider text-gray-800">
                       {item.name}
                     </h3>
@@ -317,6 +329,7 @@ function page() {
                       save {item.sale}%
                     </h3>
                   </div>
+                  
                 </div>
               </Link>
             );

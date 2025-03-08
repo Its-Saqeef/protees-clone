@@ -301,58 +301,69 @@ function page() {
                 key={item._id}
               >
                 <div
-                  className={`relative my-[10px] cursor-pointer p-2`}
-                  data-aos="fade-up"
-                >
-                  <p
-                    className={`w-[90%] text-xs md:text-sm xl:text-base 2xl:text-lg bg-gray-200 text-black text-center py-1 mt-[40%] hidden`}
-                  >
-                    Out of Stock
-                  </p>
-                  <p
-                    className={
-                      item.sale
-                        ? "text-white bg-red-600 inline px-2 py-1 absolute right-2 top-2"
-                        : "hidden"
-                    }
-                  >
-                    sale
-                  </p>
-                  <div className="flex flex-col justify-center items-center">
-                    <CldImage
-                      src={item.images[0]}
-                      width={600}
-                      height={600}
-                      alt="Product Image"
-                    />
-                    <h3 className="text-xs sm:text-xs lg:text-base  mb-[10px] text-center tracking-wider text-gray-800">
-                      {item.name}
-                    </h3>
-                  </div>
-                  <div className="w-[95%] flex gap-2 justify-around mx-auto text-xs sm:text-sm text-gray-700 flex-wrap">
-                    <p
-                      className={`${
-                        item.sale ? "block line-through" : "hidden"
-                      } `}
-                    >
-                      Rs.
-                      {(
-                        Math.floor((item.sale / 100) * item.price) + item.price
-                      ).toLocaleString("en-IN")}
-                      .00
-                    </p>
-                    <p className="">
-                      Rs.{item.price.toLocaleString("en-IN")}.00
-                    </p>
-                    <h3
-                      className={`text-red-500 ${
-                        !item.sale ? "hidden" : "block"
-                      } `}
-                    >
-                      save {item.sale}%
-                    </h3>
-                  </div>
-                </div>
+                                  className={`my-[10px] cursor-pointer p-2 group relative`}
+                                  data-aos="fade-up"
+                                >
+                                  <p
+                                    className={`w-[90%] text-xs md:text-sm xl:text-base 2xl:text-lg text-black absolute  text-left top-0 py-1 ${item.sizes.some((prod)=>prod.quantity !=0) ? "hidden" : "" }`}
+                                  >
+                                    Sold Out
+                                  </p>
+                                  <p
+                                    className={
+                                      item.sale
+                                        ? "text-white bg-red-600 inline px-2 py-1 absolute right-2 top-2"
+                                        : "hidden"
+                                    }
+                                  >
+                                    sale
+                                  </p>
+                                  <div className="flex flex-col justify-center items-center ">
+                                    <CldImage
+                                      src={item.images[0]}
+                                      width={600}
+                                      height={600}
+                                      alt="Product Image"
+                                      style={{height : "auto",width : "auto"}}
+                                    />
+                                  <div className={`w-[90%] absolute flex justify-between opacity-0 group-hover:opacity-75 transition duration-200 ease-in-out`}>
+                                  {
+                                    item.sizes.map((size)=>{
+                                      return( 
+                                          <span key={size._id} className={`text-sm bg-gray-950 text-white p-1 w-[30px] h-[30px] rounded-2xl text-center ${size.quantity==0 ? "line-through decoration-red-700 decoration-solid decoration-4" : ""}`}>{size.size=="XXL" || size.size=="XL" ? size.size.slice(0,3) :size.size[0]}</span>
+                                      )
+                                    })
+                                  }
+                                   </div>
+                                    <h3 className="text-xs sm:text-xs lg:text-base  mb-[10px] text-center tracking-wider text-gray-800">
+                                      {item.name}
+                                    </h3>
+                                  </div>
+                                  <div className="w-[95%] flex gap-2 justify-around mx-auto text-xs sm:text-sm text-gray-700 flex-wrap">
+                                    <p
+                                      className={`${
+                                        item.sale ? "block line-through" : "hidden"
+                                      } `}
+                                    >
+                                      Rs.
+                                      {(
+                                        Math.floor((item.sale / 100) * item.price) + item.price
+                                      ).toLocaleString("en-IN")}
+                                      .00
+                                    </p>
+                                    <p className="">
+                                      Rs.{item.price.toLocaleString("en-IN")}.00
+                                    </p>
+                                    <h3
+                                      className={`text-red-500 ${
+                                        !item.sale ? "hidden" : "block"
+                                      } `}
+                                    >
+                                      save {item.sale}%
+                                    </h3>
+                                  </div>
+                                  
+                                </div>
               </Link>
             );
           })}
