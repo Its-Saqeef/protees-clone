@@ -18,9 +18,7 @@ function page() {
   const [data, setData] = useState();
   const query = searchParams.get("query");
 
-  const [maxPrice, setMaxPrice] = useState(
-    data ? Math.max(...data.map((item) => item.price)) : 0
-  );
+  const [maxPrice, setMaxPrice] = useState(0);
   useEffect(() => {
     Aos.init({
       once: false,
@@ -59,19 +57,20 @@ function page() {
   const getData = async () => {
     const getData = await axios
       .get(
-        `/api/getproducts/?query=${searchInput && searchInput.toLowerCase()}`
+        `/api/getproducts/?query=${searchInput && searchInput.toLowerCase()}&min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice? "" : maximumPrice}&availability=${availability=== null ? "" : availability}`
       )
-      .then((res) => res.data.data);
+      .then((res) => res.data.data)
     return getData;
   };
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       const Data = await getData();
+      setMaxPrice(Math.max(...Data.map((item)=>item.price)))
       setData(Data);
-    });
+    },500);
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query,minPrice,maximumPrice,availability]);
 
   const keyhandler = (e) => {
     if (e.key == "Enter") {
@@ -104,8 +103,6 @@ function page() {
       </div>
       {
         <div className={`flex gap-4 border-t-2`}>
-          {data && data.length > 0 ? (
-            <>
               <div className="w-[20%] hidden md:block pt-4 h-[50%] sticky top-4">
                 <ul className="border-b-2 pb-5">
                   <li
@@ -124,7 +121,7 @@ function page() {
                       toggleAvailability ? "animateHeight" : "defaultheight"
                     }`}
                   >
-                    <div className="overflow-hidden">
+                    <form className="overflow-hidden">
                       <li
                         className={`text-[12px]  flex items-center hover:underline gap-2 py-[5px]`}
                       >
@@ -134,12 +131,14 @@ function page() {
                           name="stock"
                           value="yes"
                           className="cursor-pointer"
+                          defaultChecked
                           onClick={handleStock}
+                          
                         />
                         <label htmlFor="instock" className="cursor-pointer">
                           IN STOCK
                         </label>
-                        <p>(10)</p>
+                        
                       </li>
                       <li
                         className={`text-[12px] flex items-center gap-2 hover:underline py-[5px] `}
@@ -156,9 +155,9 @@ function page() {
                         <label htmlFor="outofstock" className="cursor-pointer">
                           OUT OF STOCK
                         </label>
-                        <p>(10)</p>
+                       
                       </li>
-                    </div>
+                    </form>
                   </div>
                 </ul>
                 <div>
@@ -224,9 +223,10 @@ function page() {
                       value="yes"
                       className="cursor-pointer"
                       onClick={handleStock}
+                      defaultChecked
                     />
                     IN STOCK
-                    <p>(10)</p>
+                    
                   </li>
                   <li
                     className={`text-[12px] cursor-pointer flex items-center gap-2 hover:underline py-[5px] `}
@@ -239,7 +239,7 @@ function page() {
                       onClick={handleStock}
                     />
                     OUT OF STOCK
-                    <p>(10)</p>
+                  
                   </li>
                 </ul>
                 <div className="w-[95%] mx-auto text-sm">
@@ -267,7 +267,7 @@ function page() {
                   </div>
                 </div>
               </div>
-
+              {data && data.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 mt-3 w-[100%] md:w-[85%] mx-auto">
                 <div className="col-span-2 md:col-span-4 pb-5">
                   <div className="flex justify-between ">
@@ -403,7 +403,7 @@ function page() {
                     );
                   })}
               </div>
-            </>
+            
           ) : (
             <p className="text-lg md:text-2xl tracking-wider flex items-center justify-center h-[30vh] w-full">
               No Products Found For "{query}"

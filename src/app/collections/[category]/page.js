@@ -63,7 +63,6 @@ function page() {
     return ()=>clearTimeout(timer)
   },[value[0],value[1],availability])
 
-  console.log(data)
 
   return (
     
@@ -86,7 +85,7 @@ function page() {
               toggleAvailability ? "animateHeight" : "defaultheight"
             }`}
           >
-            <div className="overflow-hidden">
+            <form className="overflow-hidden">
               <div
                 className={`text-[12px]  flex items-center hover:underline gap-2 py-[5px]`}
               >
@@ -97,6 +96,7 @@ function page() {
                   value="yes"
                   className="cursor-pointer"
                   onClick={handleStock}
+                  defaultChecked
                 />
                 <label htmlFor="instock" className="cursor-pointer">
                   IN STOCK
@@ -118,7 +118,7 @@ function page() {
                   OUT OF STOCK
                 </label>
               </div>
-            </div>
+            </form>
           </div>
         </div>
         <div>
@@ -186,6 +186,7 @@ function page() {
               className="cursor-pointer"
               onClick={handleStock}
               id="in-stock"
+              defaultChecked
             />
             <label htmlFor="in-stock">IN STOCK</label>
             
