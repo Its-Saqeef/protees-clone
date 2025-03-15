@@ -52,8 +52,6 @@ export async function GET(request,{params}) {
             }
         })
        }
-       // Fetch paginated data
-       
 
         const data=await Product.find({})
         return Response.json({
