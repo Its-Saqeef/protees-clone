@@ -12,25 +12,28 @@ import { useQueryState } from "nuqs";
 import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
+import { TbPlayerTrackNext } from "react-icons/tb";
+import { TbPlayerTrackPrev } from "react-icons/tb";
 
 function page() {
   const searchParams = useSearchParams();
   const [data, setData] = useState();
   const query = searchParams.get("query");
 
-  const [maxPrice, setMaxPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2000);
   useEffect(() => {
     Aos.init({
       once: false,
     });
     setSearchInput(query);
   }, []);
-  const [value, setValue] = useState([0, maxPrice]);
+  const [value, setValue] = useState([0, 2000]);
   const [minPrice, setMinPrice] = useQueryState("min_price");
   const [maximumPrice, setMaximumPrice] = useQueryState("max_price");
   const [sortBy, setSortBy] = useQueryState("sort_by");
   const [Query, setQuery] = useQueryState("query");
   const [availability, setAvailability] = useQueryState("availability");
+  const [currPage,setCurrPage]=useQueryState("page",{defaultValue : 1})
   const [togglePrice, setTogglePrice] = useState(false);
   const [toggleAvailability, setToggleAvailability] = useState(false);
   const [filter, setFilter] = useState(false);
@@ -57,20 +60,19 @@ function page() {
   const getData = async () => {
     const getData = await axios
       .get(
-        `/api/getproducts/?query=${searchInput && searchInput.toLowerCase()}&min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice? "" : maximumPrice}&availability=${availability=== null ? "" : availability}`
+        `/api/getproducts/?query=${searchInput && searchInput.toLowerCase()}&min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice? "" : maximumPrice}&availability=${availability=== null ? "" : availability}&page=${!currPage ? "" : currPage}&limit=8`
       )
-      .then((res) => res.data.data)
+      .then((res) => res.data)
     return getData;
   };
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       const Data = await getData();
-      setMaxPrice(Math.max(...Data.map((item)=>item.price)))
       setData(Data);
     },500);
     return () => clearTimeout(timer);
-  }, [query,minPrice,maximumPrice,availability]);
+  }, [query,minPrice,maximumPrice,availability,currPage]);
 
   const keyhandler = (e) => {
     if (e.key == "Enter") {
@@ -79,8 +81,14 @@ function page() {
   };
   if (typeof window !== "undefined") {
     document.title = `Search : ${
-      data && data.length
+      data && data.data.length
     } results found for ${query}`;
+  }
+  const pages=[]
+  if(data){
+    for (let i = 0; i < data.pagination.totalPages; i++) {
+      pages.push(i+1)
+    }
   }
 
   return (
@@ -267,12 +275,13 @@ function page() {
                   </div>
                 </div>
               </div>
-              {data && data.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 mt-3 w-[100%] md:w-[85%] mx-auto">
+              {data && data.data.length > 0 ? (
+                <div className="flex flex-col items-center gap-10">
+              <div className="grid grid-cols-2 md:grid-cols-4 mt-3 w-[100%] md:w-[90%] mx-auto">
                 <div className="col-span-2 md:col-span-4 pb-5">
                   <div className="flex justify-between ">
                     <p className="hidden md:block">
-                      {data && data.length} Products
+                      {data && data.data.length} Products
                     </p>
                     <div
                       className="flex border-2 px-2 py-1 items-center gap-2 w-[45%] md:hidden "
@@ -314,7 +323,7 @@ function page() {
                   </div>
                 </div>
                 {data &&
-                  data.map((item) => {
+                  data.data.map((item) => {
                     return (
                       <Link
                         href={`/collections/${item.subcategory}/product/${item._id}`}
@@ -403,7 +412,16 @@ function page() {
                     );
                   })}
               </div>
-            
+              <div className="mb-5 flex gap-2">
+                    <button onClick={()=>setCurrPage(currPage>1 && currPage<=pages.length ? currPage-1 : "")} disabled={currPage==1}>{<TbPlayerTrackPrev className="text-2xl cursor-pointer"/>}</button>
+                    {
+                      pages.map((page,i)=>{
+                        return <button key={i} disabled={currPage==page} className={`${currPage==page ? "bg-gray-600" : "bg-gray-900"} text-white rounded-sm  px-3 py-2`} onClick={()=>setCurrPage(page)}>{page}</button>
+                      })
+                    }
+                    <button onClick={()=>setCurrPage(currPage <pages.length && currPage >=1 ? currPage+1 : 1)} disabled={currPage==pages.length}>{<TbPlayerTrackNext className="text-2xl cursor-pointer"/>}</button>
+                  </div>
+              </div>
           ) : (
             <p className="text-lg md:text-2xl tracking-wider flex items-center justify-center h-[30vh] w-full">
               No Products Found For "{query}"
