@@ -281,7 +281,7 @@ function page() {
                 <div className="col-span-2 md:col-span-4 pb-5">
                   <div className="flex justify-between ">
                     <p className="hidden md:block">
-                      {data && data.data.length} Products
+                      {data && data.pagination.totalItems} Products
                     </p>
                     <div
                       className="flex border-2 px-2 py-1 items-center gap-2 w-[45%] md:hidden "
