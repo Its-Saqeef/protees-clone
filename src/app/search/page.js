@@ -60,7 +60,7 @@ function page() {
   const getData = async () => {
     const getData = await axios
       .get(
-        `/api/getproducts/?query=${searchInput && searchInput.toLowerCase()}&min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice? "" : maximumPrice}&availability=${availability=== null ? "" : availability}&page=${!currPage ? "" : currPage}&limit=8`
+        `/api/getproducts/?query=${searchInput && searchInput.toLowerCase()}&min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice? "" : maximumPrice}&availability=${availability=== null ? 1 : availability}&page=${!currPage ? "" : currPage}&limit=8`
       )
       .then((res) => res.data)
     return getData;
