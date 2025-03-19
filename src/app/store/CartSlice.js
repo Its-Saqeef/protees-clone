@@ -16,6 +16,10 @@ export const slice = createSlice({
     toggleCart : (state,action)=>{
       state.toggleCart = action.payload.toggle
     },
+    resetCart : (state,action)=>{
+      state.cart=[],     
+      localStorage.clear("Cart")
+    },
     setCartFromLocalStorage: (state, action) => {
       state.cart = action.payload;
     },
@@ -58,5 +62,5 @@ export const slice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, setCartFromLocalStorage,toggleCart } = slice.actions;
+export const { addToCart, removeFromCart, setCartFromLocalStorage,toggleCart,resetCart } = slice.actions;
 export default slice.reducer;

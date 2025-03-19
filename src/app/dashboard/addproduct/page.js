@@ -76,7 +76,6 @@ const ProductForm = () => {
     // form.append("images",formData.images)
     form.append("file", image);
 
-    console.log(formData)
     const response = await axios
       .post("/api/addproduct", form)
       .then((res) =>

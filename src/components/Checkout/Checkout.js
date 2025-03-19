@@ -6,6 +6,10 @@ import Modal from "./Modal";
 import { useSelector } from "react-redux";
 import {CldImage} from "next-cloudinary"
 import { toast } from "react-toastify";
+import { redirect } from "next/navigation";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { resetCart } from "@/app/store/CartSlice";
 
 function Checkout() {
     useEffect(()=>{
@@ -16,6 +20,7 @@ function Checkout() {
   const [radiotoggletwo, setRadioToggleTwo] = useState(false);
   const [billaddress, setBillAddress] = useState(false);
   const [shippingtoggle, setShippingToggle] = useState(false);
+  const [isLoading,setIsLoading]=useState(false)
   const data=useSelector(state=>state.cart)
   const [formdata, setFormData] = useState({
     email: "",
@@ -25,6 +30,7 @@ function Checkout() {
     city: "",
     postalcode: "",
     phone: "",
+    payment : "Cash On Delivery"
   });
 
   const [billing, setBilling] = useState({
@@ -33,9 +39,11 @@ function Checkout() {
     address: "",
     city: "",
     postalcode: "",
+    billingPhone : ""
   });
 
   const [errors, setErrors] = useState({});
+  const dispatch=useDispatch()
 
   const changeHandler = (e) => {
     setFormData(() => ({
@@ -85,7 +93,8 @@ function Checkout() {
     return errors;
   };
 
-  const submitHandler = (e) => {
+
+  const submitHandler = async(e) => {
     e.preventDefault();
 
     const errors = handleErrors();
@@ -94,8 +103,19 @@ function Checkout() {
       setErrors(errors);
       return;
     }
+    setIsLoading(true)
     setErrors({});
-    toast.success("Order Placed")
+   
+    const response=await axios.post("/api/orders",[formdata,billing,data]).then((res)=>res)
+    console.log(response)
+    if(response.data.message=="success"){
+      toast.success("Order Placed")
+    }else{
+      toast.error(response.data.message)
+    }
+    dispatch(resetCart())
+    setIsLoading(false)
+    redirect(`/order/${response.data.data.orderNumber}`)
   };
 
   let totalamount=0
@@ -103,7 +123,7 @@ function Checkout() {
         const individual_item=item.price * item.quantity
         totalamount=individual_item + totalamount
     })   
-
+    
   return (
     <div
       className={` w-full  top-0 bg-black ${
@@ -245,7 +265,7 @@ function Checkout() {
                 <div className="border-b border-gray-500 py-3 pl-2">
                   <input
                     type="radio"
-                    value=""
+                    value="Cash On Delivery"
                     name="payment"
                     id="payment"
                     defaultChecked
@@ -254,6 +274,7 @@ function Checkout() {
                       setRadioToggleTwo(false);
                       setRadioToggleOne(true);
                     }}
+                    onChange={(e)=>setFormData({...formdata,payment : e.target.value})}
                   />
                   <label htmlFor="payment" className="cursor-pointer ml-2">
                     Cash on Delivery
@@ -269,7 +290,7 @@ function Checkout() {
                 <div className={`border-b border-gray-500 py-3 pl-2`}>
                   <input
                     type="radio"
-                    value=""
+                    value="Bank Deposit"
                     name="payment"
                     id="payment2"
                     className="cursor-pointer"
@@ -277,6 +298,7 @@ function Checkout() {
                       setRadioToggleTwo(true);
                       setRadioToggleOne(false);
                     }}
+                    onChange={(e)=>setFormData({...formdata,payment : e.target.value})}
                   />
                   <label htmlFor="payment2" className="cursor-pointer ml-2">
                     Bank Deposit
@@ -374,13 +396,38 @@ function Checkout() {
                     />
                   </div>
                   <div className="text-red-500">{errors.bcity}</div>
+                  <div
+                className={`flex items-center border  border-gray-500 rounded-md p-2 relative`}
+              >
+                <input
+                  name="billingPhone"
+                  placeholder="Phone"
+                  className="bg-black w-[100%] py-1 outline-none"
+                  onChange={handlebillingaddress}
+                />
+                <div>
+                  <HiOutlineQuestionMarkCircle
+                    className="cursor-pointer w-10 text-2xl"
+                    onMouseEnter={() => setMessageDisp(true)}
+                    onMouseLeave={() => setMessageDisp(false)}
+                  />
+                  <p
+                    className={`absolute w-[150px] h-[80px] py-1 px-2 rounded-md border z-10 bg-white shadow-md text-black right-0 ${
+                      messagedisp ? "block" : "hidden"
+                    }`}
+                  >
+                    In case we need to contact you about your order
+                  </p>
                 </div>
               </div>
-              <input
-                type="submit"
-                className="bg-red-700 hover:bg-red-800 transition ease-in-out duration-300 w-full p-4 text-xl rounded-md my-8 cursor-pointer hidden md:block"
-                value="Complete Order"
-              />
+                </div>
+              </div>
+              <button  
+            onClick={submitHandler}
+            className="bg-red-700 hover:bg-red-800 transition ease-in-out duration-300 w-full p-4 text-xl rounded-md my-8 cursor-pointer hidden md:block"
+            disabled={isLoading}>
+              {isLoading ? <p className="loader mx-auto"></p> : "Complete Order"}
+          </button>
             </form>
           </div>
 
@@ -452,12 +499,12 @@ function Checkout() {
               </div>
             </div>
           </div>
-          <input
-            type="submit"
+          <button  
             onClick={submitHandler}
             className="bg-red-700 hover:bg-red-800 transition ease-in-out duration-300 w-full p-4 text-xl rounded-md my-8 cursor-pointer md:hidden"
-            value="Complete Order"
-          />
+            disabled={isLoading}>
+              {isLoading ? <p className="loader mx-auto"></p> : "Complete Order"}
+          </button>
         </div>
       </div>
     </div>
