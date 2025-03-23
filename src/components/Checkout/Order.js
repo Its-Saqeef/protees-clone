@@ -80,7 +80,7 @@ function formatDate(isoString) {
           {
             data.product.map((item)=>{
               return (
-                <div className='flex items-center py-1 justify-between '>
+                <div className='flex items-center py-1 justify-between ' key={item._id}>
                   <div className='relative'>
                     <Image src={`https://res.cloudinary.com/dtnxlm58e/image/upload/v1741148854/${item.image[0]}`} alt='Photo' height={100} width={100} className='border border-gray-400 rounded-md'/>
                     <p className='absolute top-[-5px] right-[-5px] bg-gray-500 rounded-xl w-6 h-6 text-center text-white'>{item.quantity}</p>

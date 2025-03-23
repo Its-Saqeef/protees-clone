@@ -1,6 +1,6 @@
 import connectDB from "@/lib/Connection.js";
 import { Order } from "@/components/Backend/models/Order.models";
-
+import { User } from "@/components/Backend/models/Users.models";
 
 export async function POST(req){
     try {
@@ -17,6 +17,11 @@ export async function POST(req){
             quantity: item.quantity,
             image : item.image[0]
         }))
+
+        const user= await User.findOne({email : customer.email})
+        if(!user){
+            await User.create({email : customer.email})
+        }
 
         const isEmpty=Object.values(billing).some(value => value === "")
         let order

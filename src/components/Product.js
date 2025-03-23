@@ -201,7 +201,7 @@ function Product({data}) {
                 </div>
               </div>
             </div>
-            <Link href="https://www.facebook.com/share_channel/" target="blank">
+            <Link href="https://www.facebook.com/share_channel/" target="blank" className="w-max mx-auto">
               <span className="flex justify-center items-center gap-2 text-xl my-4">
                 <FaFacebook /> Share
               </span>

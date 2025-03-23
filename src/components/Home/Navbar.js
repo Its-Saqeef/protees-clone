@@ -96,7 +96,7 @@ function Navbar() {
             <div>
               <p className="relative show">
                 <span className="message">Login</span>
-                <BsPerson className="text-2xl cursor-pointer" />
+                <Link href={"/login"}><BsPerson className="text-2xl cursor-pointer" /></Link>
               </p>
             </div>
             <div>
