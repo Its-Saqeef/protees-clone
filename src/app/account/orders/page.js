@@ -6,7 +6,7 @@ import { CiMenuBurger } from "react-icons/ci";
 import { CiGrid41 } from "react-icons/ci";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { redirect } from 'next/dist/server/api-utils';
+import { redirect } from 'next/navigation';
 
 
 function page() {
