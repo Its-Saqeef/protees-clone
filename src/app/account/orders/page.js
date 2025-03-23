@@ -6,6 +6,7 @@ import { CiMenuBurger } from "react-icons/ci";
 import { CiGrid41 } from "react-icons/ci";
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { redirect } from 'next/dist/server/api-utils';
 
 
 function page() {
@@ -35,6 +36,7 @@ function page() {
         try {
             const response = await axios.get("/api/logout").then((res)=>res)
             toast.success(response.data.message)
+            redirect("/login")
         } catch (error) {
             toast.error("Error Logging Out")
         }
