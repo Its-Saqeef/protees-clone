@@ -1,13 +1,15 @@
 import { NextResponse,NextRequest } from 'next/server'
- 
-// This function can be marked `async` if using `await` inside
+
+
+
 export function middleware(request) {
-    console.log(request)
     const path=request.nextUrl.pathname
 
     const token=request.cookies.get("Token")?.value
 
-    if(path==="/account/orders" && !token){
+    
+
+    if((path==="/account/orders" || path.includes(`/account/orders/Order-`)) && !token){
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
@@ -18,10 +20,9 @@ export function middleware(request) {
   
 }
  
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: [
     "/login",
-    "/account/orders"
+    "/account/orders/:path*",
   ]
 }

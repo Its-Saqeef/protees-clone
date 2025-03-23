@@ -15,7 +15,7 @@ export async function GET(req) {
 
     } catch (error) {
         return NextResponse.json({
-            messgae : "Error Occured",
+            message : "Error Occured",
             error : error
         })
     }

@@ -3,7 +3,11 @@ import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import Link from 'next/link';
 import Image from 'next/image';
 
+
+
 function Order({data}) {
+
+
   let total=0
     data.product.map((item)=>{
     const individualPrice=item.price * item.quantity

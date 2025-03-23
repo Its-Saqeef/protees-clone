@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React,{useEffect, useState} from 'react'
 import { toast } from 'react-toastify'
 import Cookies from "js-cookie";
-import { redirect, RedirectType } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 
 function page() {
@@ -15,6 +15,8 @@ function page() {
     const [isLoading,setIsLoading]=useState(false)
     const [error,setError]=useState()
     const [token,setToken]=useState()
+    const router=useRouter()
+
     useEffect(()=>{
         toggleLogin ? document.title="Enter Code - Protees.pk" :document.title="Login - Protees.pk"
     },[toggleLogin])
@@ -44,7 +46,7 @@ function page() {
                 toast.success("Verified")
                 setToken(Cookies.get("Token"))
                 setIsLoading(false)
-                redirect("/account/orders")
+                router.push(`/account/orders`)
             }else{
                 setIsLoading(false)
                 toast.error("Incorrect Code")                

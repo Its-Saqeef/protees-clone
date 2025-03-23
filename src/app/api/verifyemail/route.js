@@ -25,6 +25,7 @@ export async function POST(req){
 
             const response= NextResponse.json({
                 message : "Success",
+                data : user
             })
 
             const payload={
