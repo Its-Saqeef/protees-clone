@@ -6,12 +6,14 @@ import { FaFacebook } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 function Footer() {
     const [email,setEmail]=useState();
+    const pathname=usePathname()
     
   return (
-    <footer className='lg:w-[90%] lg:mx-auto  border-t-[2px] text-sm text-gray-800'>
+    <footer className={`lg:w-[90%] lg:mx-auto  border-t-[2px] text-sm text-gray-800 ${pathname.startsWith("/account") || pathname.startsWith('/login') ? "hidden" : "block"}`}>
         <div className='flex flex-col md:flex-row justify-around p-8 mt-5'>
             <div className='flex flex-col gap-[10px] border-b-2 md:border-0 md:w-1/3 xl:w-auto'>
                 <h1 className='font-bold text-xl'>CONTACT US</h1>

@@ -8,7 +8,7 @@ async function page({params}) {
   const data=await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getorder/${orderid}`).then((res)=>res.data.order)
   
   return (
-    <div className="absolute inset-0 bg-white">
+    <div className="bg-white">
         <Nav />
       <Order data={data}/>
     </div>

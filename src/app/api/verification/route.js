@@ -26,15 +26,13 @@ export async function POST(req) {
             tokenExpiry : Date.now() + 900000
         })
 
-       // const response = await sendEmail(email,code)
-       const data=await resend.emails.send({
-        from: 'Acme <onboarding@resend.dev>',
-        to: "proteesclone@gmail.com",
-        subject: `${code} is your login code`,
-        html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
-      })
-      console.log(data)
-
+        const data =await resend.emails.send({
+            from: 'Acme <onboarding@resend.dev>',
+            to: email,
+            subject: `${code} is your login code`,
+            html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
+        })
+        console.log(data)
         return Response.json({
             message : "Success"
         })

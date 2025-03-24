@@ -58,7 +58,7 @@ function page() {
   return (
     <main className='inset-0 absolute bg-white flex'>
         <div className='bg-gray-100 self-center border-2 mx-auto w-[90%] md:w-[60%] lg:w-[50%] xl:w-[40%] 2xl:w-[27%] rounded-md py-4'>
-            <Link href="/"><img src='/SITE_LOGO_1.png' alt='Logo' className='mx-auto my-7'/></Link>
+            <Link href="/"><img src='/SITE_LOGO_1.png' alt='Logo' className='mx-auto my-7 '/></Link>
             {
                 toggleLogin ? (<form className='w-[90%] flex flex-col mx-auto '>
                         <label className='font-semibold text-xl pb-2'>Enter Code</label>

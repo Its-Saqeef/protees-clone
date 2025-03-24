@@ -23,7 +23,8 @@ function formatDate(isoString) {
   return `${day} ${month} ${year}`;
 }
   return (
-    <main className='flex flex-col md:flex-row lg:w-[90%%] xl:w-[85%] 2xl:w-[75%] mx-auto justify-evenly my-8 relative'>
+    <main>
+    <section className='flex flex-col md:flex-row lg:w-[90%] xl:w-[85%] 2xl:w-[75%] mx-auto justify-evenly my-8 relative'>
       <section className='lg:w-[60%]'>
         <p className='flex items-center text-2xl font-thin'>
           <IoCheckmarkCircleOutline className='text-7xl text-green-600'/>Thank You For Purchase
@@ -112,7 +113,8 @@ function formatDate(isoString) {
           </div>
         </div>
       </section>
-      <div className='flex gap-2 absolute bottom-0 text-sm self-center'>
+    </section>
+    <div className='flex gap-3 text-sm items-center justify-center lg:w-[90%] xl:w-[85%] 2xl:w-[75%] mx-auto mb-4'>
         <Link href='/pages/refund-policy' className='underline'>Refund Policy</Link>
         <Link href='/pages/shipping-policy' className='underline'>Shipping Policy</Link>
         <Link href='/pages/privacy-policy' className='underline'>Privacy Policy</Link>

@@ -55,7 +55,7 @@ function page() {
     console.log(result);
 
   return (
-    <main className='absolute inset-0 bg-white'>
+    <main className=' bg-white'>
         <Nav />
         <section className='w-[90%] md:w-[60%] mx-auto my-10'>
             <div className='flex justify-between text-xl font-semibold my-4'>
