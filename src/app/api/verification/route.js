@@ -29,7 +29,7 @@ export async function POST(req) {
        // const response = await sendEmail(email,code)
        const data=await resend.emails.send({
         from: 'Acme <onboarding@resend.dev>',
-        to: email,
+        to: "proteesclone@gmail.com",
         subject: `${code} is your login code`,
         html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
       })
