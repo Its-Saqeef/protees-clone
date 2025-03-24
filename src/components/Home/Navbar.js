@@ -41,10 +41,6 @@ function Navbar() {
       {toggleSearch ? <Modal setToggleSearch={setToggleSearch} /> : null}
       <article className={`w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto `}>
         <div className="hidden md:flex gap-2 text-xl justify-end p-2">
-          <p className="cursor-pointer relative show">
-            <span className=" message">Dark Mode</span>
-            <MdOutlineDarkMode />
-          </p>
           <Link
             href="https://www.instagram.com/_protees.pk/?hl=en"
             target="blank"
