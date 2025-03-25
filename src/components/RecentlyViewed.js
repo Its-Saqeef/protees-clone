@@ -17,7 +17,7 @@ function RecentlyViewed({id}) {
 
   return (
     <section className={`my-5 md:mt-20 `}>
-        <h1 className={`w-max mx-auto text-xl md:text-2xl lg:text-3xl my-[20px] text-gray-800 tracking-wider text-center ${data && data.length <=1 ? "hidden" : ""}`}>RECENTLY VIEWED</h1>
+        <h1 className={`w-max mx-auto text-xl md:text-2xl lg:text-3xl my-[20px] text-gray-800 tracking-wider text-center ${data && (data.length <=1 & data[0]._id==id) ? "hidden" : ""}`}>RECENTLY VIEWED</h1>
         <div className='md:grid md:grid-cols-4 mt-[30px] flex overflow-x-scroll md:overflow-hidden'>
         { data &&
             data.map((item)=>{
