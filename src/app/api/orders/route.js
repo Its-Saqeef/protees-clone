@@ -1,6 +1,7 @@
 import connectDB from "@/lib/Connection.js";
 import { Order } from "@/components/Backend/models/Order.models";
 import { User } from "@/components/Backend/models/Users.models";
+import { Product } from "@/components/Backend/models/Product.models";
 
 export async function POST(req){
     try {
@@ -15,8 +16,25 @@ export async function POST(req){
             size: item.size,
             price: item.price,
             quantity: item.quantity,
-            image : item.image[0]
+            image : item.image[0],
         }))
+
+        // const allids=data[2].map((prod)=>prod.id)
+        // const sizes=data[2].map((prod)=>prod.size)
+        
+        // const allProducts =await Product.find(
+        //     {
+        //         $and : [
+        //             {_id : {$in : allids}},
+        //             { sizes : {}}
+        //         ]
+                
+        //     }
+        // )
+        
+        // allProducts.map((item)=>{
+        //     return item.sizes.filter((prod)=>prod.size==)
+        // })
 
         const user= await User.findOne({email : customer.email})
         if(!user){
@@ -54,7 +72,7 @@ export async function POST(req){
                 billingAddress : `${billing.address}, ${billing.city}`,
                 billingPhone : billing.billingPhone,
                 product: products, 
-            })
+            })  
         }         
 
         return Response.json({

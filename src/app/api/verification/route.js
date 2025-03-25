@@ -27,12 +27,15 @@ export async function POST(req) {
         })
 
         const data =await resend.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
+            from: 'Protees-clone <@portfoliosite.store>',
             to: email,
             subject: `${code} is your login code`,
-            html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
+            html: `"<div>
+            <p>${code}</p>
+            <p>This code is valid for 15 minutes</p>
+            </div>"`
         })
-        console.log(data)
+        
         return Response.json({
             message : "Success"
         })

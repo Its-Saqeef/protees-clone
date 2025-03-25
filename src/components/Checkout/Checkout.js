@@ -103,11 +103,14 @@ function Checkout() {
       setErrors(errors);
       return;
     }
+    if(data.length==0){
+      toast.error("Please select Product")
+      return;
+    }
     setIsLoading(true)
     setErrors({});
    
     const response=await axios.post("/api/orders",[formdata,billing,data]).then((res)=>res)
-    console.log(response)
     if(response.data.message=="success"){
       toast.success("Order Placed")
     }else{
