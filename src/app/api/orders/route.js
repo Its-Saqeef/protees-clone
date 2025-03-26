@@ -19,22 +19,33 @@ export async function POST(req){
             image : item.image[0],
         }))
 
-        // const allids=data[2].map((prod)=>prod.id)
-        // const sizes=data[2].map((prod)=>prod.size)
-        
-        // const allProducts =await Product.find(
-        //     {
-        //         $and : [
-        //             {_id : {$in : allids}},
-        //             { sizes : {}}
-        //         ]
-                
-        //     }
-        // )
-        
-        // allProducts.map((item)=>{
-        //     return item.sizes.filter((prod)=>prod.size==)
-        // })
+        console.log(data[2])
+
+        const updateResult=await Promise.all(
+            data[2].map(async(item)=>{
+                try {
+                    const product = await Product.findById(item.id)
+                    if (!product) {
+                        return { status: "error", message: "Product not found" };
+                    }
+
+                    const sizeObj = product.sizes.find((s) => s.size === item.size)
+                    if (!sizeObj) {
+                        return { status: "error", message: "Size not found" };
+                    }
+
+                    if (parseInt(sizeObj.quantity) < parseInt(item.quantity)) {
+                        return { status: "error", message: "Not enough stock" };
+                    }
+
+                    sizeObj.quantity = (parseInt(sizeObj.quantity) - parseInt(item.quantity)).toString();
+                    await product.save();
+
+                } catch (error) {
+                    console.log("Error",error)
+                }
+            })
+        )
 
         const user= await User.findOne({email : customer.email})
         if(!user){

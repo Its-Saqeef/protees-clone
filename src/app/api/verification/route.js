@@ -35,7 +35,8 @@ export async function POST(req) {
             <p>This code is valid for 15 minutes</p>
             </div>`
         })
-        console.log(data)
+        
+        
         return Response.json({
             message : "Success"
         })
