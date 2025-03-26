@@ -22,9 +22,8 @@ function page() {
     useEffect(()=>{
         (async()=>{const response =await axios.post(`/api/getorderhistory`).then((res)=>res)
         setData(response.data.data)})();
-        
     },[])
-    console.log(data)
+    
     const handleLogout=async()=>{
         try {
             const response = await axios.get("/api/logout").then((res)=>res)
@@ -52,11 +51,12 @@ function page() {
     };
     
     const result =data&&calculateOrderTotal(data);
-    console.log(result);
+    
 
   return (
     <main className=' bg-white'>
-        <Nav />
+        <Nav data={data&&data[0]}/>
+
         <section className='w-[90%] md:w-[60%] mx-auto my-10'>
             <div className='flex justify-between text-xl font-semibold my-4'>
                 <p>Orders</p>

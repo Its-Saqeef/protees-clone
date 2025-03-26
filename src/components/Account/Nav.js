@@ -6,7 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 
-function Nav() {
+function Nav({data}) {
 
      const dropdownRef = useRef(null);
     const [toggleDropDown,setToggleDropDown]=useState(false)
@@ -59,8 +59,8 @@ function Nav() {
                         <div className='flex items-center gap-2 text-sm py-2 border-b-2'>
                             <p className='bg-gray-100 rounded-xl p-1'>NM</p>
                             <div>
-                                <p>Muhammad Saqeef</p>
-                                <p>Muhammadxaqeef@gmailcom</p>
+                                <p>{data.name}</p>
+                                <p>{data.email}</p>
                             </div>
                         </div>
                         <p className='hover:bg-gray-100 cursor-pointer py-2 rounded-md'>Profile</p>

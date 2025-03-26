@@ -9,7 +9,7 @@ async function page({params}) {
   
   return (
     <div className="bg-white">
-        <Nav />
+        <Nav data={data}/>
       <Order data={data}/>
     </div>
   )
