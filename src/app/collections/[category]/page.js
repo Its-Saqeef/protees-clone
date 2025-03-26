@@ -10,7 +10,7 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import { useQueryState } from "nuqs";
 import { toast } from "react-toastify";
-import { useParams } from "next/navigation";
+import { notFound, redirect, useParams } from "next/navigation";
 
 function page() {
   const { category } = useParams()
@@ -19,7 +19,13 @@ function page() {
 
   const [maxPrice, setMaxPrice] = useState(0);
   useEffect(() => {
-    (async()=>await fetch(`/api/getcategory/${category}`).then((res)=>res.json()).then((res)=>[setCategoryData(res.data),setMaxPrice(Math.max(...res.data.map((item) => item.price)))]))();
+    (async()=>await fetch(`/api/getcategory/${category}`).then((res)=>res.json()).then((res)=>{
+      if(!res.success){
+        redirect("/not-found")
+      }else{
+        [setCategoryData(res.data),setMaxPrice(Math.max(...res.data.map((item) => item.price)))]
+      }
+      }))();
     Aos.init({
       once: false,
     });

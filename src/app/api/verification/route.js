@@ -1,6 +1,5 @@
 import connectDB from "@/lib/Connection";
 import { User } from "@/components/Backend/models/Users.models";
-import {sendEmail} from "@/lib/Mailer"
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY)

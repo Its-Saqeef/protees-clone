@@ -24,12 +24,12 @@ function Banner() {
             image : "/smoke-superman.png",
             link : "superheroes"
         },
-        {
-            id :4,
-            category : 'SUPERHEROES FULL SLEEVES',
-            sub_category : 'graphic_tees',
-            image : "/superhero- full.png"
-        },
+        // {
+        //     id :4,
+        //     category : 'SUPERHEROES FULL SLEEVES',
+        //     sub_category : 'graphic_tees',
+        //     image : "/superhero- full.png"
+        // },
         {
             id :5,
             category : 'BASIC',
@@ -37,18 +37,18 @@ function Banner() {
             image : "/img5.png",
             link : "basic"
         },
-        {
-            id :6,
-            category : 'SUPER BOTTOMS',
-            sub_category : 'yearly',
-            image : "/bottom-.png"
-        },
-        {
-            id :7,
-            category : 'DESIGNER HOODIES',
-            sub_category : 'yearly',
-            image : "/designer.png"
-        },
+        // {
+        //     id :6,
+        //     category : 'SUPER BOTTOMS',
+        //     sub_category : 'yearly',
+        //     image : "/bottom-.png"
+        // },
+        // {
+        //     id :7,
+        //     category : 'DESIGNER HOODIES',
+        //     sub_category : 'yearly',
+        //     image : "/designer.png"
+        // },
         {
             id :8,
             category : 'SWEATSHIRTS',
@@ -56,18 +56,18 @@ function Banner() {
             image : "/sweatshirt-.png",
             link : "sweatshirt"
         },
-        {
-            id :9,
-            category : 'SUPER HOODIES',
-            sub_category : 'yearly',
-            image : "/superhoodie-.png"
-        },
-        {
-            id :10,
-            category : 'PUFFER JACKETS',
-            sub_category : 'yearly',
-            image : "/puffer-.png"
-        },
+        // {
+        //     id :9,
+        //     category : 'SUPER HOODIES',
+        //     sub_category : 'yearly',
+        //     image : "/superhoodie-.png"
+        // },
+        // {
+        //     id :10,
+        //     category : 'PUFFER JACKETS',
+        //     sub_category : 'yearly',
+        //     image : "/puffer-.png"
+        // },
         {
             id :11,
             category : 'DIGITAL GRAPHIC TEES',
@@ -75,12 +75,12 @@ function Banner() {
             image : "/digitaltee-.png",
             link : "graphic"
         },
-        {
-            id :12,
-            category : 'FOOTBALL TEES',
-            sub_category : 'yearly',
-            image : "/football-.png"
-        },
+        // {
+        //     id :12,
+        //     category : 'FOOTBALL TEES',
+        //     sub_category : 'yearly',
+        //     image : "/football-.png"
+        // },
     ]
     
     

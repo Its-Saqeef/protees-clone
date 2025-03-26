@@ -17,6 +17,7 @@ export async function GET(request, { params }) {
       return NextResponse.json(
         {
           message: "No Input Data",
+          success : false
         },
         { status: 400 }
       );
@@ -37,7 +38,8 @@ export async function GET(request, { params }) {
       const eachCategory = await Product.find(filterCriteria)
       if (eachCategory.length == 0) {
         return NextResponse.json({
-          message: "Category Not Found"
+          message: "Category Not Found",
+          success :false
         }, { status: 404 })
       }
       else {
@@ -45,6 +47,7 @@ export async function GET(request, { params }) {
           {
             message: "Success",
             data: eachCategory,
+            success :true
           },
           { status: 200 }
         )
@@ -66,6 +69,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({
         message: "Success",
         data: eachCategory,
+        success :true
       }, { status: 200 });
     }
     else if(max_price && (availability==0 || availability==1)){
@@ -93,6 +97,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({
         message: "Success",
         data: eachCategory,
+        success :true
       }, { status: 200 });
     }
   } catch (error) {
