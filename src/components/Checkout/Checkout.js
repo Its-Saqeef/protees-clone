@@ -151,7 +151,7 @@ function Checkout() {
               <h2 className="text-2xl py-4">Contact</h2>
               <input
                 name="email"
-                placeholder="Email or Mobile Phone Number"
+                placeholder="Enter Email"
                 className={`bg-black focus:outline-none border border-gray-500 w-full p-3 rounded-md ${
                   errors.email ? "border-red-500" : null
                 }`}
