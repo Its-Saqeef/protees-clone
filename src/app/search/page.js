@@ -76,7 +76,7 @@ function page() {
 
   const keyhandler = (e) => {
     if (e.key == "Enter") {
-      searchInput.length > 0 ? setQuery(searchInput) : null;
+      searchInput.length > 0 ? (setQuery(searchInput),setCurrPage(1),setMaximumPrice(""),setAvailability(1)) : null;
     }
   };
   if (typeof window !== "undefined") {
@@ -105,7 +105,7 @@ function page() {
         <CiSearch
           className="text-2xl cursor-pointer mr-1"
           onClick={() =>
-            searchInput.length > 0 ? setQuery(searchInput) : null
+            searchInput.length > 0 ? (setQuery(searchInput),setCurrPage(1),setMaximumPrice(""),setAvailability(1)) : null
           }
         />
       </div>
