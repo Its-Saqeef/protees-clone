@@ -68,6 +68,9 @@ function page() {
             </div>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
                 {
+                    !data && <div className="h-[75vh] col-span-4 "><p className="loader border-x-black mx-auto"></p></div>
+                }
+                {
                     data&& data.map((item)=>{
                         return (
                             <Link href={`/account/orders/${item.orderNumber}`} key={item._id}>
