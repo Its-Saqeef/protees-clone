@@ -194,15 +194,22 @@ function Order({ data }) {
                 </div>
               );
             })}
-            <div className="flex justify-center items-center">
-            <button
-              className="w-[50%]  bg-[#c10000] rounded-md p-1 text-white font-semibold hover:bg-red-800"
-              disabled={isLoading || rating.length <=1}
-              onClick={handleReview}
-            >
-              Submit Review
-            </button>
+            {
+              data.status === "delivered" &&
+              pathname.startsWith("/account") && (
+                <div className="flex justify-center items-center">
+                  <button
+                  className="w-[50%]  bg-[#c10000] rounded-md p-1 text-white font-semibold hover:bg-red-800"
+                  disabled={isLoading || rating.length <=1}
+                  onClick={handleReview}
+                >
+                  Submit Review
+                </button>
             </div>
+              )
+
+            }
+            
             <div className="flex w-[50%] mx-auto justify-between my-2">
               <p>Subtotal</p>
               <p>Rs.{total.toLocaleString("en-IN")}.00</p>
