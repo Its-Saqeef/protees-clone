@@ -62,6 +62,12 @@ const orderSchema=new mongoose.Schema({
         },
         image : {
             type : [String]
+        },
+        id : {
+            type : String
+        },
+        rating : {
+            type : String
         }
     }],
 },{timestamps : true})

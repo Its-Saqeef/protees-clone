@@ -17,9 +17,8 @@ export async function POST(req){
             price: item.price,
             quantity: item.quantity,
             image : item.image[0],
+            id : item.id
         }))
-
-        console.log(data[2])
 
         const updateResult=await Promise.all(
             data[2].map(async(item)=>{

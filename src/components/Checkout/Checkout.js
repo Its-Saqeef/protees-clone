@@ -125,7 +125,8 @@ function Checkout() {
     data && data.map((item)=>{
         const individual_item=item.price * item.quantity
         totalamount=individual_item + totalamount
-    })   
+    })
+
     
   return (
     <div

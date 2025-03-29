@@ -13,8 +13,9 @@ import { addToCart,setCartFromLocalStorage } from "@/app/store/CartSlice";
 import { useDispatch } from "react-redux";
 import RecentlyViewed from "./RecentlyViewed";
 import { IoIosArrowRoundBack } from "react-icons/io"
+import { FaRegStar,FaStar } from "react-icons/fa6";
 
-function Product({data}) {
+function Product({data,reviews}) {
   const router=useRouter()
   const params = useParams();
   const [id, setId] = useState(params.id);
@@ -46,6 +47,9 @@ function Product({data}) {
       dispatch(setCartFromLocalStorage(storedCart));
     }
   },[dispatch])
+  
+  const rating=reviews.reduce((sum,item)=>sum + Number(item.rating),0)
+  const averageRating=rating/reviews.length
   
   return (
     <main className={`w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto mt-10`}>
@@ -132,6 +136,14 @@ function Product({data}) {
                 ? `${stock} items left - Shop now`
                 : `In stock - order now`}
             </h6>
+            <div className="flex gap-2 items-center p-1 my-2">
+              {
+                Array.from({length : 5},(_,index)=>{
+                return  averageRating >=index+1 ? <FaStar key={index} className="fill-yellow-400"/> : <FaRegStar key={index} />
+                })
+              }
+              <span className="text-sm">({reviews.length} Reviews)</span>
+            </div>
             {stock == 0 ? (
               <button
                 className="bg-gray-200 text-gray-400 p-3 border-gray-600 border tracking-wider rounded-sm my-4"
@@ -140,7 +152,7 @@ function Product({data}) {
                 SOLD OUT
               </button>
             ) : (
-              <div className="flex flex-col gap-2 my-5">
+              <div className="flex flex-col gap-2 my-3">
                 <button className="border border-black p-3 tracking-wider rounded-sm" onClick={()=>dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images,subcategory : data.subcategory}))}>
                   ADD TO CART
                 </button>

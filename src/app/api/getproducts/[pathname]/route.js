@@ -1,6 +1,7 @@
 import connectDB from "@/lib/Connection.js";
 import { Product } from "@/components/Backend/models/Product.models";
 import { NextResponse } from "next/server";
+import { Reviews } from "@/components/Backend/models/Reviews.models";
 
 export async function GET(request,{params}) {
   try {
@@ -16,10 +17,13 @@ export async function GET(request,{params}) {
       })
     }
       const data=await Product.findById(pathname)
+      const reviews =await Reviews.find({productId : pathname})
+
 
       return NextResponse.json({
         message : "Success",
-        data : data
+        data : data,
+        reviews : reviews
       },
       {
         status : 200
