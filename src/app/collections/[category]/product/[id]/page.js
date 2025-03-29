@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 async function GetData(id) {
   const getData = await axios
-    .get(`${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/api/getproducts/${id}`)
+    .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getproducts/${id}`)
     .then((res) =>res)
   return getData;
 }
