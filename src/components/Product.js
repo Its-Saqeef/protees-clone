@@ -136,7 +136,7 @@ function Product({data,reviews}) {
                 ? `${stock} items left - Shop now`
                 : `In stock - order now`}
             </h6>
-            <div className="flex gap-2 items-center p-1 my-2">
+            <div className="flex gap-2 items-center p-1 my-2 mx-auto md:mx-0">
               {
                 Array.from({length : 5},(_,index)=>{
                 return  averageRating >=index+1 ? <FaStar key={index} className="fill-yellow-400"/> : <FaRegStar key={index} />
