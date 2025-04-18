@@ -35,7 +35,7 @@ export default async function Success({ searchParams }) {
         </div>`
     })
     return (
-      <section id="success" className='bg-gray-100 w-[30%] flex flex-col mx-auto my-20 p-2'>
+      <section id="success" className='bg-gray-100 w-[90%] md:w-[60%] lg:w-[50%] xl:w-[40%] 2xl:w-[27%] rounded-md flex flex-col mx-auto my-20 p-2'>
         <p className='font-semibold text-3xl flex justify-center items-center gap-2'>Success <IoCheckmarkCircleOutline className='text-green-600 text-4xl'/></p>
         <div className='w-[90%] mx-auto text-center mt-8'>
             <p>
