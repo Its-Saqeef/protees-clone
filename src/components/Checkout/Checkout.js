@@ -96,7 +96,7 @@ function Checkout() {
   };
 
   const cardPayment=async()=>{
-    const stripe=await loadStripe(process.env.STRIPE_PUBLISHABLE_KEY)
+    const stripe=await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
     if (canceled) {
       console.log(
         'Order canceled -- continue to shop around and checkout when you’re ready.'
