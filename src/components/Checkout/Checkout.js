@@ -6,10 +6,11 @@ import Modal from "./Modal";
 import { useSelector } from "react-redux";
 import {CldImage} from "next-cloudinary"
 import { toast } from "react-toastify";
-import { redirect } from "next/navigation";
+import { redirect,useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { resetCart } from "@/app/store/CartSlice";
+import { loadStripe } from "@stripe/stripe-js";
 
 function Checkout() {
     useEffect(()=>{
@@ -44,6 +45,7 @@ function Checkout() {
 
   const [errors, setErrors] = useState({});
   const dispatch=useDispatch()
+  const {canceled} = useSearchParams()
 
   const changeHandler = (e) => {
     setFormData(() => ({
@@ -93,6 +95,25 @@ function Checkout() {
     return errors;
   };
 
+  const cardPayment=async()=>{
+    const stripe=await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+    if (canceled) {
+      console.log(
+        'Order canceled -- continue to shop around and checkout when you’re ready.'
+      )
+    }
+    const response = await fetch("/api/checkout-session",{
+      method : "POST",
+      body : JSON.stringify(data),
+      
+    }).then((res)=>res.json())
+    dispatch(resetCart())
+    setIsLoading(false)
+       const result=stripe.redirectToCheckout({
+       sessionId : response.session_id
+    })
+  }
+
 
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -109,16 +130,21 @@ function Checkout() {
     }
     setIsLoading(true)
     setErrors({});
-   
-    const response=await axios.post("/api/orders",[formdata,billing,data]).then((res)=>res)
-    if(response.data.message=="success"){
-      toast.success("Order Placed")
-    }else{
-      toast.error(response.data.message)
+
+    if(radiotoggletwo){
+      cardPayment()
     }
-    dispatch(resetCart())
-    setIsLoading(false)
-    redirect(`/order/${response.data.data.orderNumber}`)
+    else{
+        const response=await axios.post("/api/orders",[formdata,billing,data]).then((res)=>res)
+      if(response.data.message=="success"){
+        toast.success("Order Placed")
+      }else{
+        toast.error(response.data.message)
+      }
+      dispatch(resetCart())
+      setIsLoading(false)
+      redirect(`/order/${response.data.data.orderNumber}`)
+    }
   };
 
   let totalamount=0
@@ -313,10 +339,7 @@ function Checkout() {
                     radiotoggletwo ? "block" : "hidden"
                   }`}
                 >
-                  <p> Transfer the amount to this bank account.</p>
-                  <p>BANK NAME: MEEZAN BANK</p>
-                  <p>ACC TITLE: PROTEES PRIVATE LIMITED</p>
-                  <p>ACC NUMBER: 02240104954836</p>
+                 <p>Place Order Below</p>
                 </div>
               </div>
               <h2 className="text-2xl py-4">Billing Address</h2>
