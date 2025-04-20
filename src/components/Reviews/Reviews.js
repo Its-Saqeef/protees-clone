@@ -19,7 +19,7 @@ function Reviews() {
   useEffect(() => {
     (async () => {
       const result = await axios
-        .get("/api/getreviews")
+        .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/getreviews`)
         .then((res) => setData(res.data));
     })();
   }, []);
