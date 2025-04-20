@@ -48,7 +48,7 @@ export async function POST(req){
 
         const user= await User.findOne({email : customer.email})
         if(!user){
-            await User.create({email : customer.email})
+            await User.create({email : customer.email,name : `${customer.fname} ${customer.lname}`})
         }
 
         const isEmpty=Object.values(billing).some(value => value === "")

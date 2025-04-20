@@ -4,7 +4,7 @@ import React,{useEffect} from "react";
 import Aos from "aos";
 import "aos/dist/aos.css"
 import EachCategory from "@/components/Home/EachCategory";
-
+import Reviews from "@/components/Reviews/Reviews";
 
 export default function Home({data}) {
   
@@ -27,6 +27,7 @@ export default function Home({data}) {
       <EachCategory data={superTees} heading={"COTTON SUPERHERO T-SHIRTS"}/>
       <EachCategory data={basic} heading={"BASIC"}/>
       <EachCategory data={sweatshirts} heading={"SWEATSHIRTS"} />
+      <Reviews />
     </section>
   );
 }
