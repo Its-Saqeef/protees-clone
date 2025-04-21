@@ -7,11 +7,11 @@ export async function GET(request){
     try {
        await connectDB()
 
-        const reviews=(await Reviews.find({}).populate("productId").populate("userId").limit(15)).reverse()
-        const totalReviews= await Reviews.find({})
+        const reviews=await Reviews.find({}).populate("productId").populate("userId").sort({createdAt : -1}).limit(15)
+         const totalReviews= await Reviews.find({})
         
-        const length=totalReviews.length
-        const allRating=totalReviews.reduce((sum,rev)=>sum + Number(rev.rating),0)
+         const length=totalReviews.length
+         const allRating=totalReviews.reduce((sum,rev)=>sum + Number(rev.rating),0)
         
         
         return NextResponse.json({
@@ -24,7 +24,7 @@ export async function GET(request){
     } catch (error) {
         return NextResponse.json({
             success :false,
-            error : error
+            error : "Something Went Wrong"
         },{status : 500})
     }
 

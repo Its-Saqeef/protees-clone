@@ -18,9 +18,7 @@ function Reviews() {
 
   useEffect(() => {
     (async () => {
-      const result = await axios
-        .get(`/api/getreviews`)
-        .then((res) => setData(res.data));
+      const result = await axios.get(`/api/getreviews`).then((res) => setData(res.data))
     })();
   }, []);
 
@@ -45,7 +43,7 @@ function Reviews() {
       }
     };
 
-    updateVisibleItems(); // initial check
+    updateVisibleItems()
     window.addEventListener('resize', updateVisibleItems);
     return () => window.removeEventListener('resize', updateVisibleItems);
   }, []);
