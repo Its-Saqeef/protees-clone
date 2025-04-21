@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const reviewSchema=new mongoose.Schema({
     rating : {
-        type : String,
+        type : Number,
     },
     productId : {
         type : mongoose.Schema.Types.ObjectId,
