@@ -80,8 +80,8 @@ function Reviews() {
 
   return (
     <section
-      className="w-[90%] mx-auto flex flex-col items-center mt-5 mb-20"
-      data-aos="fade-up"
+      className={`w-[90%] mx-auto flex flex-col items-center mt-5 mb-20`}
+      data-aos="fade-up" 
     >
       <h1 className="font-bold text-2xl lg:text-4xl my-[10px] text-gray-800 tracking-widest text-center uppercase">
         Let customers speak for us

@@ -10,16 +10,15 @@ export async function GET(request){
        await connectDB()
 
         const reviews= await Reviews.find({}).populate("userId","name").populate("productId","name images").sort({createdAt : -1}).limit(15)
-         const totalReviews= await Reviews.find({})
+        const totalReviews= await Reviews.countDocuments()
         
-         const length=totalReviews.length
-         const allRating=totalReviews.reduce((sum,rev)=>sum + rev.rating,0)
+        const allRating=reviews.reduce((sum,rev)=>sum + rev.rating,0)
         
         
         return NextResponse.json({
             success : true,
             data : reviews,
-            totalreviews : length,
+            totalreviews : totalReviews,
             totalrating : allRating
         },{status : 200})
 
