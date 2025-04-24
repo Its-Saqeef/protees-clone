@@ -86,7 +86,7 @@ function Reviews() {
       <h1 className="font-bold text-2xl lg:text-4xl my-[10px] text-gray-800 tracking-widest text-center uppercase">
         Let customers speak for us
       </h1>
-      <div className="flex">{stars}</div>
+      <div className="flex gap-1">{stars}</div>
       <p>from {data && data.totalreviews} reviews</p>
       <div className="w-full sm:max-w-[65%] mx-auto overflow-hidden mt-8 relative">
         <div
