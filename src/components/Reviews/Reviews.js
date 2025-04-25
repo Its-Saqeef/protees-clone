@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { FaRegStar, FaStar } from "react-icons/fa6";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { CldImage } from "next-cloudinary";
@@ -60,6 +60,7 @@ function Reviews() {
     }
   }
 
+
   const handleNext = () => {
     if (index < totalItems - visibleItems) {
       setIndex((prev) => prev + 1);
@@ -77,6 +78,13 @@ function Reviews() {
       setIndex(totalItems - visibleItems)
     }
   };
+
+  useEffect(()=>{
+      const timer= setTimeout(()=>{
+        handleNext()
+      },3000)
+      return ()=>clearTimeout(timer)   
+  },[index])
 
   return (
     <section
