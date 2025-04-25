@@ -1,5 +1,5 @@
 
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono,Poppins } from "next/font/google";
 import "./globals.css";
 import AllNavComps from "@/components/Home/AllNavComps";
 import { ToastContainer } from "react-toastify";
@@ -7,13 +7,11 @@ import Footer from "@/components/Footer_Links/Footer";
 import { StoreProvider } from "@/app/store/Provider";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  weight : "400",
   subsets: ["latin"],
 });
 
@@ -30,7 +28,7 @@ export default function RootLayout({ children }) {
     <StoreProvider>
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+        className={` ${poppins.className} antialiased `}
       >
         <main>
           <marquee className="bg-black text-white text-lg p-1">This website is a clone of www.protees.pk.Clone is for practice purposes</marquee>
