@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { redirect,useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { resetCart } from "@/app/store/CartSlice";
+import { resetCart } from "@/app/store/CartSlice"; 
 import { loadStripe } from "@stripe/stripe-js";
 
 function Checkout() {

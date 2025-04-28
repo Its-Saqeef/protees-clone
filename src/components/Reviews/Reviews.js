@@ -80,6 +80,10 @@ function Reviews() {
   };
 
   useEffect(()=>{
+    setIndex(index+1)
+  },[])
+
+  useEffect(()=>{
       const timer= setTimeout(()=>{
         handleNext()
       },3000)
