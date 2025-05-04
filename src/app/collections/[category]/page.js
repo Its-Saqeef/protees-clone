@@ -268,6 +268,7 @@ function page() {
         </div>
         { data && 
           data.map((item) => {
+            if(item.isActive)
             return (
               <Link
                 href={`/collections/${item.subcategory}/product/${item._id}`}

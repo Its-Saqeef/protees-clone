@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,6 +18,8 @@ function Order({ data }) {
   ]);
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false);
+  const [success,setSuccess]=useState(false)
+  const [prevReviews,setPrevReviews]=useState()
 
   let total = 0;
   data.product.map((item) => {
@@ -34,6 +36,10 @@ function Order({ data }) {
     return `${day} ${month} ${year}`;
   }
 
+  useEffect(()=>{
+      fetch("/api/getreviews").then((res)=>res.json()).then((data)=>setPrevReviews(data.data))
+  },[])
+
   const handleRating = (id, star) => {
     setRating((prevRating) => {
       const existing = prevRating.some((item) => item.id === id);
@@ -47,20 +53,22 @@ function Order({ data }) {
       }
     });
   };
+  
 
-  const handleReview = async (id) => {
+  const handleReview = async () => {
     setIsLoading(true);
-    if (rating.length<2) {
+    if (rating.length==1) {
       toast.error("Please Rate First");
       setIsLoading(false);
       return;
     }
     const response = await axios
       .post("/api/reviews", JSON.stringify(rating))
-      .then((res) => res);
-     console.log(response)
+      .then((res) =>res.data.success ? setSuccess(true) : setSuccess(false));
     setIsLoading(false);
   };
+
+  console.log(prevReviews)  
 
   return (
     <main>
@@ -148,7 +156,7 @@ function Order({ data }) {
             {data.product.map((item) => {
               const currentRating =
                 rating.find((rate) => rate.id === item.id)?.stars || 0;
-
+                
               return (
                 <div
                   className="flex items-center py-1 justify-between"
@@ -173,21 +181,26 @@ function Order({ data }) {
 
                     {data.status === "delivered" &&
                       pathname.startsWith("/account") && (
-                        <div className="flex my-2 gap-2 text-base items-center">
-                          {Array.from({ length: 5 }, (_, index) => (
-                            <span
-                              key={`${item.id}-${index}`}
-                              onClick={() => handleRating(item.id, index + 1)}
-                            >
-                              {currentRating >= index + 1 ? (
-                                <FaStar className="fill-yellow-500 cursor-pointer" />
-                              ) : (
-                                <FaRegStar className="cursor-pointer" />
-                              )}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                        
+                           
+                            <div className={`flex my-2 gap-2 text-base items-center ${success ? "pointer-events-none" : ""}`}>
+                            {Array.from({ length: 5 }, (_, index) => (
+                              <span
+                                key={`${item.id}-${index}`}
+                                onClick={() => handleRating(item.id, index + 1)}
+                              >
+                                {currentRating >= index + 1 ? (
+                                  <FaStar className="fill-yellow-500 cursor-pointer" />
+                                ) : (
+                                  <FaRegStar className="cursor-pointer" />
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                          
+            )
+                    
+                      }
                   </div>
 
                   <p>Rs.{item.price.toLocaleString("en-IN")}.00</p>
@@ -196,17 +209,19 @@ function Order({ data }) {
             })}
             {
               data.status === "delivered" &&
-              pathname.startsWith("/account") && (
+              pathname.startsWith("/account") && !success ? (
                 <div className="flex justify-center items-center">
                   <button
                   className="w-[50%]  bg-[#c10000] rounded-md p-1 text-white font-semibold hover:bg-red-800"
-                  disabled={isLoading || rating.length <=1}
+                  disabled={isLoading}
                   onClick={handleReview}
                 >
-                  Submit Review
+                  {
+                    isLoading ? <div className="flex justify-center"><p className="loader"></p></div> : "Submit Review"
+                  }
                 </button>
             </div>
-              )
+              ) : <p className="text-center">Review Submitted</p>
 
             }
             

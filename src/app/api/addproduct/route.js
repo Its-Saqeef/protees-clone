@@ -8,28 +8,26 @@ export async function POST(request) {
     const data = await request.formData();
 
     const name = data.get("name");
-    const sizes = JSON.parse(data.get("sizes")); // If multiple values are expected (array)
+    const sizes = JSON.parse(data.get("sizes"));
     const description = data.get("description");
     const category = data.get("category");
     const subcategory = (data.get("subcategory")).toLowerCase();
-    const colors = JSON.parse(data.get("colors")); // If multiple values are expected (array)
+    const colors = JSON.parse(data.get("colors")); 
     const composition = data.get("composition");
-    //const images = data.get("images"); // If multiple files are uploaded
     const price = parseInt(data.get("price"));
     const sale = parseInt(data.get("sale"));
-    const file = data.get("file");
+   const images = data.getAll("images[]")
 
-    if(!file){
+    if(!images.length){
       return Response.json({
         message : "Please Upload Photo"
       })
     }
-    // const bufferdata = await file.arrayBuffer();
-    // const buffer = Buffer.from(bufferdata);
-    // await fs.writeFile(`./public/uploads/${file.name}`, buffer);
-
+    
+    const imageUrls=[]
+    for (let image of images) {
     const formdata = new FormData();
-    formdata.append("file", file);
+    formdata.append('file',image)
     formdata.append("upload_preset", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`);
     formdata.append("cloud_name", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`);
 
@@ -38,14 +36,15 @@ export async function POST(request) {
       {
         method: "POST",
         body: formdata,
-        upload_preset: `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`,
       }
     )
       .then((res) => res.json())
       .then((result) => result.public_id)
       .catch((error) => console.log("could not upload to cloudinary", error));
-
-      let newComposition = composition.split(",")
+      imageUrls.push(response)
+    }
+  
+    let newComposition = composition.split(",")
     
     
     await Product.create({
@@ -57,7 +56,7 @@ export async function POST(request) {
       subcategory,
       sale,
       composition: newComposition,
-      images: response,
+      images: imageUrls,
       colors,
     })
     

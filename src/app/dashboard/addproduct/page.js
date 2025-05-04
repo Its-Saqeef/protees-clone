@@ -16,12 +16,10 @@ const ProductForm = () => {
     sale: 0,
     composition: "",
     sizes: [],
-    //  images : [],
+    images : [],
     colors: [],
   });
-  const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const imageRef=useRef()
   const handleChange = (e) => {
     const { name } = e.target;
     if (
@@ -42,13 +40,12 @@ const ProductForm = () => {
       });
     }
     
-    //  else if(name==="images"){
-
-    //     setFormData((prevData)=>{
-    //       const images =Array.isArray(formData.images) ? [...prevData.images,e.target.file?.[0]] : [e.target.file?.[0]]
-    //         return {...prevData, images : images}
-    //     })
-    //  }
+      else if(name==="images"){
+        const selectedFiles = Array.from(e.target.files)
+        setFormData((prevData)=>{
+          return {...prevData,images : [...prevData.images,...selectedFiles]}
+        })
+    }
     else if (name === "colors") {
       const value = e.target.value;
       const array = value.split(",");
@@ -73,8 +70,9 @@ const ProductForm = () => {
     form.append("composition", formData.composition);
     form.append("sizes", JSON.stringify(formData.sizes));
     form.append("colors", JSON.stringify(formData.colors));
-    // form.append("images",formData.images)
-    form.append("file", image);
+    for (let index = 0; index < formData.images.length; index++) {
+      form.append(`images[]`,formData.images[index])
+    }
 
     const response = await axios
       .post("/api/addproduct", form)
@@ -94,13 +92,13 @@ const ProductForm = () => {
     composition: "",
     sizes: [],
     colors: [],
+    images : []
       })
-     if(imageRef){
-      imageRef.current.value=""
-     }
      setIsLoading(false);
   };
 
+  console.log(formData.images)
+ 
   return (
     <section className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
       <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
@@ -255,11 +253,20 @@ const ProductForm = () => {
             id="images"
             name="images"
             placeholder="Upload Images"
-            accept="image/*"
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-            onChange={(e) => setImage(e.target.files?.[0])}
-            ref={imageRef}
+            // onChange={(e) => setImage(e.target.files?.[0])}
+            // ref={imageRef}
+            onChange={handleChange}
+            multiple
           />
+          <div className="flex gap-4 items-center my-4">
+          {
+            formData.images.map((img,i)=>{
+               const url= URL.createObjectURL(img)
+               return <img src={url} alt="photo" height={100} width={100} key={i} />
+             })
+          }
+          </div>
         </div>
 
         {/* Sizes and Quantities */}

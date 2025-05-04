@@ -44,7 +44,12 @@ const productSchema=new Schema({
         },
         composition : [String],
         images : [String],
-        colors : [String]    
+        colors : [String],
+        features : [Number],
+        isActive : {
+            type : Boolean,
+            default : true
+        }
 },{timestamps : true})
 
 export const Product = mongoose.models.Product || mongoose.model("Product",productSchema)

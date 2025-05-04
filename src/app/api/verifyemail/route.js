@@ -30,7 +30,8 @@ export async function POST(req){
 
             const payload={
                 id : user._id,
-                email : user.email
+                email : user.email,
+                role : user.role
             }
 
             const token=jwt.sign(payload,process.env.TOEKN_SECRET,{expiresIn : "1d"})

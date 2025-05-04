@@ -16,6 +16,7 @@ import { IoIosArrowRoundBack } from "react-icons/io"
 import { FaRegStar,FaStar } from "react-icons/fa6";
 
 function Product({data,reviews}) {
+  const [source,setSource]=useState(data && data.images[0])
   const router=useRouter()
   const params = useParams();
   const [id, setId] = useState(params.id);
@@ -50,24 +51,36 @@ function Product({data,reviews}) {
   
   const rating=reviews.reduce((sum,item)=>sum + Number(item.rating),0)
   const averageRating=rating/reviews.length
+
   
   return (
-    <main className={`w-[95%] sm:w-[90%] md:max-w-[80%] mx-auto mt-10`}>
+    <main className={`w-[95%] sm:w-[90%] lg:max-w-[80%] mx-auto mt-10`}>
       {data ? (
         <div
           className="flex flex-col md:flex-row md:items-start gap-4"
           key={data._id}
         >
-          <div className="w-[100%] md:sticky md:top-0 mx-auto">
-            <CldImage
-              src={data.images[0]}
-              alt="Photo"
-              width={1000}
-              height={1000}
-              priority
-            />
+          <div className="w-[100%] md:sticky md:top-0 mx-auto flex ">
+            <div className="flex flex-col gap-4">
+              {
+                data && data.images.map((img,i)=>{
+                  return <CldImage src={img} alt="Photo" height={100} width={100} key={i} className="border-2 cursor-pointer" onClick={()=>setSource(img)}/>
+                })
+              }
+            </div>
+            <div>
+              <CldImage
+                src={source}
+                alt="Photo"
+                width={700}
+                height={700}
+                className=""
+                priority
+                
+              />
+            </div>
           </div>
-          <div className="w-[100%] md:[w-50%] flex flex-col">
+          <div className="w-[100%] md:[w-50%] flex flex-col flex-wrap">
             <h1 className="text-lg sm:text-2xl text-center md:text-start xl:text-3xl pb-4 mb-3 mx-auto md:mx-0 tracking-wide ">
               {data.name}
             </h1>

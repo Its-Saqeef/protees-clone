@@ -14,7 +14,9 @@ async function page({ params }) {
   const { id } = await params;
   try {
     const data = await GetData(id)
-    return <Product data={data.data.data} reviews={data.data.reviews} />;
+    if(data.data.data.isActive){
+      return <Product data={data.data.data} reviews={data.data.reviews} />
+    }
   } catch (error) {
     if(error.status==404){
       notFound()

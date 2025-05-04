@@ -19,8 +19,8 @@ function Footer() {
                 <h1 className='font-bold text-xl'>CONTACT US</h1>
                 <Image  src="/SITE_LOGO_1.png" alt='photo' width={300} height={300} style={{height : "auto" , width : "auto"}}/>
                 <p className='text-sm  font-bold'>PROTEES HEAD OFFICE,NAWAB TOWN RAIWIND ROAD LAHORE</p>
-                <p>0321-6331227</p>
-                <p>Info@protees.pk</p>
+                <p>0321-00****</p>
+                <p>Info@hotmail.pk</p>
             </div>
             <div className='border-b-2 md:border-0 mt-2 md:mt-0 md:w-1/3 md:text-center xl:w-auto'>
                 <div className='leading-9 flex flex-col' onClick={()=> window.scrollTo(0,0)}>
