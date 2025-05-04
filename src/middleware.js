@@ -7,7 +7,7 @@ export function middleware(request) {
 
     const token=request.cookies.get("Token")?.value
 
-    if((path==="/account/orders" || path.includes(`/account/orders/Order-`)  ) && !token){
+    if((path==="/account/orders" || path.includes(`/account/orders/Order-`) || path.includes(`/dashboard`) ) && !token){
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
