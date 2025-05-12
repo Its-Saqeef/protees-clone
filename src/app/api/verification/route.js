@@ -25,15 +25,15 @@ export async function POST(req) {
             tokenExpiry : Date.now() + 900000
         })
 
-        const data =await resend.emails.send({
-            from: 'Protees-clone <email@portfoliosite.store>',
-            to: email,
-            subject: `${code} is your login code`,
-            html: `<div>
-            <p>${code}</p>
-            <p>This code is valid for 15 minutes</p>
-            </div>`
-        })
+        // const data =await resend.emails.send({
+        //     from: 'Protees-clone <email@portfoliosite.store>',
+        //     to: email,
+        //     subject: `${code} is your login code`,
+        //     html: `<div>
+        //     <p>${code}</p>
+        //     <p>This code is valid for 15 minutes</p>
+        //     </div>`
+        // })
         
         
         return Response.json({

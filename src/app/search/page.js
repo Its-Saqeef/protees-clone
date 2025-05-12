@@ -91,23 +91,48 @@ function page() {
     }
   }
 
+  const handleImageSearch=async (e)=>{
+    const image = e.target.files[0]
+    const form = new FormData()
+    form.append("image",image)
+
+    const response = await axios.post("/api/imagesearch",form).then((res)=>res.data)
+    console.log(response)
+  }
+
   return (
     <main className="w-[90%] mx-auto">
       <h1 className="text-2xl w-max tracking-widest mx-auto my-10">SEARCH</h1>
-      <div className="w-[90%] md:w-[60%] mx-auto flex border-2 border-black items-center mb-10">
+      <div className="flex flex-col items-center">
+        <div className="w-[90%] md:w-[60%] mx-auto flex border-2 border-black items-center mb-10">
+          <input
+            type="text"
+            className=" p-2 w-full focus:outline-none"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={keyhandler}
+          />
+          <CiSearch
+            className="text-2xl cursor-pointer mr-1"
+            onClick={() =>
+              searchInput.length > 0 ? (setQuery(searchInput),setCurrPage(1),setMaximumPrice(""),setAvailability(1)) : null
+            }
+          />
+        </div>
+        <label
+          htmlFor="file-upload"
+          className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition mb-4"
+        >
+          Upload Image
+        </label>
         <input
-          type="text"
-          className=" p-2 w-full focus:outline-none"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          onKeyDown={keyhandler}
+          id="file-upload"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageSearch}
         />
-        <CiSearch
-          className="text-2xl cursor-pointer mr-1"
-          onClick={() =>
-            searchInput.length > 0 ? (setQuery(searchInput),setCurrPage(1),setMaximumPrice(""),setAvailability(1)) : null
-          }
-        />
+
       </div>
       {
         <div className={`flex gap-4 border-t-2`}>

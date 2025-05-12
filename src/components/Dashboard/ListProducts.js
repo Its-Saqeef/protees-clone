@@ -5,6 +5,7 @@ import DeleteConfirmationModal from '@/components/Modal/DeleteConfirmationModal'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
+import Editproduct from './Editproduct'
 
 function ListProducts({data}) {
     useEffect(()=>{
@@ -13,6 +14,8 @@ function ListProducts({data}) {
     const [showConfirm, setShowConfirm] = useState(false)
     const [isLoading,setLoading]=useState(false)
     const [Id,setId]=useState()
+    const [editPage,setEditPage]=useState(false)
+    const [product,setProduct]=useState()
 
     const handleDelete=async()=>{
         setLoading(true)
@@ -25,7 +28,7 @@ function ListProducts({data}) {
     }
     
     return (
-    <main className='w-[90%] mx-auto'>
+    <main className={`w-[90%] mx-auto ${editPage ? "" : ""}`}>
         <h1 className='font-bold text-2xl lg:text-4xl my-[20px] text-gray-800 tracking-widest text-center'>All Products ({data.length})</h1>
         <div className='w-[90%] lg:w-[70%] 2xl:w-[50%] mx-auto'>
             {
@@ -42,7 +45,7 @@ function ListProducts({data}) {
                                 <h6 className={`text-red-500 ${item.sale !=0 ? "block" : "hidden"}`}>Sale{item.sale}%</h6>
                                 <p>Active : {item.isActive ? "Yes" : "No"}</p>
                                 <div className='flex gap-4'>
-                                    <button className='bg-green-600 text-white px-4 py-2 rounded-md'>Edit</button>
+                                    <button className='bg-green-600 text-white px-4 py-2 rounded-md' onClick={()=>{setEditPage(true),setProduct(item)}}>Edit</button>
                                     <button className='bg-red-600 text-white px-4 py-2 rounded-md' onClick={()=>{setId(item._id);setShowConfirm(true)}}>Delete</button>
                                 </div>
                                 
@@ -76,6 +79,14 @@ function ListProducts({data}) {
          onCancel={() => setShowConfirm(false)}
          loading={isLoading}
         />
+        <div >
+           { editPage && <Editproduct
+            setEditPage={setEditPage} 
+            editPage={editPage}
+            product={product}
+            />
+           }
+        </div>
     </main>
   )
 }

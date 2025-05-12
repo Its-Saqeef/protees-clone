@@ -2,22 +2,27 @@
 import axios from "axios";
 import React, { useState,useRef, useEffect } from "react";
 import { toast } from "react-toastify";
+import { IoCloseSharp } from "react-icons/io5";
+import { CldImage } from "next-cloudinary";
 
-const ProductForm = () => {
+
+const Editproduct = ({setEditPage,editPage,product}) => {
   useEffect(()=>{
     document.title="Add Product - Protees.pk"
   },[])
   const [formData, setFormData] = useState({
-    name: "",
-    price: "",
-    description: "",
-    category: "",
-    subcategory: "",
-    sale: 0,
-    composition: "",
-    sizes: [],
+    id : product._id,
+    name: product.name,
+    price: product.price,
+    description: product.description,
+    category: product.category,
+    subcategory: product.subcategory,
+    sale: product.sale,
+    composition:product.composition ,
+    sizes: product.sizes,
     images : [],
     colors: [],
+    status : product.isActive
   });
   const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
@@ -61,6 +66,7 @@ const ProductForm = () => {
     e.preventDefault();
     setIsLoading(true);
     const form = new FormData();
+    form.append("id",formData.id)
     form.append("name", formData.name);
     form.append("price", formData.price);
     form.append("description", formData.description);
@@ -75,13 +81,11 @@ const ProductForm = () => {
     }
 
     const response = await axios
-      .post("/api/addproduct", form)
+      .post("/api/updateproduct", form)
       .then((res) =>
-        res.data.message === "Success"
-          ? toast.success("Product Added Successfully")
-          : toast.error(res.data.message)
+        res.data.success === true && toast.success("Product Updated")
       )
-      .catch((err) => toast.error("Could not Add Product"));
+      .catch((err) => toast.error("Could not Update Product"));
       setFormData({
         name: "",
     price: "",
@@ -98,11 +102,12 @@ const ProductForm = () => {
   };
 
   return (
-    <section className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg my-10 ">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
-        Create New Product
+    <main className={`${editPage && "fixed inset-0 bg-black bg-opacity-30 overflow-y-scroll"}`}>
+    <section className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-6 flex items-center justify-between">
+        Edit Product
+        <IoCloseSharp onClick={()=>setEditPage(false)} className="cursor-pointer"/>
       </h2>
-
       <form onSubmit={handleSubmit}>
         {/* Product Name */}
         <div className="mb-4">
@@ -252,8 +257,6 @@ const ProductForm = () => {
             name="images"
             placeholder="Upload Images"
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
-            // onChange={(e) => setImage(e.target.files?.[0])}
-            // ref={imageRef}
             onChange={handleChange}
             multiple
           />
@@ -264,6 +267,14 @@ const ProductForm = () => {
                return <img src={url} alt="photo" height={100} width={100} key={i} />
              })
           }
+          </div>
+          <p>Exisitng Images</p>
+          <div className="flex gap-4">
+            {
+                product.images.map((img,i)=>{
+                    return <CldImage src={img} alt="photo" height={100} width={100} key={i}/>
+                })
+            }
           </div>
         </div>
 
@@ -282,9 +293,17 @@ const ProductForm = () => {
                   placeholder="Quantity"
                   className="w-20 p-2 mt-1 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-gray-500"
                   onChange={handleChange}
+                  
                 />
               </div>
             ))}
+          </div>
+          <div className="flex items-center justify-evenly mt-5">
+          {
+            product.sizes.map((item,i)=>{
+                return <span key={i}>{item.size}{item.quantity}</span>
+            })
+          }
           </div>
         </div>
 
@@ -306,6 +325,13 @@ const ProductForm = () => {
             value={formData.colors}
           />
         </div>
+        {/* Status */}
+
+        <p>Status</p>
+        <div className="flex gap-2">
+          <label >Active</label><input type="radio"  name="status" checked={formData.status===true} onChange={(e)=>setFormData({...formData,status : true})}/>
+          <label >Disable</label><input type="radio" name="status" checked={formData.status===false} onChange={(e)=>setFormData({...formData,status : false})}/>
+        </div>
 
         {/* Submit Button */}
         <div className="mt-6">
@@ -317,13 +343,14 @@ const ProductForm = () => {
             {isLoading ? (
               <div className="loader mx-auto"></div>
             ) : (
-              "Submit Product"
+              "Update Product"
             )}
           </button>
         </div>
       </form>
     </section>
+    </main>
   );
 };
 
-export default ProductForm;
+export default Editproduct;

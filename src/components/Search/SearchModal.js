@@ -89,9 +89,10 @@ function Modal({setToggleSearch}) {
                 </div>
                     ) : <p className="text-sm font-semibold p-4">Search For "{searchInput}"</p>
                 }
-                
+          
           </div>
             }
+            <Link href={"/search"} className="absolute top-20 underline left-[50%] translate-x-[-50%]" onClick={()=>setToggleSearch(false)}>Search by Image</Link>
         </div>
         
     </section>    
