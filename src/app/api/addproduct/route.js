@@ -1,5 +1,8 @@
 import connectDB from "@/lib/Connection.js";
 import { Product } from "@/components/Backend/models/Product.models";
+import {generateImageEmbedding} from "@/lib/embedding"
+import axios from "axios";
+
 
 export async function POST(request) {
   await connectDB();
@@ -23,7 +26,18 @@ export async function POST(request) {
         message : "Please Upload Photo"
       })
     }
-    
+
+    // const embeddings = async ()=>{
+    //   const form=new FormData()
+    //   form.append("image",images[0])
+    //    const response=await axios.post("http://localhost:5000/embed",form).then((res)=>res)
+    //    return response.data.embedding
+    // }
+
+    // const embedding =await embeddings()
+
+    const embedding = []
+
     const imageUrls=[]
     for (let image of images) {
     const formdata = new FormData();
@@ -58,6 +72,7 @@ export async function POST(request) {
       composition: newComposition,
       images: imageUrls,
       colors,
+      embedding : embedding
     })
     
     return Response.json({

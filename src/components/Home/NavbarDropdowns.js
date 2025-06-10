@@ -1,9 +1,32 @@
+"use client"
+import { useEffect,useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import Link from "next/link";
-
+import Cookies from "js-cookie"
+import { jwtDecode } from "jwt-decode";
 
 function Lists() {
-    
+  
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+   useEffect(() => {
+    const token = Cookies.get('Token');
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // decode JWT payload
+        setIsLoggedIn(true);
+        if (decoded.role === 'admin') {
+          setIsAdmin(true);
+        }
+      } catch (error) {
+        console.error('Invalid token:', error);
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+      }
+    }
+  }, []);
   return (
     <nav className="w-[85%] lg:w-[70%] xl:w-[55%] 2xl:w-[50%] mx-auto" >
         <div className="hidden md:flex items-center justify-evenly my-[2%]" >
@@ -43,6 +66,7 @@ function Lists() {
             <Link href={""} className="text-base  cursor-pointer tracking-wider custom relative">PROTEES JUNIOR</Link>
             <Link href={""} className="text-base  cursor-pointer tracking-wider custom relative">CLEARANCE SALE</Link>
             <Link href={""} className="text-base  cursor-pointer tracking-wider custom relative">SPECIAL OFFER</Link>
+            {isLoggedIn && isAdmin && <Link href="/dashboard/allorders" className="p-2 rounded-md bg-red-700 text-white">Dashboard</Link>}
         </div>
         
     </nav>

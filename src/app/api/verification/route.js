@@ -1,6 +1,7 @@
 import connectDB from "@/lib/Connection";
 import { User } from "@/components/Backend/models/Users.models";
 import { Resend } from 'resend';
+import VerificationCodeEmail from "@/lib/Email-Service/VerificationTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -29,10 +30,10 @@ export async function POST(req) {
             from: 'Protees-clone <email@portfoliosite.store>',
             to: email,
             subject: `${code} is your login code`,
-            html: `<div>
-            <p>${code}</p>
-            <p>This code is valid for 15 minutes</p>
-            </div>`
+           react : VerificationCodeEmail({
+                name : user.name,
+                verificationCode : code
+           })
         })
         
         

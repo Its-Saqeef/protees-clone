@@ -38,6 +38,8 @@ function page() {
   const [toggleAvailability, setToggleAvailability] = useState(false);
   const [filter, setFilter] = useState(false);
   const [searchInput, setSearchInput] = useState(query);
+  const [isloading,setIsLoading]=useState(false)
+  const [image,setImage]=useState()
 
   const valuetext = () => {
     return `${value}`;
@@ -82,7 +84,7 @@ function page() {
   if (typeof window !== "undefined") {
     document.title = `Search : ${
       data && data.data.length
-    } results found for ${query}`;
+    } results found`
   }
   const pages=[]
   if(data){
@@ -92,13 +94,25 @@ function page() {
   }
 
   const handleImageSearch=async (e)=>{
-    const image = e.target.files[0]
+    if(image){
+      setIsLoading(true)
     const form = new FormData()
     form.append("image",image)
 
-    const response = await axios.post("/api/imagesearch",form).then((res)=>res.data)
-    console.log(response)
+    const response = await axios.post(`/api/imagesearch?page=${!currPage ? "" : currPage}&limit=20&min_price=${!minPrice ? 0 : minPrice}&max_price=${!maximumPrice? "" : maximumPrice}&availability=${availability=== null ? 1 : availability}`,form).then((res)=>res)
+    
+    setData(response.data)
+    setIsLoading(false)
   }
+  }
+  useEffect(()=>{
+    const timer=setTimeout(async()=>{
+      handleImageSearch()
+    },500)
+    return ()=>clearTimeout(timer)    
+  },[availability,minPrice,maximumPrice,image])
+
+
 
   return (
     <main className="w-[90%] mx-auto">
@@ -108,7 +122,7 @@ function page() {
           <input
             type="text"
             className=" p-2 w-full focus:outline-none"
-            value={searchInput}
+            value={searchInput || ""}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={keyhandler}
           />
@@ -122,15 +136,17 @@ function page() {
         <label
           htmlFor="file-upload"
           className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition mb-4"
+          
         >
-          Upload Image
+         {isloading ? <div className="flex justify-center items-center"><p className="loader"></p></div> : "Upload Image"}
         </label>
         <input
           id="file-upload"
           type="file"
           accept="image/*"
           className="hidden"
-          onChange={handleImageSearch}
+          onChange={(e)=>setImage(e.target.files[0])}
+          disabled={isloading}
         />
 
       </div>
@@ -449,7 +465,7 @@ function page() {
               </div>
           ) : (
             <p className="text-lg md:text-2xl tracking-wider flex items-center justify-center h-[30vh] w-full">
-              No Products Found For "{query}"
+              No Products Found
             </p>
           )}
         </div>

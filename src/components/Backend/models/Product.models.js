@@ -49,7 +49,8 @@ const productSchema=new Schema({
         isActive : {
             type : Boolean,
             default : true
-        }
+        },
+        embedding : [Number]
 },{timestamps : true})
 
 export const Product = mongoose.models.Product || mongoose.model("Product",productSchema)

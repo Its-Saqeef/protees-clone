@@ -26,6 +26,7 @@ function Navbar() {
   const [winter, setWinter] = useState(false);
   const data = useSelector((state) => state.cart);
   const [toggleSearch, setToggleSearch] = useState(false);
+ 
 
   const togglecart = useSelector((state) => state.toggleCart);
   useEffect(() => {

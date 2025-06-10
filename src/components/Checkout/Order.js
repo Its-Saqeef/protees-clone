@@ -68,8 +68,6 @@ function Order({ data }) {
     setIsLoading(false);
   };
 
-  console.log(prevReviews)  
-
   return (
     <main>
       <section className="flex flex-col md:flex-row lg:w-[90%] xl:w-[85%] 2xl:w-[75%] mx-auto justify-evenly my-8 relative">
