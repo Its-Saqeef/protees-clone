@@ -3,70 +3,86 @@ import React, { useEffect, useState } from "react";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import Link from "next/link";
 import Image from "next/image";
-import { FaRegStar } from "react-icons/fa6";
-import { FaStar } from "react-icons/fa6";
+import { FaRegStar, FaStar } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 function Order({ data }) {
-  const [rating, setRating] = useState([
-    {
-      id: "",
-      stars: 0,
-    },
-  ]);
-  const pathname = usePathname();
+  const [rating, setRating] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [success,setSuccess]=useState(false)
-  const [prevReviews,setPrevReviews]=useState()
+  const [success, setSuccess] = useState(false);
+  const [existingReviews, setExistingReviews] = useState(null);
 
-  let total = 0;
+  const pathname = usePathname();
+
+   let total = 0;
   data.product.map((item) => {
     const individualPrice = item.price * item.quantity;
     total = individualPrice + total;
   });
+
   function formatDate(isoString) {
     const date = new Date(isoString);
-
     const day = date.getUTCDate();
     const month = date.toLocaleString("en-US", { month: "long" });
     const year = date.getUTCFullYear();
-
     return `${day} ${month} ${year}`;
   }
 
-  useEffect(()=>{
-      fetch("/api/getreviews").then((res)=>res.json()).then((data)=>setPrevReviews(data.data))
-  },[])
+  const fetchData = async () => {
+    try {
+      const response = await axios.post("/api/getreviewstatus", data.product);
+      setExistingReviews(response.data);
+    } catch (error) {
+      console.error("Error fetching review status:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
 
   const handleRating = (id, star) => {
     setRating((prevRating) => {
       const existing = prevRating.some((item) => item.id === id);
-
       if (existing) {
         return prevRating.map((item) =>
           item.id === id ? { ...item, stars: star } : item
         );
       } else {
-        return [...prevRating, { id: id, stars: star }];
+        return [...prevRating, { id, stars: star }];
       }
     });
   };
-  
 
   const handleReview = async () => {
     setIsLoading(true);
-    if (rating.length==1) {
+    if (rating.length === 0) {
       toast.error("Please Rate First");
       setIsLoading(false);
       return;
     }
-    const response = await axios
-      .post("/api/reviews", JSON.stringify(rating))
-      .then((res) =>res.data.success ? setSuccess(true) : setSuccess(false));
+
+    try {
+      const res = await axios.post("/api/reviews", JSON.stringify(rating));
+      if (res.data.success) {
+        setSuccess(true);
+      } else {
+        setSuccess(false);
+      }
+    } catch (error) {
+      console.error("Review submission failed:", error);
+    }
     setIsLoading(false);
   };
+
+  const allReviewed = data.product.every((item) =>
+  existingReviews?.reviews?.some(
+    (review) => review[0]?.productId === item.id
+  )
+)
 
   return (
     <main>
@@ -77,20 +93,14 @@ function Order({ data }) {
             Thank You For Purchase
           </p>
           <p className="p-2 text-lg">#{data.orderNumber}</p>
-          <p className="text-sm px-2 mb-2">
-            Confirmed {formatDate(data.createdAt)}
-          </p>
+          <p className="text-sm px-2 mb-2">Confirmed {formatDate(data.createdAt)}</p>
           <div className="bg-gray-100 px-2 py-4 mx-2 my-4 rounded-lg">
             <p className="text-sm">News and offers</p>
             <p className="text-gray-700">
               You'll receive marketing emails. You can unsubscribe at any time.
             </p>
             <div className="flex gap-2 my-2">
-              <input
-                type="checkbox"
-                id="optforemail"
-                className="w-[15px] accent-black"
-              />
+              <input type="checkbox" id="optforemail" className="w-[15px] accent-black" />
               <label htmlFor="optforemail" className="cursor-pointer">
                 Email me with news and offers
               </label>
@@ -122,9 +132,7 @@ function Order({ data }) {
                 <p className="text-gray-500 text-sm py-1">
                   Rs.{total.toLocaleString("en-IN")}.00
                 </p>
-                <p className="text-gray-500 text-sm ">
-                  {formatDate(data.createdAt)}
-                </p>
+                <p className="text-gray-500 text-sm">{formatDate(data.createdAt)}</p>
               </div>
               <div>
                 <p className="text-sm">Billing address</p>
@@ -141,11 +149,12 @@ function Order({ data }) {
             </button>
           </Link>
         </section>
+
         <section className="md:w-[35%] mx-2 my-2">
           <div className="my-4 rounded-lg bg-gray-100 px-2 py-3">
             <p>Rs.{total.toLocaleString("en-IN")}.00</p>
             <p className="text-gray-500 text-sm mt-2">
-              {data.status == "pending"
+              {data.status === "pending"
                 ? "This order has a pending payment. The balance will be updated when payment is received."
                 : "Payment Made"}
             </p>
@@ -154,12 +163,13 @@ function Order({ data }) {
             {data.product.map((item) => {
               const currentRating =
                 rating.find((rate) => rate.id === item.id)?.stars || 0;
-                
+              const exists =
+                existingReviews?.reviews?.find(
+                  (review) => review[0]?.productId === item.id
+                );
+
               return (
-                <div
-                  className="flex items-center py-1 justify-between"
-                  key={item._id}
-                >
+                <div className="flex items-center py-1 justify-between" key={item._id}>
                   <div className="relative">
                     <Image
                       src={`https://res.cloudinary.com/dtnxlm58e/image/upload/v1741148854/${item.image[0]}`}
@@ -179,10 +189,13 @@ function Order({ data }) {
 
                     {data.status === "delivered" &&
                       pathname.startsWith("/account") && (
-                        
-                           
-                            <div className={`flex my-2 gap-2 text-base items-center ${success ? "pointer-events-none" : ""}`}>
-                            {Array.from({ length: 5 }, (_, index) => (
+                        <div
+                          className={`flex my-2 gap-2 text-base items-center ${
+                            success ? "pointer-events-none" : ""
+                          }`}
+                        >
+                          {!exists ? (
+                            Array.from({ length: 5 }, (_, index) => (
                               <span
                                 key={`${item.id}-${index}`}
                                 onClick={() => handleRating(item.id, index + 1)}
@@ -193,36 +206,40 @@ function Order({ data }) {
                                   <FaRegStar className="cursor-pointer" />
                                 )}
                               </span>
-                            ))}
-                          </div>
-                          
-            )
-                    
-                      }
+                            ))
+                          ) : (
+                            <p className="text-xs text-green-600">Review Exists</p>
+                          )}
+                        </div>
+                      )}
                   </div>
 
                   <p>Rs.{item.price.toLocaleString("en-IN")}.00</p>
                 </div>
               );
             })}
-            {
-              data.status === "delivered" &&
-              pathname.startsWith("/account") && !success ? (
+            {data.status === "delivered" &&
+              pathname.startsWith("/account") &&
+              !success &&
+              !allReviewed && (
                 <div className="flex justify-center items-center">
                   <button
-                  className="w-[50%]  bg-[#c10000] rounded-md p-1 text-white font-semibold hover:bg-red-800"
-                  disabled={isLoading}
-                  onClick={handleReview}
-                >
-                  {
-                    isLoading ? <div className="flex justify-center"><p className="loader"></p></div> : "Submit Review"
-                  }
-                </button>
-            </div>
-              ) : <p className="text-center">Review Submitted</p>
+                    className="w-[50%] bg-[#c10000] rounded-md p-1 text-white font-semibold hover:bg-red-800"
+                    disabled={isLoading}
+                    onClick={handleReview}
+                  >
+                    {isLoading ? (
+                      <div className="flex justify-center">
+                        <p className="loader"></p>
+                      </div>
+                    ) : (
+                      "Submit Review"
+                    )}
+                  </button>
+                </div>
+              )}
+            {success && <p className="text-center">Review Submitted</p>}
 
-            }
-            
             <div className="flex w-[50%] mx-auto justify-between my-2">
               <p>Subtotal</p>
               <p>Rs.{total.toLocaleString("en-IN")}.00</p>
@@ -235,13 +252,13 @@ function Order({ data }) {
               <p className="text-black font-semibold text-2xl">Total</p>
               <p className="text-black text-lg font-semibold">
                 <sub className="mr-1 text-gray-500">PKR</sub>Rs.
-                {(total < 2000 ? total + 200 : total).toLocaleString("en-IN")}
-                .00
+                {(total < 2000 ? total + 200 : total).toLocaleString("en-IN")}.00
               </p>
             </div>
           </div>
         </section>
       </section>
+
       <div className="flex gap-3 text-sm items-center justify-center lg:w-[90%] xl:w-[85%] 2xl:w-[75%] mx-auto mb-4">
         <Link href="/pages/refund-policy" className="underline">
           Refund Policy

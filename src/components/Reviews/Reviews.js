@@ -89,7 +89,7 @@ function Reviews() {
       },3000)
       return ()=>clearTimeout(timer)   
   },[index])
-
+  
   return (
     <section
       className={`w-[90%] mx-auto flex flex-col items-center mt-5 mb-20`}
