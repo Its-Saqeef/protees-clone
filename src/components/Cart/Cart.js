@@ -50,7 +50,7 @@ function Cart() {
                           <p>{item.quantity}</p>
                           <LuPlus className='cursor-pointer' onClick={()=>dispatch(addToCart({id : item.id,size :item.size}))}/>
                           </div>
-                          <p className='font-medium text-sm xl:text-lg'>Rs {item.price}.00</p>
+                          <p className='font-medium text-sm xl:text-lg'>Rs {item.price.toLocaleString("en-IN")}.00</p>
                         </div>
                       </div>
                     </div>
