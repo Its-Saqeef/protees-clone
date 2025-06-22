@@ -17,7 +17,7 @@ function Cart() {
         const individual_item=item.price * item.quantity
         calculatePrice=individual_item + calculatePrice
     })
-    console.log(data)
+    
   return (
     <section className='w-[100%] h-[100vh] top-0 left-0 fixed z-20 flex'>
         <div className='w-[10%] sm:w-[55%] lg:w-[60%] xl:w-[70%] bg-opacity-50 bg-gray-300 backdrop-blur-sm' onClick={()=>dispatch(toggleCart({toggle: false}))}></div>

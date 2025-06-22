@@ -13,7 +13,7 @@ function EachCategory({ data, heading }) {
     return rgb
       && "#" + rgb.map((x) => x.toString(16).padStart(2, "0")).join("")
     }
-console.log(data)
+
   const router = useRouter();
   return (
     <section className="w-[90%] xl:w-[80%] mx-auto my-[60px] flex flex-col items-center gap-10">
