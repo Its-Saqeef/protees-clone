@@ -28,17 +28,18 @@
 @keyframes l1 {to{transform: rotate(.5turn)}}
 
 .animateHeight{
-  display: grid;
+  
   grid-template-rows: 1fr;
   transition: grid-template-rows ease-in-out 0.7s 
 }
 
 .defaultheight{
   grid-template-rows: 0fr;
-  transition: grid-template-rows ease-in-out 0.3s
+  transition: grid-template-rows ease-in-out 0.3s;
+  
 }
 .custom-animate{
-  animation: skid;
+  animation: skid; 
   animation-duration: 500ms;
   animation-fill-mode: forwards;
 }

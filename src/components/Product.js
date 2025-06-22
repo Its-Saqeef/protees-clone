@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import RecentlyViewed from "./RecentlyViewed";
 import { IoIosArrowRoundBack } from "react-icons/io"
 import { FaRegStar,FaStar } from "react-icons/fa6";
+import ImageWithPopup from "@/lib/ImageWithPopup";
 
 function Product({data,reviews}) {
   const [source,setSource]=useState(data && data.images[0])
@@ -23,15 +24,22 @@ function Product({data,reviews}) {
   const [open, setOpen] = useState(false);
   const [size,setSize]=useState("SMALL")
   const [active,setActive]=useState("SMALL")
+  const [selectedColor,setSelectedColor]=useState(data && data.colors[0])
+  const [activeColor,setActiveColor]=useState(data.colorSizeQuantities.length > 0 ? data.colorSizeQuantities[0].color : "")
   const sizeButtonsRef = useRef({});  
   const [stock, setStock] = useState();
   const [recent,setRecent]=useState(typeof window !== "undefined" ? JSON.parse(localStorage.getItem("Recent")) || [] : null)
+  const [defaultColorImage,setColorImage]=useState(Object.keys(data.colorImages).length > 0 && Object.values(data.colorImages)[0])
+  const [isOpen, setIsOpen] = useState(false)
+  const [disabledColors, setDisabledColors] = useState([])
+  const [isSoldOut, setIsSoldOut] = useState(false)
+
   useEffect(() => {
     document.title = data.name + " - Protees.pk";
     Aos.init({
       once: false,
     })      
-      setStock(data.sizes[0].quantity);
+     data.sizes.length > 0 && setStock(data.sizes[0].quantity);
       if(recent.length>6 && !recent.some(item => item._id === data._id)){
         recent.shift();
         localStorage.setItem("Recent", JSON.stringify([...recent,data]))
@@ -48,10 +56,38 @@ function Product({data,reviews}) {
       dispatch(setCartFromLocalStorage(storedCart));
     }
   },[dispatch])
+
+  function handleSizes(size){
+    for(const item of data.sizes){
+      if(item.size == size){
+        setStock(item.quantity),setSize(size),setActive(size)
+      }
+    }
+  }
+
+ useEffect(() => {
+  const updatedDisabledColors = data.colorSizeQuantities
+    .filter(item => item.sizes?.[size] < 1)
+    .map(item => item.color);
+
+  setDisabledColors(updatedDisabledColors);
+}, [data.colorSizeQuantities, size]);
+
+useEffect(() => {
+  const match = data.colorSizeQuantities.find(
+    (item) => item.color === activeColor
+  );
+  if (match && match.sizes && match.sizes[size] < 1) {
+    setIsSoldOut(true);
+  } else {
+    setIsSoldOut(false);
+  }
+}, [activeColor, size, data.colorSizeQuantities]);
+
+
   
   const rating=reviews.reduce((sum,item)=>sum + Number(item.rating),0)
   const averageRating=rating/reviews.length
-
   
   return (
     <main className={`w-[95%] sm:w-[90%] lg:max-w-[80%] mx-auto mt-10`}>
@@ -63,22 +99,48 @@ function Product({data,reviews}) {
           <div className="w-[100%] md:sticky md:top-0 mx-auto flex ">
             <div className="flex flex-col gap-4">
               {
-                data && data.images.map((img,i)=>{
-                  return <CldImage src={img} alt="Photo" height={100} width={100} key={i} className="border-2 cursor-pointer" onClick={()=>setSource(img)}/>
+                data.images.length > 0 && data.images.map((img,i)=>{
+                  return <CldImage src={img} alt={data.name} height={100} width={100} key={i} className="border-2 cursor-pointer" onClick={()=>setSource(img)}/>
+                })
+              }
+              {
+                Object.keys(data.colorImages).length > 0 && Object.values(data.colorImages).map((url,i)=>{
+                  return <CldImage src={url} alt={data.name} height={100} width={100} key={i} className="border-2 cursor-pointer" onClick={()=>setColorImage(url)} />
                 })
               }
             </div>
             <div>
-              <CldImage
+              { data.images.length > 0 && 
+              <>
+                <CldImage
                 src={source}
-                alt="Photo"
+                alt={data.name}
                 width={700}
                 height={700}
-                className=""
                 priority
-                
+                onClick={()=>setIsOpen(true)}
+                className="cursor-zoom-in"
               />
+               <ImageWithPopup src={source} alt={data.name} isOpen={isOpen} setIsOpen={setIsOpen} />
+              </>
+              }
+              { Object.keys(data.colorImages).length > 0 &&
+              <>
+                <CldImage
+                src={defaultColorImage}
+                alt={data.name}
+                width={700}
+                height={700}
+                priority
+                className="cursor-zoom-in"
+                 onClick={()=>setIsOpen(true)}    
+              />
+               <ImageWithPopup src={defaultColorImage} alt={data.name} isOpen={isOpen} setIsOpen={setIsOpen} />
+              </>
+              }
+              
             </div>
+            
           </div>
           <div className="w-[100%] md:[w-50%] flex flex-col flex-wrap">
             <h1 className="text-lg sm:text-2xl text-center md:text-start xl:text-3xl pb-4 mb-3 mx-auto md:mx-0 tracking-wide ">
@@ -112,22 +174,43 @@ function Product({data,reviews}) {
               <h3 className="text-lg my-2 tracking-wider">SIZE</h3>
               <div className="flex gap-1 sm:gap-2 xl:gap-3 text-xs lg:text-base">
                 {data &&
-                  data.sizes.map((size, index) => {
+                  ["SMALL", "MEDIUM", "LARGE", "XL", "XXL"].map((size, index) => {
                     return (
                       <button
-                        className={`font-medium border-2 ${active===size.size ? "border-black" : "border-gray-300"} ${
+                        className={`font-medium border-2 ${active===size ? "border-black" : "border-gray-300"} ${
                           size.quantity == 0 ? "line-through text-gray-500" : ""
                         } py-2 px-2 sm:px-3 md:min-w-20`}
                         key={index}
-                        onClick={() => {setStock(size.quantity),setSize(size.size),setActive(size.size)}}
+                        onClick={()=>{ data.sizes.length > 0 ? handleSizes(size) : setSize(size),setActive(size)}}
                         ref={(el) => (sizeButtonsRef.current[size.size] = el)}
                       >
-                        {size.size}
+                        {size}
                       </button>
                     );
                   })}
+                  
               </div>
             </div>
+            { data.colors.length > 0 &&
+              <div className="flex flex-col items-center md:items-start mt-4">
+                <h3 className="text-lg my-2 tracking-wider">COLOR</h3>
+                <div className="flex gap-[2px] sm:gap-2 xl:gap-3 text-xs lg:text-base">
+                  {data.colorSizeQuantities.map((item, index) => {
+                     const isDisabled = disabledColors.includes(item.color)
+                      return (
+                        <button
+                          className={`font-medium border-2 ${isDisabled ? "line-through text-gray-500" : ""} ${activeColor===item.color ? "border-black" : "border-gray-300"} py-1 px-1 sm:px-3 md:min-w-20`}
+                          key={index}
+                          onClick={()=>[setActiveColor(item.color)]}
+                          disabled={isDisabled}      
+                        >
+                          {item.color}
+                        </button>
+                      );
+                    })}
+                </div>
+              </div>
+            }
             <p className="flex items-center gap-1 text-md mx-auto md:mx-0 font-medium py-4">
               <TfiWorld className="text-xl" /> Free shipping on order above 2000{" "}
             </p>
@@ -157,19 +240,20 @@ function Product({data,reviews}) {
               }
               <span className="text-sm">({reviews.length} Reviews)</span>
             </div>
-            {stock == 0 ? (
+            { isSoldOut ||
+             stock == 0 ?  (
               <button
                 className="bg-gray-200 text-gray-400 p-3 border-gray-600 border tracking-wider rounded-sm my-4"
-                disabled={stock}
+                disabled={stock || isSoldOut}
               >
                 SOLD OUT
               </button>
             ) : (
               <div className="flex flex-col gap-2 my-3">
-                <button className="border border-black p-3 tracking-wider rounded-sm" onClick={()=>dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images,subcategory : data.subcategory}))}>
+                <button className="border border-black p-3 tracking-wider rounded-sm" onClick={()=>dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images,subcategory : data.subcategory, color : activeColor,colorImage : data.colorImages[activeColor]}))}>
                   ADD TO CART
                 </button>
-                <button className="bg-black text-white p-3 tracking-wider rounded-sm" onClick={()=>(dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images,subcategory : data.subcategory})), router.push("/checkout"))}>
+                <button className="bg-black text-white p-3 tracking-wider rounded-sm" onClick={()=>(dispatch(addToCart({id : data._id,name: data.name,size :size,price : data.price,image : data.images,subcategory : data.subcategory, color : activeColor,colorImage : data.colorImages[activeColor]})), router.push("/checkout"))}>
                   BUY NOW
                 </button>
               </div>
@@ -238,7 +322,7 @@ function Product({data,reviews}) {
       )}
       <YouMayLike params={params} />
       <RecentlyViewed id={data._id} />
-      <div className="flex justify-center my-5">
+      <div className="flex justify-center my-8">
         <Link href={`/collections/${data.subcategory}`}>
         <button className="text-white bg-black py-3 px-2 text-center rounded-md"><IoIosArrowRoundBack className="inline-block text-2xl" /> <span className="uppercase text-xs tracking-widest">BACK TO {data.subcategory}</span></button>
         </Link>

@@ -7,6 +7,9 @@ const ProductForm = () => {
   useEffect(()=>{
     document.title="Add Product - Protees.pk"
   },[])
+  const [colorImages, setColorImages] = useState({});
+  const [colorSizeQuantities, setColorSizeQuantities] = useState([])
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -50,7 +53,15 @@ const ProductForm = () => {
       const value = e.target.value;
       const array = value.split(",");
       setFormData({ ...formData, colors: array });
-    } else {
+    } else if (name === "color-image") {
+    const colorName = e.target.dataset.color;
+    const file = e.target.files[0];
+    setColorImages((prev) => ({
+      ...prev,
+      [colorName]: file,
+    }))
+    }
+     else {
       setFormData({
         ...formData,
         [name]: e.target.value,
@@ -73,6 +84,11 @@ const ProductForm = () => {
     for (let index = 0; index < formData.images.length; index++) {
       form.append(`images[]`,formData.images[index])
     }
+    Object.entries(colorImages).forEach(([color, file]) => {
+    form.append(`colorImages[${color}]`, file);
+  });
+
+    form.append("colorSizeQuantities", JSON.stringify(colorSizeQuantities))
 
     const response = await axios
       .post("/api/addproduct", form)
@@ -94,8 +110,49 @@ const ProductForm = () => {
     colors: [],
     images : []
       })
+    setColorImages({});
      setIsLoading(false);
   };
+
+  const handleColorSizeQuantityChange = (color, size, value) => {
+  setColorSizeQuantities(prev => {
+    const existingIndex = prev.findIndex(entry => entry.color === color);
+
+    if (existingIndex !== -1) {
+      // Update existing color's size quantity
+      const updated = [...prev];
+      updated[existingIndex] = {
+        ...updated[existingIndex],
+        sizes: {
+          ...updated[existingIndex].sizes,
+          [size]: parseInt(value)
+        }
+      };
+      return updated;
+    } else {
+      // Add new color entry with all sizes defaulted to 0
+      return [
+        ...prev,
+        {
+          color,
+          sizes: {
+            SMALL: 0,
+            MEDIUM: 0,
+            LARGE: 0,
+            XL: 0,
+            XXL: 0,
+            [size]: parseInt(value)  // override one size with given value
+          }
+        }
+      ];
+    }
+  });
+}
+
+const getSizeValue = (color, size) => {
+  const entry = colorSizeQuantities.find((e) => e.color === color);
+  return entry?.sizes?.[size] ?? "";
+}
 
   return (
     <section className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg my-10 ">
@@ -132,7 +189,8 @@ const ProductForm = () => {
             Price
           </label>
           <input
-            type="number"
+            type="number" 
+            min={0}
             id="price"
             name="price"
             required
@@ -278,6 +336,7 @@ const ProductForm = () => {
                 <label className="text-gray-700">{size}</label>
                 <input
                   type="number"
+                  min={0}
                   name={size}
                   placeholder="Quantity"
                   className="w-20 p-2 mt-1 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -294,7 +353,7 @@ const ProductForm = () => {
             htmlFor="colors"
             className="block text-lg font-medium text-gray-600 mb-2"
           >
-            Colors
+            Colors(Comma separated)
           </label>
           <input
             type="text"
@@ -306,6 +365,59 @@ const ProductForm = () => {
             value={formData.colors}
           />
         </div>
+
+        {/* Per-Color Images */}
+        {formData.colors.length > 0 && (
+            <div className="mb-6">
+              <label className="block text-lg font-medium text-gray-600 mb-2">
+                Upload Image for Each Color
+              </label>
+              <div className="space-y-4">
+                {formData.colors.map((color) => (
+                  <div key={color} className="border p-4 rounded-md">
+                    <div className="flex items-center gap-4 mb-2">
+                      <label className="w-24 text-gray-700 capitalize">{color}</label>
+                      <input
+                        type="file"
+                        name="color-image"
+                        data-color={color}
+                        accept="image/*"
+                        className="border border-gray-300 p-2 rounded-md"
+                        onChange={handleChange}
+                        
+                      />
+                      {colorImages[color] && (
+                        <img
+                          src={URL.createObjectURL(colorImages[color])}
+                          alt={`${color} preview`}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      )}
+                    </div>
+                    <div className="grid grid-cols-5 gap-4 mt-4">
+                      {["SMALL", "MEDIUM", "LARGE", "XL", "XXL"].map((size) => (
+                        <div key={size} className="flex flex-col items-center">
+                          <label className="text-gray-700 text-sm">{size}</label>
+                          <input
+                            type="number"
+                            min="0"
+                            className="w-20 p-2 mt-1 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            value={
+                             getSizeValue(color, size)
+                            }
+                            onChange={(e) =>
+                              handleColorSizeQuantityChange(color, size, e.target.value)
+                            }
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
 
         {/* Submit Button */}
         <div className="mt-6">

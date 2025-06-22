@@ -11,7 +11,7 @@ export async function GET(request){
     try {
        await connectDB()
 
-        const reviews= await Reviews.find({}).populate("userId","name").populate("productId","name images").sort({createdAt : -1}).limit(15)
+        const reviews= await Reviews.find({}).populate("userId","name").populate("productId","name images colorImages").sort({createdAt : -1}).limit(15)
         const totalReviews= await Reviews.countDocuments()
         
         const allRating=reviews.reduce((sum,rev)=>sum + rev.rating,0)

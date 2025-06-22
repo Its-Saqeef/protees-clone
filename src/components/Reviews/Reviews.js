@@ -89,7 +89,7 @@ function Reviews() {
       },3000)
       return ()=>clearTimeout(timer)   
   },[index])
-  
+  console.log(data)
   return (
     <section
       className={`w-[90%] mx-auto flex flex-col items-center mt-5 mb-20`}
@@ -112,12 +112,16 @@ function Reviews() {
               key={i}
               className="w-full md:w-1/2 xl:w-1/3 flex gap-2 p-4 items-center shrink-0"
             >
+              {
+                item.productId.images.length > 0 ?
               <CldImage
                 src={item.productId.images[0]}
-                alt="Photo"
+                alt={item.productId.name}
                 height={120}
                 width={120}
-              />
+              /> :
+              <CldImage src={item.productId.colorImages[item.color]} alt={item.productId.name} height={120} width={120}/>
+              } 
               <div className="flex flex-col gap-2">
                 <div className="flex gap-1 mb-2">
                   {Array.from({ length: 5 }, (_, index) =>

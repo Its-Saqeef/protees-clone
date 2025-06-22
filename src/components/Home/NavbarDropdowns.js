@@ -42,6 +42,7 @@ function Lists() {
                         <Link href={"/collections/beyond active"} className="p-1">BEYOND ACTIVE</Link>
                         <Link href={"/collections/graphic"} className="p-1">GRAPHIC TEES</Link>
                         <Link href={"/collections/superheroes"} className="p-1">SUPER TEES</Link>
+                        <Link href={"/collections/dtf-tees"} className="p-1">DTF TEES</Link>
                       </div>
                         <div className="md:text-sm lg:text-base flex flex-col">
                             <Link href={""}  className="p-1 text-xs lg:text-sm ">WINTER</Link>
@@ -66,7 +67,7 @@ function Lists() {
             <Link href={""} className="text-base  cursor-pointer tracking-wider custom relative">PROTEES JUNIOR</Link>
             <Link href={""} className="text-base  cursor-pointer tracking-wider custom relative">CLEARANCE SALE</Link>
             <Link href={""} className="text-base  cursor-pointer tracking-wider custom relative">SPECIAL OFFER</Link>
-            {isLoggedIn && isAdmin && <Link href="/dashboard/allorders" className="p-2 rounded-md bg-red-700 text-white">Dashboard</Link>}
+            {isLoggedIn && isAdmin && <Link href="/dashboard/allorders" className="p-2 rounded bg-[#c10000] text-white">Dashboard</Link>}
         </div>
         
     </nav>

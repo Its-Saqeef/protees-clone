@@ -10,7 +10,6 @@ export default function OrderConfirmationEmail(props) {
     shippingAddress,
     billingAddress,
     billingPhoneNumber,
-    supportEmail,
     phone
   } = props;
 
@@ -52,11 +51,11 @@ export default function OrderConfirmationEmail(props) {
                     <h2 style={styles.h2}>Order Summary</h2>
                     {orderItems.map((item, idx) => (
                       <p style={styles.text} key={idx}>
-                        {item.quantity} × {item.name} — {item.price}
+                        {item.quantity} x {item.name} {item.color} — Rs {item.price.toLocaleString("en-IN")}.00
                       </p>
                     ))}
                     <p style={styles.text}>
-                      <strong>Total: Rs.{totalAmount.toLocaleString("en-IN")}</strong>
+                      <strong>Total: Rs.{totalAmount.toLocaleString("en-IN")}.00</strong>
                     </p>
                   </td>
                 </tr>
@@ -82,7 +81,7 @@ export default function OrderConfirmationEmail(props) {
                 <tr>
                   <td align="center" style={{ padding: "20px 0" }}>
                     <a
-                      href={`http://localhost:3000/order/${orderNumber}`}
+                      href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/order/${orderNumber}`}
                       style={styles.button}
                     >
                       View Your Order

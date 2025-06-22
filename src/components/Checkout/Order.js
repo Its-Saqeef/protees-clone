@@ -44,15 +44,15 @@ function Order({ data }) {
   }, []);
   
 
-  const handleRating = (id, star) => {
+  const handleRating = (id, star,color) => {
     setRating((prevRating) => {
-      const existing = prevRating.some((item) => item.id === id);
+      const existing = prevRating.some((item) => item.id === id && item.color == color);
       if (existing) {
         return prevRating.map((item) =>
           item.id === id ? { ...item, stars: star } : item
         );
       } else {
-        return [...prevRating, { id, stars: star }];
+        return [...prevRating, { id, stars: star,color : color }];
       }
     });
   };
@@ -80,7 +80,7 @@ function Order({ data }) {
 
   const allReviewed = data.product.every((item) =>
   existingReviews?.reviews?.some(
-    (review) => review[0]?.productId === item.id
+    (review) => review[0]?.productId === item.id 
   )
 )
 
@@ -165,19 +165,21 @@ function Order({ data }) {
                 rating.find((rate) => rate.id === item.id)?.stars || 0;
               const exists =
                 existingReviews?.reviews?.find(
-                  (review) => review[0]?.productId === item.id
+                  (review) => review[0]?.productId === item.id 
                 );
-
               return (
                 <div className="flex items-center py-1 justify-between" key={item._id}>
                   <div className="relative">
+                    {
+                      item.colorImage ? <Image src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1741148854/${item.colorImage}`} alt={item.name} height={100} width={100} /> :
                     <Image
-                      src={`https://res.cloudinary.com/dtnxlm58e/image/upload/v1741148854/${item.image[0]}`}
-                      alt="Photo"
+                      src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1741148854/${item.image[0]}`}
+                      alt={item.name}
                       height={100}
                       width={100}
                       className="border border-gray-400 rounded-md"
                     />
+                    }
                     <p className="absolute top-[-5px] right-[-5px] bg-gray-500 rounded-xl w-6 h-6 text-center text-white">
                       {item.quantity}
                     </p>
@@ -186,6 +188,7 @@ function Order({ data }) {
                   <div className="text-sm max-w-[50%]">
                     <p>{item.name}</p>
                     <p>{item.size}</p>
+                    <p>{item.color}</p>
 
                     {data.status === "delivered" &&
                       pathname.startsWith("/account") && (
@@ -198,7 +201,7 @@ function Order({ data }) {
                             Array.from({ length: 5 }, (_, index) => (
                               <span
                                 key={`${item.id}-${index}`}
-                                onClick={() => handleRating(item.id, index + 1)}
+                                onClick={() => handleRating(item.id, index + 1,item.color)}
                               >
                                 {currentRating >= index + 1 ? (
                                   <FaStar className="fill-yellow-500 cursor-pointer" />

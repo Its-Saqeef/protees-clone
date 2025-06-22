@@ -25,11 +25,11 @@ function Allorders({data}) {
   return (
     <main>
         <h1 className='font-bold text-2xl lg:text-4xl my-[20px] text-gray-800 tracking-widest text-center'>All Orders ({data.length})</h1>
-        <div className='w-[50%] mx-auto'>
+        <div className='w-[90%] lg:w-[80%] xl:w-[70%] 2xl:w-[50%] mx-auto'>
             {
                 data.map((order)=>{
                     return (
-                        <div key={order._id} className='flex border-2 my-2 items-center '>
+                        <div key={order._id} className='flex border-2 my-2 items-center flex-wrap'>
                             <Link href={`/order/${order.orderNumber}`} target='blank'><p>{order.orderNumber}</p></Link>
                             <div className='self-start ml-2'>
                                 <h1>{order.name}</h1>

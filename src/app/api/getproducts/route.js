@@ -21,7 +21,8 @@ export async function GET(request,{params}) {
        if (query) {
            searchQuery.$or = [
                { name: { $regex: query, $options: 'i' } },
-               { subcategory: { $regex: query, $options: 'i' } }
+               { subcategory: { $regex: query, $options: 'i' } },
+               
            ];
        }
 
@@ -35,7 +36,7 @@ export async function GET(request,{params}) {
            searchQuery.sizes = { $elemMatch: { quantity: { $lte: 0 } } };
        }
 
-       console.log(searchQuery)
+       
        if(Object.keys(searchQuery).length>0){
         const data = await Product.find(searchQuery).limit(limit).skip(skip)
 

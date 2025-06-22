@@ -10,12 +10,14 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import { useQueryState } from "nuqs";
 import { toast } from "react-toastify";
-import { notFound, redirect, useParams } from "next/navigation";
+import {  redirect, useParams } from "next/navigation";
+import colorName from "color-name";
 
 function page() {
   const { category } = useParams()
   const [categoryData,setCategoryData]=useState()
   const [data,setData]=useState()
+  const [selectedColors, setSelectedColors] = useState({})
 
   const [maxPrice, setMaxPrice] = useState(0);
   useEffect(() => {
@@ -69,6 +71,11 @@ function page() {
     return ()=>clearTimeout(timer)
   },[value[0],value[1],availability])
 
+  function nameToHex(name) {
+      const rgb = colorName[name.toLowerCase()];
+      return rgb
+        && "#" + rgb.map((x) => x.toString(16).padStart(2, "0")).join("")
+  }
 
   return (
     
@@ -268,10 +275,12 @@ function page() {
         </div>
         { data && 
           data.map((item) => {
-            if(item.isActive)
+            const selectedColor = selectedColors[item._id];
+                const selectedImage = selectedColor && item.colorImages[selectedColor];
+                const defaultImage = Object.values(item.colorImages)[0];
+            if(item.isActive)              
             return (
-              <Link
-                href={`/collections/${item.subcategory}/product/${item._id}`}
+              <div
                 className="relative"
                 key={item._id}
               >
@@ -293,14 +302,34 @@ function page() {
                   >
                     sale
                   </p>
+                  <Link href={`/collections/${item.subcategory}/product/${item._id}`}>
                   <div className="flex flex-col justify-center items-center ">
-                    <CldImage
-                      src={item.images[0]}
-                      width={600}
-                      height={600}
-                      alt="Product Image"
-                      style={{height : "auto",width : "auto"}}
-                    />
+                    {item.images.length > 0 && (
+                                            <CldImage
+                                              width="600"
+                                              height="600"
+                                              src={item.images[0]}
+                                              alt={item.name}
+                                              style={{height : "auto", width : "auto"}}
+                                            />
+                                          )}
+                                          {selectedImage ? (
+                                            <CldImage
+                                                width="600"
+                                                height="600"
+                                                src={selectedImage}
+                                                alt={`${item.name} ${selectedColor}`}
+                                                style={{height : "auto", width : "auto"}}
+                                            />
+                                            ) : defaultImage ? (
+                                            <CldImage
+                                                width="600"
+                                                height="600"
+                                                src={defaultImage}
+                                                alt={item.name}
+                                                style={{height : "auto", width : "auto"}}
+                                            />
+                                            ) : null}
                   <div className={`w-[90%] absolute flex justify-between opacity-0 group-hover:opacity-75 transition duration-200 ease-in-out`}>
                   {
                     item.sizes.map((size)=>{
@@ -337,9 +366,23 @@ function page() {
                       save {item.sale}%
                     </h3>
                   </div>
-                  
+                  </Link>
+                  {item.colors.length > 0 && (
+                    <div className="flex justify-center gap-2 mt-2">
+                        {item.colors.map((color, i) => (
+                        <button
+                            key={i}
+                            onClick={() =>
+                            setSelectedColors((prev) => ({ ...prev, [item._id]: color }))
+                            }
+                            className="p-[5px] w-1 h-1 rounded-xl border-gray-400 focus:border-black border-2"
+                            style={{ backgroundColor: nameToHex(color) }}
+                        ></button>
+                        ))}
+                    </div>
+                    )}
                 </div>
-              </Link>
+              </div>
             );
           })} 
       </section> : <section className='w-full flex items-center justify-center'>

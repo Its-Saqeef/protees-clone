@@ -14,16 +14,17 @@ export async function POST(request){
         
         body.map(async(item)=>{
             if(item.id !=''){
-                const product= await Reviews.findOne({productId : item.id, userId : tokenValue.id})
+                const product= await Reviews.findOne({productId : item.id, userId : tokenValue.id,color : item.color})
                  if(product){
                     await Reviews.findOneAndUpdate(product._id,{
-                        rating : item.stars
+                        rating : item.stars,
                     })
                 }else{
                     await Reviews.create({
                         rating : item.stars,
                         productId : item.id,
-                        userId : tokenValue.id
+                        userId : tokenValue.id,
+                        color : item.color
                     })
                 }
             }

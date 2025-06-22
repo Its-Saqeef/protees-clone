@@ -8,6 +8,9 @@ const reviewSchema=new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : "Product"
     },
+    color :{
+        type : String
+    },
     userId : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "User"

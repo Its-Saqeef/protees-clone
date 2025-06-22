@@ -9,7 +9,7 @@ export async function POST(request) {
 
   try {
     const data = await request.formData();
-
+    console.log(data)
     const name = data.get("name");
     const sizes = JSON.parse(data.get("sizes"));
     const description = data.get("description");
@@ -20,11 +20,34 @@ export async function POST(request) {
     const price = parseInt(data.get("price"));
     const sale = parseInt(data.get("sale"));
    const images = data.getAll("images[]")
+   const colorSizeQuantities = JSON.parse(data.get("colorSizeQuantities"))
 
-    if(!images.length){
-      return Response.json({
-        message : "Please Upload Photo"
-      })
+    const colorImageMap={}
+
+    for(const color of colors){
+      const file = data.get(`colorImages[${color}]`)
+      if(file){
+        const colorFormData = new FormData()
+        colorFormData.append("file", file)
+        colorFormData.append("upload_preset", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`)
+        colorFormData.append("cloud_name", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`)
+
+        try {
+          const result = await fetch(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          {
+            method: "POST",
+            body: colorFormData,
+          }
+        ).then((res) => res.json()).catch(("Error Uploading Image"))
+
+        colorImageMap[color] = result.public_id
+        
+
+        } catch (error) {
+          console.log(`Could not upload ${color} image to Cloudinary`, error)
+        }
+      }
     }
 
     // const embeddings = async ()=>{
@@ -40,22 +63,24 @@ export async function POST(request) {
 
     const imageUrls=[]
     for (let image of images) {
-    const formdata = new FormData();
-    formdata.append('file',image)
-    formdata.append("upload_preset", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`);
-    formdata.append("cloud_name", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`);
+      if(image){
+        const formdata = new FormData();
+        formdata.append('file',image)
+        formdata.append("upload_preset", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`);
+        formdata.append("cloud_name", `${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}`);
 
-    let response = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: formdata,
+        let response = await fetch(
+          `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+          {
+            method: "POST",
+            body: formdata,
+          }
+        )
+          .then((res) => res.json())
+          .then((result) => result.public_id)
+          .catch((error) => console.log("could not upload to cloudinary", error));
+          imageUrls.push(response)
       }
-    )
-      .then((res) => res.json())
-      .then((result) => result.public_id)
-      .catch((error) => console.log("could not upload to cloudinary", error));
-      imageUrls.push(response)
     }
   
     let newComposition = composition.split(",")
@@ -72,7 +97,9 @@ export async function POST(request) {
       composition: newComposition,
       images: imageUrls,
       colors,
-      embedding : embedding
+      embedding : embedding,
+      colorImages : colorImageMap,
+      colorSizeQuantities : colorSizeQuantities
     })
     
     return Response.json({

@@ -14,12 +14,10 @@ const productSchema=new Schema({
         sizes: [{
             size : {
                 type : String,
-                required : true,
                 enum : ['SMALL',"MEDIUM","LARGE","XL","XXL"]
             },
             quantity : {
                 type : String,
-                required : true,
                 default : "0"
             }
         }],  
@@ -45,12 +43,28 @@ const productSchema=new Schema({
         composition : [String],
         images : [String],
         colors : [String],
-        features : [Number],
         isActive : {
             type : Boolean,
             default : true
         },
-        embedding : [Number]
+        embedding : [Number],
+        colorImages: {
+            type: Map,
+            of: String,
+            default: {}
+        },
+        colorSizeQuantities: [
+        {
+        color: { type: String, required: true },
+        sizes: {
+            SMALL: { type: Number, default: 0 },
+            MEDIUM: { type: Number, default: 0 },
+            LARGE: { type: Number, default: 0 },
+            XL: { type: Number, default: 0 },
+            XXL: { type: Number, default: 0 },
+        }
+        }
+    ]
 },{timestamps : true})
 
 export const Product = mongoose.models.Product || mongoose.model("Product",productSchema)

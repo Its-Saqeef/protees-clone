@@ -10,7 +10,6 @@ import { FaYoutube } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { BsPerson } from "react-icons/bs";
-import { MdOutlineDarkMode } from "react-icons/md";
 import Cart from "../Cart/Cart";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartFromLocalStorage, toggleCart } from "@/app/store/CartSlice";

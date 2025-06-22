@@ -81,6 +81,9 @@ function Checkout() {
     if (!formdata.phone) {
       errors.phone = "Enter a phone number";
     }
+    if(!formdata.postalcode){
+      errors.postal = "Enter Postal Code"
+    }
     if (billaddress) {
       if (!billing.lname) {
         errors.blname = "Enter Last Name";
@@ -247,6 +250,7 @@ function Checkout() {
                   className="bg-black w-[50%] outline-none border  border-gray-500 p-3 rounded-md"
                   onChange={changeHandler}
                 />
+                <div className="text-red-500">{errors.postal}</div>
               </div>
               <div
                 className={`flex items-center border  border-gray-500 rounded-md p-2 relative ${
@@ -464,13 +468,16 @@ function Checkout() {
                   return (
                     <div className="flex gap-2 md:justify-between items-center my-5" key={item.id + i}>
                       <div className="relative">
-                        <CldImage
-                          src={item.image[0]}
-                          alt="photo"
-                          height={50}
-                          width={50}
-                          className="h-[40px] w-[40px] md:h-[80px] md:w-[80px] border-2"
-                        />
+                        {item.colorImage ? 
+                          <CldImage src={item.colorImage} alt={item.name}  height={50} width={50} className=" md:h-[80px] md:w-[80px] border-2"/> :
+                          <CldImage
+                            src={item.image[0]}
+                            alt={item.name}
+                            height={50}
+                            width={50}
+                            className="h-[40px] w-[40px] md:h-[80px] md:w-[80px] border-2"
+                          />
+                        }
                         <p className="absolute top-[-8px] right-[-8px] border-2 h-[20px] md:h-[30px] w-[20px] md:w-[30px] text-center text-xs md:text-sm pb-1 md:p-1 rounded-2xl bg-gray-500 text-white">
                           {item.quantity}
                         </p>
@@ -480,6 +487,7 @@ function Checkout() {
                           {item.name}
                         </p>
                         <p><span className="text-gray-500">Size : </span>{item.size}</p>
+                        <p><span className="text-gray-500">{item.color && "Color :"} </span>{item.color}</p>
                       </div>
                       <p className="text-sm md:text-base text-gray-500">
                         Rs {item.price.toLocaleString("en-IN")}.00

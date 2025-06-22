@@ -17,7 +17,7 @@ function Cart() {
         const individual_item=item.price * item.quantity
         calculatePrice=individual_item + calculatePrice
     })
-    
+    console.log(data)
   return (
     <section className='w-[100%] h-[100vh] top-0 left-0 fixed z-20 flex'>
         <div className='w-[10%] sm:w-[55%] lg:w-[60%] xl:w-[70%] bg-opacity-50 bg-gray-300 backdrop-blur-sm' onClick={()=>dispatch(toggleCart({toggle: false}))}></div>
@@ -35,11 +35,15 @@ function Cart() {
                    return(
                     <div className='flex  my-4 py-4 xl:py-5 border-b-2 gap-1' key={i}>
                       <Link href={`/collections/${item.subcategory}/product/${item.id}`} onClick={()=>dispatch(toggleCart({toggle: false}))}>
-                      <CldImage src={item.image[0]} alt='photo' width={150} height={120} /></Link>
+                      {
+                        item.colorImage ? <CldImage src={item.colorImage} alt={item.name} width={150} height={120} />  : <CldImage src={item.image[0]} alt={item.name} width={150} height={120} />
+                      }
+                      </Link>
                       <div  className='flex flex-col justify-start gap-2 xl:gap-3'>
                         <h4 className='font-medium tracking-wider sm:w-[170px] lg:w-[230px] xl:text-lg w-[120px] xl:w-[270px]'>{item.name}</h4>
                         
                         <p><span className='text-xs'>SIZE</span> : {item.size}</p>
+                        <p><span className='text-xs'>{item.color && "COLOR :"}</span> {item.color}</p>
                         <div className='flex gap-[15px] xl:gap-[25px]'>
                           <div className='flex items-center border gap-3 xl:gap-4 self-start'>
                           <LuMinus className='cursor-pointer' onClick={()=>dispatch(removeFromCart({id : item.id,size : item.size}))}/>

@@ -68,6 +68,9 @@ const orderSchema=new mongoose.Schema({
         },
         rating : {
             type : String
+        },
+        color : {
+            type : String
         }
     }],
 },{timestamps : true})

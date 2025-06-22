@@ -18,7 +18,7 @@ export default function Home({data}) {
   const superTees=data ? data.filter((item)=>item.subcategory==="superheroes") : null
   const basic= data ? data.filter((item)=>item.subcategory==="basic") : null
   const sweatshirts= data ? data.filter((item)=>item.subcategory==="sweatshirt") : null
-  
+  const dtftees = data ? data.filter((item)=>item.subcategory==="dtf-tees") : null
   return (
     <section>      
       <ShopByCategory />
@@ -27,6 +27,7 @@ export default function Home({data}) {
       <EachCategory data={superTees} heading={"COTTON SUPERHERO T-SHIRTS"}/>
       <EachCategory data={basic} heading={"BASIC"}/>
       <EachCategory data={sweatshirts} heading={"SWEATSHIRTS"} />
+      <EachCategory data={dtftees} heading={"DTF-TEES"} />
       <Reviews />
     </section>
   );

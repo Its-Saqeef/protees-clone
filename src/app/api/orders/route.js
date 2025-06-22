@@ -13,38 +13,50 @@ export async function POST(req) {
   try {
     await connectDB();
     const data = await req.json();
-
+    console.log(data)
     const generateOrderNumber = `Order-${Math.floor(10000 + Math.random() * 900000)}`;
     const customer = data[0];
     const billing = data[1];
     const cartItems = data[2];
+
 
     const products = cartItems.map((item) => ({
       name: item.name,
       size: item.size,
       price: item.price,
       quantity: item.quantity,
-      image: item.image[0],
+      image: item.image.length > 0 ? item.image[0] : item.colorImage,
       id: item.id,
+      color : item.color
     }));
 
     const totalAmount = products.reduce((sum, product) => {
       return sum + product.price * product.quantity;
-    }, 0);
+    }, 0)
 
     await Promise.all(
       cartItems.map(async (item) => {
         const product = await Product.findById(item.id);
         if (!product) throw new Error("Product not found");
 
-        const sizeObj = product.sizes.find((s) => s.size === item.size);
-        if (!sizeObj) throw new Error("Size not found");
-
-        if (parseInt(sizeObj.quantity) < parseInt(item.quantity)) {
-          throw new Error("Not enough stock");
+        if(item.color){
+            const sizeObject = product.colorSizeQuantities.find((obj)=>obj.color == item.color)
+            const quantity = sizeObject.sizes[item.size]
+            if(parseInt(quantity) < parseInt(item.quantity))
+              throw new Error("Not enough stock");
+            const newValue= parseInt(quantity) - parseInt(item.quantity)
+            sizeObject.sizes[item.size] = newValue
         }
+        else {
+          const sizeObj = product.sizes.find((s) => s.size === item.size);
+          if (!sizeObj) throw new Error("Size not found");
 
-        sizeObj.quantity = (parseInt(sizeObj.quantity) - parseInt(item.quantity)).toString();
+          if (parseInt(sizeObj.quantity) < parseInt(item.quantity)) {
+            throw new Error("Not enough stock");
+          }
+
+          sizeObj.quantity = (parseInt(sizeObj.quantity) - parseInt(item.quantity)).toString();
+          }
         await product.save();
       })
     );
@@ -105,6 +117,7 @@ export async function POST(req) {
           name: item.name,
           quantity: item.quantity,
           price: item.price,
+          color : item.color
         })),
         totalAmount: totalAmount,
         phone : customer.phone,

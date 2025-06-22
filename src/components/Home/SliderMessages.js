@@ -24,7 +24,7 @@ function SliderMessages() {
 
   return (
     <section className='w-full '>
-      <div className='flex items-center text-white text-sm p-2 justify-center bg-red-700'>
+      <div className='flex items-center text-white text-sm p-2 justify-center bg-[#c10000]'>
         <p>{messages[index]}</p>
       </div>
     </section>

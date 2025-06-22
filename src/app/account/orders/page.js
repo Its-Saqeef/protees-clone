@@ -24,15 +24,7 @@ function page() {
         setData(response.data.data)})();
     },[])
     
-    const handleLogout=async()=>{
-        try {
-            const response = await axios.get("/api/logout").then((res)=>res)
-            toast.success(response.data.message)
-            router.replace("/")
-        } catch (error) {
-            toast.error("Error Logging Out")
-        }
-    }
+    
     function formatDate(isoString) {
         const date = new Date(isoString);
         
@@ -52,7 +44,6 @@ function page() {
     
     const result =data&&calculateOrderTotal(data);
     
-
   return (
     <main className=' bg-white'>
         <Nav data={data&&data[0]}/>
