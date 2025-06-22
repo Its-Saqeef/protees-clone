@@ -37,10 +37,10 @@ function RecentlyViewed({ id }) {
       <div className="md:grid md:grid-cols-4 mt-[30px] flex overflow-x-scroll md:overflow-hidden">
         {data &&
           data.map((item) => {
+            
             const selectedColor = selectedColors[item._id];
-            const selectedImage =
-              selectedColor && item.colorImages[selectedColor];
-            const defaultImage = Object.values(item.colorImages)[0];
+            const selectedImage = selectedColor && item.colorImages[selectedColor];
+            const defaultImage = !item.images.length > 0 && Object.values(item && item.colorImages)[0];
             if (item._id != id)
               return (
                 <section key={item._id}>
@@ -48,7 +48,7 @@ function RecentlyViewed({ id }) {
                     href={`/collections/${item.subcategory}/product/${item._id}`}
                   >
                     <div
-                      className="relative my-[10px] w-44 md:w-auto p-2"
+                      className="relative my-[10px] w-44 md:w-auto p-2" 
                       data-aos="fade-left"
                     >
                       <p
