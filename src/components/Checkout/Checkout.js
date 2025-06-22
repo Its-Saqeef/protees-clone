@@ -527,8 +527,8 @@ function Checkout() {
                   <p className="font-semibold text-xl">
                     <sub className="text-gray-400 font-normal mr-2">PKR</sub>Rs{" "}
                     {(totalamount > 2000
-                      ? totalamount + ".00"
-                      : totalamount+ 200).toLocaleString("en-IN")}
+                      ? totalamount
+                      : totalamount+ 200).toLocaleString("en-IN")}.00
                   </p>
                 </div>
               </div>
