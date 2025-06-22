@@ -133,7 +133,7 @@ function page() {
             }
           />
         </div>
-        <label
+        {/* <label
           htmlFor="file-upload"
           className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition mb-4"
           
@@ -147,7 +147,7 @@ function page() {
           className="hidden"
           onChange={(e)=>setImage(e.target.files[0])}
           disabled={isloading}
-        />
+        /> */}
 
       </div>
       {
