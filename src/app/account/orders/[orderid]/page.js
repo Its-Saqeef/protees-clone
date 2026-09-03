@@ -1,21 +1,26 @@
 import Nav from "@/components/Account/Nav";
 import Order from "@/components/Checkout/Order";
-import axios from "axios";
-import React from 'react'
-import { getApiBaseUrl } from "@/lib/apiBaseUrl";
+import { notFound } from "next/navigation";
+import { getOrderByNumber } from "@/lib/data/orders";
 
 export const dynamic = "force-dynamic";
 
-async function page({params}) {
-  const {orderid}=await params
-  const data=await axios.get(`${getApiBaseUrl()}/api/getorder/${orderid}`).then((res)=>res.data.order)
-  
-  return (
-    <div className="bg-white">
-        <Nav data={data}/>
-      <Order data={data}/>
-    </div>
-  )
-}
+export default async function page({ params }) {
+  const { orderid } = await params;
 
-export default page
+  try {
+    const data = await getOrderByNumber(orderid);
+    if (data) {
+      return (
+        <div className="bg-white">
+          <Nav data={data} />
+          <Order data={data} />
+        </div>
+      );
+    }
+  } catch (error) {
+    console.error("Failed to load order:", error.message);
+  }
+
+  notFound();
+}

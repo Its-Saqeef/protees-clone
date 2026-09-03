@@ -1,24 +1,16 @@
-import axios from 'axios'
-import React from 'react'
-import Allorders from '@/components/Dashboard/Allorders'
-import { getApiBaseUrl } from "@/lib/apiBaseUrl"
+import Allorders from "@/components/Dashboard/Allorders";
+import { getAllOrders } from "@/lib/data/orders";
 
 export const dynamic = "force-dynamic";
 
-async function getOrders() {
+export default async function Page() {
+  let orders = [];
+
   try {
-    const response = await axios.get(`${getApiBaseUrl()}/api/getorder`);
-    return response.data;
+    orders = await getAllOrders();
   } catch (error) {
     console.error("Failed to fetch orders:", error.message);
-    return { orders: [] }; // fallback to empty array
   }
-}
 
-export default async function Page() {
-  const orders = await getOrders();
-
-  return (
-    <Allorders data={orders.orders} />
-  );
+  return <Allorders data={orders} />;
 }
