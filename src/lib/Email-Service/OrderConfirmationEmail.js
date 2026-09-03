@@ -1,4 +1,5 @@
 import React from "react";
+import { getApiBaseUrl } from "@/lib/apiBaseUrl";
 
 export default function OrderConfirmationEmail(props) {
   const {
@@ -81,7 +82,7 @@ export default function OrderConfirmationEmail(props) {
                 <tr>
                   <td align="center" style={{ padding: "20px 0" }}>
                     <a
-                      href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/order/${orderNumber}`}
+                      href={`${getApiBaseUrl()}/order/${orderNumber}`}
                       style={styles.button}
                     >
                       View Your Order

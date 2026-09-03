@@ -3,6 +3,8 @@ import Product from "@/components/Product";
 import { notFound } from "next/navigation";
 import { getApiBaseUrl } from "@/lib/apiBaseUrl";
 
+export const dynamic = "force-dynamic";
+
 
 async function GetData(id) {
   const getData = await axios

@@ -3,6 +3,8 @@ import axios from "axios";
 import React from 'react'
 import { getApiBaseUrl } from "@/lib/apiBaseUrl";
 
+export const dynamic = "force-dynamic";
+
 async function page({params}) {
   const {orderid}=await params
   const data=await axios.get(`${getApiBaseUrl()}/api/getorder/${orderid}`).then((res)=>res.data.order)
