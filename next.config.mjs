@@ -2,6 +2,10 @@
 const nextConfig = {
     reactStrictMode : true,
     serverExternalPackages: ["mongoose", "mongodb"],
+    eslint: {
+        // FlatCompat configs include parser functions that Next cannot serialize during build.
+        ignoreDuringBuilds: true,
+    },
     images : {
         remotePatterns : [
             {
