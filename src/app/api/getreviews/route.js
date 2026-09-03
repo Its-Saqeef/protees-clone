@@ -4,7 +4,7 @@ import { User } from "@/components/Backend/models/Users.models";
 import { Product } from "@/components/Backend/models/Product.models";
 import { NextResponse } from "next/server";
 
-export const dynamic="force-static"
+export const dynamic = "force-dynamic";
 
 
 export async function GET(request){

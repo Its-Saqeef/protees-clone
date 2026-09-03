@@ -25,7 +25,7 @@ function Product({data,reviews}) {
   const [size,setSize]=useState("SMALL")
   const [active,setActive]=useState("SMALL")
   const [selectedColor,setSelectedColor]=useState(data && data.colors[0])
-  const [activeColor,setActiveColor]=useState(data.colorSizeQuantities.length > 0 ? data.colorSizeQuantities[0].color : "")
+  const [activeColor,setActiveColor]=useState(data.colorSizeQuantities?.length > 0 ? data.colorSizeQuantities[0].color : "")
   const sizeButtonsRef = useRef({});  
   const [stock, setStock] = useState();
   const [recent,setRecent]=useState(typeof window !== "undefined" ? JSON.parse(localStorage.getItem("Recent")) || [] : null)
@@ -40,12 +40,13 @@ function Product({data,reviews}) {
       once: false,
     })      
      data.sizes.length > 0 && setStock(data.sizes[0].quantity);
-      if(recent.length>6 && !recent.some(item => item._id === data._id)){
-        recent.shift();
-        localStorage.setItem("Recent", JSON.stringify([...recent,data]))
+      const recentItems = recent || []
+      if(recentItems.length>6 && !recentItems.some(item => item._id === data._id)){
+        recentItems.shift();
+        localStorage.setItem("Recent", JSON.stringify([...recentItems,data]))
       }
-      else if(!recent.some(item => item._id === data._id)){
-        localStorage.setItem("Recent", JSON.stringify([...recent,data]))
+      else if(!recentItems.some(item => item._id === data._id)){
+        localStorage.setItem("Recent", JSON.stringify([...recentItems,data]))
       }
   },[]);
   
@@ -66,7 +67,7 @@ function Product({data,reviews}) {
   }
 
  useEffect(() => {
-  const updatedDisabledColors = data.colorSizeQuantities
+  const updatedDisabledColors = (data.colorSizeQuantities || [])
     .filter(item => item.sizes?.[size] < 1)
     .map(item => item.color);
 
@@ -74,7 +75,7 @@ function Product({data,reviews}) {
 }, [data.colorSizeQuantities, size]);
 
 useEffect(() => {
-  const match = data.colorSizeQuantities.find(
+  const match = (data.colorSizeQuantities || []).find(
     (item) => item.color === activeColor
   );
   if (match && match.sizes && match.sizes[size] < 1) {
@@ -86,8 +87,8 @@ useEffect(() => {
 
 
   
-  const rating=reviews.reduce((sum,item)=>sum + Number(item.rating),0)
-  const averageRating=rating/reviews.length
+  const rating=(reviews || []).reduce((sum,item)=>sum + Number(item.rating),0)
+  const averageRating=reviews?.length ? rating/reviews.length : 0
   
   return (
     <main className={`w-[95%] sm:w-[90%] lg:max-w-[80%] mx-auto mt-10`}>
@@ -195,7 +196,7 @@ useEffect(() => {
               <div className="flex flex-col items-center md:items-start mt-4">
                 <h3 className="text-lg my-2 tracking-wider">COLOR</h3>
                 <div className="flex gap-[2px] sm:gap-2 xl:gap-3 text-xs lg:text-base">
-                  {data.colorSizeQuantities.map((item, index) => {
+                  {(data.colorSizeQuantities || []).map((item, index) => {
                      const isDisabled = disabledColors.includes(item.color)
                       return (
                         <button
