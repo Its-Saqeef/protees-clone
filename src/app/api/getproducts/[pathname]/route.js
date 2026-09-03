@@ -3,7 +3,7 @@ import { Product } from "@/components/Backend/models/Product.models";
 import { NextResponse } from "next/server";
 import { Reviews } from "@/components/Backend/models/Reviews.models";
 
-export const dynamic="force-static"
+export const dynamic="force-dynamic"
 
 export async function GET(request,{params}) {
   try {
