@@ -29,7 +29,11 @@ function Product({data,reviews}) {
   const sizeButtonsRef = useRef({});  
   const [stock, setStock] = useState();
   const [recent,setRecent]=useState(typeof window !== "undefined" ? JSON.parse(localStorage.getItem("Recent")) || [] : null)
-  const [defaultColorImage,setColorImage]=useState(Object.keys(data.colorImages).length > 0 && Object.values(data.colorImages)[0])
+  const [defaultColorImage,setColorImage]=useState(
+    data?.colorImages && Object.keys(data.colorImages).length > 0
+      ? Object.values(data.colorImages)[0]
+      : ""
+  )
   const [isOpen, setIsOpen] = useState(false)
   const [disabledColors, setDisabledColors] = useState([])
   const [isSoldOut, setIsSoldOut] = useState(false)
@@ -105,7 +109,7 @@ useEffect(() => {
                 })
               }
               {
-                Object.keys(data.colorImages).length > 0 && Object.values(data.colorImages).map((url,i)=>{
+                data.colorImages && Object.keys(data.colorImages).length > 0 && Object.values(data.colorImages).map((url,i)=>{
                   return <CldImage src={url} alt={data.name} height={100} width={100} key={i} className="border-2 cursor-pointer" onClick={()=>setColorImage(url)} />
                 })
               }
@@ -125,7 +129,7 @@ useEffect(() => {
                <ImageWithPopup src={source} alt={data.name} isOpen={isOpen} setIsOpen={setIsOpen} />
               </>
               }
-              { Object.keys(data.colorImages).length > 0 &&
+              { data.colorImages && Object.keys(data.colorImages).length > 0 &&
               <>
                 <CldImage
                 src={defaultColorImage}

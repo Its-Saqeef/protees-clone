@@ -1,25 +1,16 @@
-import ListProducts from '@/components/Dashboard/ListProducts'
-import axios from 'axios'
-import React from 'react'
-import { getApiBaseUrl } from "@/lib/apiBaseUrl"
+import ListProducts from "@/components/Dashboard/ListProducts";
+import { getAllProducts } from "@/lib/data/products";
 
 export const dynamic = "force-dynamic";
 
-async function getData(){
-    try {
-        const response=await axios.get(`${getApiBaseUrl()}/api/getproducts`).then((res)=>res.data)
-        return response
-    } catch (error) {
-        console.error("Failed to fetch products:", error.message)
-        return { data: [] }
-    }
-}
+export default async function page() {
+  let data = [];
 
-async function page() {
-    const data = await getData()
-  return (
-    <ListProducts data={data.data} />
-  )
-}
+  try {
+    data = await getAllProducts();
+  } catch (error) {
+    console.error("Failed to fetch products:", error.message);
+  }
 
-export default page
+  return <ListProducts data={data} />;
+}

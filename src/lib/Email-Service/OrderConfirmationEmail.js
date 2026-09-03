@@ -1,5 +1,5 @@
 import React from "react";
-import { getApiBaseUrl } from "@/lib/apiBaseUrl";
+import { getSiteUrl } from "@/lib/apiBaseUrl";
 
 export default function OrderConfirmationEmail(props) {
   const {
@@ -82,7 +82,7 @@ export default function OrderConfirmationEmail(props) {
                 <tr>
                   <td align="center" style={{ padding: "20px 0" }}>
                     <a
-                      href={`${getApiBaseUrl()}/order/${orderNumber}`}
+                      href={`${getSiteUrl()}/order/${orderNumber}`}
                       style={styles.button}
                     >
                       View Your Order

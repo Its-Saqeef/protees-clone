@@ -1,24 +1,20 @@
-import axios from "axios";
 import Home from "@/components/Home/GetHomeData";
-import { toast } from "react-toastify";
-import { getApiBaseUrl } from "@/lib/apiBaseUrl";
+import { getAllProducts } from "@/lib/data/products";
 
 export const dynamic = "force-dynamic";
-const fetcher=async ()=>{
-  const response = await axios.get(`${getApiBaseUrl()}/api/getproducts`).then((res)=>res.data.data).catch((err)=>console.log("Request Failed",err.message))
-  return response
-}
 
 export default async function page() {
+  let data = [];
 
   try {
-    const data=await fetcher()
-    return (
-      <section>      
-        <Home data={data} />
-      </section>
-    );
+    data = await getAllProducts();
   } catch (error) {
-    toast.error("Error Occured",error)
+    console.error("Failed to load products:", error.message);
   }
+
+  return (
+    <section>
+      <Home data={data} />
+    </section>
+  );
 }
